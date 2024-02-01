@@ -1,16 +1,17 @@
-﻿using eBarberShop.Services.Interfejsi;
+﻿using eBarberShop.Model.Search;
+using eBarberShop.Services.Interfejsi;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eBarberShop.Controllers
 {
-    [Route("api/[controller]")]
-    public class BaseCRUDController<T, TInsert, TUpdate> : BaseController<T> where T : class
+    [Route("[controller]")]
+    public class BaseCRUDController<T, TSearch, TInsert, TUpdate> : BaseController<T, TSearch> where T : class where TSearch : BaseSearch
     {
-        protected new ICRUDService<T, TInsert, TUpdate> _service;
-        protected new ILogger<BaseCRUDController<T, TInsert, TUpdate>> _logger;
+        protected new ICRUDService<T, TSearch, TInsert, TUpdate> _service;
+        protected new ILogger<BaseCRUDController<T, TSearch, TInsert, TUpdate>> _logger;
 
-        public BaseCRUDController(ILogger<BaseCRUDController<T, TInsert, TUpdate>> logger, ICRUDService<T, TInsert, TUpdate> service) : base(logger, service)
+        public BaseCRUDController(ILogger<BaseCRUDController<T, TSearch, TInsert, TUpdate>> logger, ICRUDService<T, TSearch, TInsert, TUpdate> service) : base(logger, service)
         {
             _service = service;
             _logger = logger;

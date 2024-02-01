@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using eBarberShop.Model.Search;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Identity.Client;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace eBarberShop.Services.Servisi
 {
-    public class BaseCRUDService<T, Tdb, TInsert, TUpdate> : BaseService<T, Tdb> where T : class where Tdb : class
+    public class BaseCRUDService<T, Tdb, TSearch, TInsert, TUpdate> : BaseService<T, Tdb, TSearch> where T : class where Tdb : class where TSearch : BaseSearch
     {
         public BaseCRUDService(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {

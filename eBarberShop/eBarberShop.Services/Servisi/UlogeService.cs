@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace eBarberShop.Services.Servisi
 {
-    public class UlogeService : BaseService<Model.Uloge, Database.Uloge>, IUlogeService
+    public class UlogeService : BaseService<Model.Uloge, Database.Uloge, Model.Search.BaseSearch>, IUlogeService
     {
         public UlogeService(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {

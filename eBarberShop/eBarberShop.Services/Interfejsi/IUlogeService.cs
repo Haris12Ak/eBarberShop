@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace eBarberShop.Services.Interfejsi
 {
-    public interface IUlogeService : IService<Model.Uloge>
+    public interface IUlogeService : IService<Model.Uloge, Model.Search.BaseSearch>
     {
     }
 }

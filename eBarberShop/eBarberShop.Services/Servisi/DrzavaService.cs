@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace eBarberShop.Services.Servisi
 {
-    public class DrzavaService : BaseService<Model.Drzava, Database.Drzava>, IDrzavaService
+    public class DrzavaService : BaseService<Model.Drzava, Database.Drzava, Model.Search.BaseSearch>, IDrzavaService
     {
         public DrzavaService(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {
