@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eBarberShop.Model
+namespace eBarberShop.Model.Requests
 {
-    public class Uloge
+    public class VrsteProizvodaInsertRequest
     {
-        public int UlogeId { get; set; }
         public string Naziv { get; set; }
         public string? Opis { get; set; }
-
-        public virtual ICollection<KorisniciUloge> KorisniciUloge { get; set; } = new List<KorisniciUloge>();
     }
 }

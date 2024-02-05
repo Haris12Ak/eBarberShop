@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace eBarberShop.Model
 {
-    public class Uloge
+    public class VrsteProizvoda
     {
-        public int UlogeId { get; set; }
+        public int VrsteProizvodaId { get; set; }
         public string Naziv { get; set; }
         public string? Opis { get; set; }
-
-        public virtual ICollection<KorisniciUloge> KorisniciUloge { get; set; } = new List<KorisniciUloge>();
     }
 }

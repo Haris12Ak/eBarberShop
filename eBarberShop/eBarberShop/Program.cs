@@ -11,6 +11,16 @@ builder.Services.AddTransient<IDrzavaService, DrzavaService>();
 builder.Services.AddTransient<IGradService, GradService>();
 builder.Services.AddTransient<IKorisniciService, KorisniciService>();
 builder.Services.AddTransient<IUlogeService, UlogeService>();
+builder.Services.AddTransient<IVrsteProizvodaService, VrsteProizvodaService>();
+builder.Services.AddTransient<IProizvodiService, ProizvodiService>();
+builder.Services.AddTransient<INovostiService, NovostiService>();
+builder.Services.AddTransient<IRecenzijeService, RecenzijeService>();
+builder.Services.AddTransient<IUposlenikService, UposlenikService>();
+builder.Services.AddTransient<IUslugaService, UslugaService>();
+builder.Services.AddTransient<IRezervacijaService, RezervacijaService>();
+builder.Services.AddTransient<ISlikeService, SlikeService>();
+builder.Services.AddTransient<INarudzbeService, NarudzbeService>();
+builder.Services.AddTransient<IKosaricaService, KosaricaService>();
 
 
 builder.Services.AddControllers();

@@ -18,5 +18,9 @@ namespace eBarberShop.Model
         public bool? Status { get; set; }
         public byte[]? Slika { get; set; }
         public int GradId { get; set; }
+
+        public virtual ICollection<KorisniciUloge> KorisniciUloge { get; set; } = new List<KorisniciUloge>();
+        public virtual ICollection<Kosarica> Kosarica { get; set; } = new List<Kosarica>();
+        public virtual ICollection<Rezervacija> Rezervacije { get; set; } = new List<Rezervacija>();
     }
 }

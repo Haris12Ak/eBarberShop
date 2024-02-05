@@ -21,6 +21,45 @@ namespace eBarberShop.Services
 
             CreateMap<Database.Uloge, Model.Uloge>();
 
+            CreateMap<Database.VrsteProizvoda, Model.VrsteProizvoda>();
+            CreateMap<Model.Requests.VrsteProizvodaInsertRequest, Database.VrsteProizvoda>();
+            CreateMap<Model.Requests.VrsteProizvodaUpdateRequest, Database.VrsteProizvoda>();
+
+            CreateMap<Database.Proizvodi, Model.Proizvodi>();
+            CreateMap<Model.Requests.ProizvodiInsertRequest, Database.Proizvodi>();
+            CreateMap<Model.Requests.ProizvodiUpdateRequest, Database.Proizvodi>();
+
+            CreateMap<Database.Novosti, Model.Novosti>();
+            CreateMap<Model.Requests.NovostiInsertRequest, Database.Novosti>();
+            CreateMap<Model.Requests.NovostiUpdateRequest, Database.Novosti>();
+
+            CreateMap<Database.Recenzije, Model.Recenzije>();
+            CreateMap<Model.Requests.RecenzijeInsertRequest, Database.Recenzije>();
+            CreateMap<Model.Requests.RecenzijeUpdateRequest, Database.Recenzije>();
+
+            CreateMap<Database.Uposlenik, Model.Uposlenik>();
+            CreateMap<Model.Requests.UposlenikInsertRequest, Database.Uposlenik>();
+            CreateMap<Model.Requests.UposlenikUpdateRequest, Database.Uposlenik>();
+
+            CreateMap<Database.Usluga, Model.Usluga>();
+            CreateMap<Model.Requests.UslugaInsertRequest, Database.Usluga>();
+            CreateMap<Model.Requests.UslugaUpdateRequest, Database.Usluga>();
+
+            CreateMap<Database.Rezervacija, Model.Rezervacija>();
+            CreateMap<Model.Requests.RezervacijaInsertRequest, Database.Rezervacija>();
+            CreateMap<Model.Requests.RezervacijaUpdateRequest, Database.Rezervacija>();
+
+            CreateMap<Database.Slike, Model.Slike>();
+            CreateMap<Model.Requests.SlikeInsertRequest, Database.Slike>();
+            CreateMap<Model.Requests.SlikeUpdateRequest, Database.Slike>();
+
+            CreateMap<Database.Narudzbe, Model.Narudzbe>();
+            CreateMap<Model.Requests.NarudzbeInsertRequest, Database.Narudzbe>();
+            CreateMap<Model.Requests.NarudzbeUpdateRequest, Database.Narudzbe>();
+
+            CreateMap<Database.Kosarica, Model.Kosarica>();
+            CreateMap<Model.Requests.KosaricaInsertRequest, Database.Kosarica>();
+            CreateMap<Model.Requests.KosaricaUpdateRequest, Database.Kosarica>();
         }
     }
 }
