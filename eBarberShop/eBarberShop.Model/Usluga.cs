@@ -15,6 +15,5 @@ namespace eBarberShop.Model
         public int? Trajanje { get; set; }
 
         public virtual ICollection<SlikeUsluge> SlikeUsluge { get; set; } = new List<SlikeUsluge>();
-        public virtual ICollection<RezervacijaUsluge> RezervacijaUsluge { get; set; } = new List<RezervacijaUsluge>();
     }
 }

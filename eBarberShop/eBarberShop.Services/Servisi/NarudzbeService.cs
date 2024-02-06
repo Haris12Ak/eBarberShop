@@ -2,6 +2,7 @@
 using eBarberShop.Model.Search;
 using eBarberShop.Services.Database;
 using eBarberShop.Services.Interfejsi;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,16 @@ namespace eBarberShop.Services.Servisi
             }
 
             return base.AddFilter(query, search);
+        }
+
+        public override IQueryable<Narudzbe> AddInclude(IQueryable<Narudzbe> query, NarudzbeSearch? search)
+        {
+            if(search?.IsNarudzbeDetaljiInclude == true)
+            {
+                query = query.Include("NarudzbeDetalji.Proizvod");
+            }
+
+            return base.AddInclude(query, search);
         }
     }
 }

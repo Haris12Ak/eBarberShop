@@ -15,6 +15,5 @@ namespace eBarberShop.Model
         public string? Email { get; set; }
         public string? Adresa { get; set; }
 
-        public virtual ICollection<Rezervacija> Rezervacije { get; set; } = new List<Rezervacija>();
     }
 }

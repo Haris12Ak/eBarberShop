@@ -16,10 +16,5 @@ namespace eBarberShop.Model
         public byte[]? Slika { get; set; }
         public bool? Status { get; set; }
         public int VrstaProizvodaId { get; set; }
-
-        public virtual VrsteProizvoda VrstaProizvoda { get; set; }
-
-        public virtual ICollection<Kosarica> Kosarica { get; set; } = new List<Kosarica>();
-        public virtual ICollection<NarudzbeDetalji> NarudzbeDetalji { get; set; } = new List<NarudzbeDetalji>();
     }
 }

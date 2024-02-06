@@ -4,6 +4,7 @@ using eBarberShop.Model.Search;
 using eBarberShop.Services.Database;
 using eBarberShop.Services.Helper;
 using eBarberShop.Services.Interfejsi;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,16 @@ namespace eBarberShop.Services.Servisi
             }
 
             return base.AddFilter(query, search);
+        }
+
+        public override IQueryable<Korisnici> AddInclude(IQueryable<Korisnici> query, KorisniciSearch? search)
+        {
+            if(search?.IsUlogeIncluded == true)
+            {
+                query = query.Include("KorisniciUloge.Uloga");
+            }
+
+            return base.AddInclude(query, search);
         }
 
     }

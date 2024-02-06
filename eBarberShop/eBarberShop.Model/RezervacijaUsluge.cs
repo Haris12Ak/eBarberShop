@@ -12,7 +12,6 @@ namespace eBarberShop.Model
         public int RezervacijaId { get; set; }
         public int UslugaId { get; set; }
 
-        public virtual Rezervacija Rezervacija { get; set; }
         public virtual Usluga Usluga { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace eBarberShop.Model.Search
     {
         public string? Ime { get; set; }
         public string? Prezime { get; set; }
+        public bool? IsUlogeIncluded{ get; set; }
 
     }
 }

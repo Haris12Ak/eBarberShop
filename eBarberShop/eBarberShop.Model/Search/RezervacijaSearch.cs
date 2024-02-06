@@ -8,5 +8,6 @@ namespace eBarberShop.Model.Search
 {
     public class RezervacijaSearch : BaseSearch
     {
+        public bool? IsUslugeIncluded { get; set; }
     }
 }

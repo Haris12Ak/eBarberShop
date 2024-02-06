@@ -29,6 +29,8 @@ namespace eBarberShop.Services.Servisi
 
             query = AddFilter(query, search);
 
+            query = AddInclude(query, search);
+
             result.Count = await query.CountAsync();
 
             if(search?.PageSize.HasValue == true && search?.Page.HasValue == true)
@@ -41,6 +43,11 @@ namespace eBarberShop.Services.Servisi
             result.Result = _mapper.Map<List<T>>(list);
 
             return result;
+        }
+
+        public virtual IQueryable<Tdb> AddInclude(IQueryable<Tdb> query, TSearch? search)
+        {
+            return query;
         }
 
         public virtual IQueryable<Tdb> AddFilter(IQueryable<Tdb> query, TSearch? search)

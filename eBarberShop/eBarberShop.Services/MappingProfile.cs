@@ -19,6 +19,8 @@ namespace eBarberShop.Services
             CreateMap<Model.Requests.KorisniciInsertRequest, Database.Korisnici>();
             CreateMap<Model.Requests.KorisniciUpdateRequest, Database.Korisnici>();
 
+            CreateMap<Database.KorisniciUloge, Model.KorisniciUloge>();
+
             CreateMap<Database.Uloge, Model.Uloge>();
 
             CreateMap<Database.VrsteProizvoda, Model.VrsteProizvoda>();
@@ -60,6 +62,11 @@ namespace eBarberShop.Services
             CreateMap<Database.Kosarica, Model.Kosarica>();
             CreateMap<Model.Requests.KosaricaInsertRequest, Database.Kosarica>();
             CreateMap<Model.Requests.KosaricaUpdateRequest, Database.Kosarica>();
+
+            CreateMap<Database.NarudzbeDetalji, Model.NarudzbeDetalji>();
+
+            CreateMap<Database.RezervacijaUsluge, Model.RezervacijaUsluge>();
+
         }
     }
 }
