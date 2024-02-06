@@ -9,6 +9,6 @@ namespace eBarberShop.Services.Interfejsi
 {
     public interface IKorisniciService : ICRUDService<Model.Korisnici, Model.Search.KorisniciSearch, Model.Requests.KorisniciInsertRequest, Model.Requests.KorisniciUpdateRequest>
     {
-
+        Task<Model.Korisnici> Login(string username, string password);
     }
 }

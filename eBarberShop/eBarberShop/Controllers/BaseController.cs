@@ -1,12 +1,14 @@
 ﻿using eBarberShop.Model;
 using eBarberShop.Model.Search;
 using eBarberShop.Services.Interfejsi;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eBarberShop.Controllers
 {
     [Route("[controller]")]
+    [Authorize]
     public class BaseController<T, TSearch> : ControllerBase where T : class where TSearch : BaseSearch
     {
         protected IService<T, TSearch> _service;

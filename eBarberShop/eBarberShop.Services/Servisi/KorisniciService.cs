@@ -50,5 +50,22 @@ namespace eBarberShop.Services.Servisi
             return base.AddInclude(query, search);
         }
 
+        public async Task<Model.Korisnici> Login(string username, string password)
+        {
+            var user = await _dbContext.Korisnici
+                .Include("KorisniciUloge.Uloga")
+                .Where(x => x.KorisnickoIme == username)
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+                return null;
+
+            var hash = PasswordHelper.GenerateHash(user.LozinkaSalt, password);
+
+            if(hash != user.LozinkaHash)
+                return null;
+
+            return _mapper.Map<Model.Korisnici>(user);
+        }
     }
 }
