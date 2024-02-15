@@ -1,4 +1,5 @@
 using eBarberShop;
+using eBarberShop.Filter;
 using eBarberShop.Services;
 using eBarberShop.Services.Interfejsi;
 using eBarberShop.Services.Servisi;
@@ -26,7 +27,11 @@ builder.Services.AddTransient<INarudzbeService, NarudzbeService>();
 builder.Services.AddTransient<IKosaricaService, KosaricaService>();
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(x =>
+{
+    x.Filters.Add<ErrorFilter>();
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -50,7 +55,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options => 
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(connectionString));
 
 builder.Services.AddAutoMapper(typeof(IKorisniciService));
