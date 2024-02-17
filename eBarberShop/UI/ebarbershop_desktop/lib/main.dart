@@ -1,8 +1,13 @@
+import 'package:ebarbershop_desktop/providers/login_provider.dart';
 import 'package:ebarbershop_desktop/screens/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [ChangeNotifierProvider(create: (_) => LoginProvider())],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

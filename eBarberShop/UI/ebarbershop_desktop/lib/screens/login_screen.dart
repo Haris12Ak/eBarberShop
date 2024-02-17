@@ -1,4 +1,9 @@
+import 'package:ebarbershop_desktop/models/korisnik/korisnik.dart';
+import 'package:ebarbershop_desktop/providers/login_provider.dart';
+import 'package:ebarbershop_desktop/screens/home_screen.dart';
+import 'package:ebarbershop_desktop/utils/util.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -10,6 +15,23 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool _isObscured = true;
   IconData _icon = Icons.visibility_off;
+
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  late LoginProvider _loginProvider;
+  Korisnik? korisnikResponse;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _loginProvider = context.read<LoginProvider>();
+  }
+
+  Future<void> getData() async {
+    korisnikResponse = await _loginProvider.login();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +68,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 80.0,
                     color: Colors.grey[400],
                   ),
-                  const TextField(
-                    decoration: InputDecoration(
+                  TextField(
+                    controller: _usernameController,
+                    decoration: const InputDecoration(
                         labelText: 'Korisnicko ime',
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.email)),
@@ -56,6 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 20.0,
                   ),
                   TextField(
+                    controller: _passwordController,
                     obscureText: _isObscured,
                     decoration: InputDecoration(
                       labelText: 'Lozinka',
@@ -89,7 +113,50 @@ class _LoginScreenState extends State<LoginScreen> {
 
   ElevatedButton buildLogin() {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () async {
+        korisnikResponse = null;
+
+        var username = _usernameController.text;
+        var password = _passwordController.text;
+
+        Authorization.username = username;
+        Authorization.password = password;
+
+        await getData();
+
+        if (korisnikResponse != null) {
+          Authorization.korisnikId = korisnikResponse!.korisniciId;
+
+          // ignore: use_build_context_synchronously
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            (route) => false,
+          );
+        } else {
+          _usernameController.text = "";
+          _passwordController.text = "";
+
+          String errorMessage =
+              "Netačno korisničko ime ili lozinka. Molimo pokušajte ponovo.";
+
+          // ignore: use_build_context_synchronously
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text("Greška!"),
+                  content: Text(errorMessage),
+                  actions: [
+                    TextButton(
+                      onPressed: () => {Navigator.of(context).pop()},
+                      child: const Text("OK"),
+                    ),
+                  ],
+                );
+              });
+        }
+      },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.grey[400],
         foregroundColor: Colors.white,

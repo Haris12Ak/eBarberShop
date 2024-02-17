@@ -1,15 +1,10 @@
 ﻿using AutoMapper;
+using eBarberShop.Model;
 using eBarberShop.Model.Requests;
 using eBarberShop.Model.Search;
-using eBarberShop.Services.Database;
 using eBarberShop.Services.Helper;
 using eBarberShop.Services.Interfejsi;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eBarberShop.Services.Servisi
 {
@@ -19,13 +14,13 @@ namespace eBarberShop.Services.Servisi
         {
         }
 
-        public override async Task BeforeInsert(Korisnici entity, KorisniciInsertRequest insert)
+        public override async Task BeforeInsert(Database.Korisnici entity, KorisniciInsertRequest insert)
         {
             entity.LozinkaSalt = PasswordHelper.GenerateSalt();
             entity.LozinkaHash = PasswordHelper.GenerateHash(entity.LozinkaSalt, insert.Lozinka);
         }
 
-        public override IQueryable<Korisnici> AddFilter(IQueryable<Korisnici> query, KorisniciSearch? search)
+        public override IQueryable<Database.Korisnici> AddFilter(IQueryable<Database.Korisnici> query, KorisniciSearch? search)
         {
             if (!string.IsNullOrWhiteSpace(search?.Ime))
             {
@@ -40,9 +35,9 @@ namespace eBarberShop.Services.Servisi
             return base.AddFilter(query, search);
         }
 
-        public override IQueryable<Korisnici> AddInclude(IQueryable<Korisnici> query, KorisniciSearch? search)
+        public override IQueryable<Database.Korisnici> AddInclude(IQueryable<Database.Korisnici> query, KorisniciSearch? search)
         {
-            if(search?.IsUlogeIncluded == true)
+            if (search?.IsUlogeIncluded == true)
             {
                 query = query.Include("KorisniciUloge.Uloga");
             }
@@ -57,15 +52,14 @@ namespace eBarberShop.Services.Servisi
                 .Where(x => x.KorisnickoIme == username)
                 .FirstOrDefaultAsync();
 
-            if (user == null)
-                return null;
+            if (user != null)
+            {
+                var hash = Helper.PasswordHelper.GenerateHash(user.LozinkaSalt, password);
+                if (hash == user.LozinkaHash)
+                    return _mapper.Map<Model.Korisnici>(user);
+            }
 
-            var hash = PasswordHelper.GenerateHash(user.LozinkaSalt, password);
-
-            if(hash != user.LozinkaHash)
-                return null;
-
-            return _mapper.Map<Model.Korisnici>(user);
+            throw new UserException("Korisnicko ime ili lozinka nisu ispravni!");
         }
     }
 }
