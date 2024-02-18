@@ -119,26 +119,8 @@ class _LoginScreenState extends State<LoginScreen> {
         var username = _usernameController.text;
         var password = _passwordController.text;
 
-        Authorization.username = username;
-        Authorization.password = password;
-
-        await getData();
-
-        if (korisnikResponse != null) {
-          Authorization.korisnikId = korisnikResponse!.korisniciId;
-
-          // ignore: use_build_context_synchronously
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-            (route) => false,
-          );
-        } else {
-          _usernameController.text = "";
-          _passwordController.text = "";
-
-          String errorMessage =
-              "Netačno korisničko ime ili lozinka. Molimo pokušajte ponovo.";
+        if (username == "" || password == "") {
+          String errorMessage = "Unesite korisničko ime i lozinku!";
 
           // ignore: use_build_context_synchronously
           showDialog(
@@ -155,6 +137,44 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 );
               });
+        } else {
+          Authorization.username = username;
+          Authorization.password = password;
+
+          await getData();
+
+          if (korisnikResponse != null) {
+            Authorization.korisnikId = korisnikResponse!.korisniciId;
+
+            // ignore: use_build_context_synchronously
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+              (route) => false,
+            );
+          } else {
+            _usernameController.text = "";
+            _passwordController.text = "";
+
+            String errorMessage =
+                "Netačno korisničko ime ili lozinka. Molimo pokušajte ponovo.";
+
+            // ignore: use_build_context_synchronously
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text("Greška!"),
+                    content: Text(errorMessage),
+                    actions: [
+                      TextButton(
+                        onPressed: () => {Navigator.of(context).pop()},
+                        child: const Text("OK"),
+                      ),
+                    ],
+                  );
+                });
+          }
         }
       },
       style: ElevatedButton.styleFrom(
