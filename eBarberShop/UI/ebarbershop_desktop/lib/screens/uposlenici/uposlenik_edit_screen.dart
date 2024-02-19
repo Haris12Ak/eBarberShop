@@ -24,7 +24,7 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
   void initState() {
     super.initState();
     _initialValue = {
-      //'uposlenikId': widget.uposlenik?.uposlenikId.toString(),
+      'uposlenikId': widget.uposlenik?.uposlenikId.toString(),
       'ime': widget.uposlenik?.ime,
       'prezime': widget.uposlenik?.prezime,
       'kontaktTelefon': widget.uposlenik?.kontaktTelefon,
@@ -205,37 +205,12 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
                                 Map.from(_formKey.currentState!.value);
 
                             try {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  title: const Text(
-                                      "Potvrda ažuriranja podataka!"),
-                                  content: const Text(
-                                      'Da li ste sigurni da želite sačuvati trenutne izmjene!'),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () async {
-                                          await _uposlenikProvider.update(
-                                              widget.uposlenik!.uposlenikId,
-                                              request);
-
-                                          setState(() {
-                                            _initialValue = Map.from(
-                                                _formKey.currentState!.value);
-                                          });
-
-                                          // ignore: use_build_context_synchronously
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text("Potvrdi")),
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text("Otkaži"))
-                                  ],
-                                ),
-                              );
+                              if (widget.uposlenik != null) {
+                                // ignore: use_build_context_synchronously
+                                _buildEditUposlenik(context, request);
+                              } else {
+                                _buildAddUposlenik(context, request);
+                              }
                             } on Exception catch (e) {
                               // ignore: use_build_context_synchronously
                               showDialog(
@@ -254,7 +229,7 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
                           },
                           icon: const Icon(Icons.save_alt),
                           label: const Text(
-                            'Sacuvaj izmjene',
+                            'Spremi',
                             style: TextStyle(fontSize: 16.0),
                           ),
                           style: ElevatedButton.styleFrom(
@@ -273,6 +248,86 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Future<dynamic> _buildAddUposlenik(
+      BuildContext context, Map<dynamic, dynamic> request) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text("Potvrda!"),
+        content: const Text(
+            'Da li ste sigurni da želite dodati uposlenika sa unesenim informacijama!'),
+        actions: [
+          TextButton(
+              onPressed: () async {
+                if (_formKey.currentState!.saveAndValidate()) {
+                  await _uposlenikProvider.insert(request);
+                }
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pop();
+
+                // ignore: use_build_context_synchronously
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Poruka!'),
+                          content: const Text(
+                              'Uspješno ste dodali novog uposlenika.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                _formKey.currentState?.reset();
+
+                                Navigator.of(context).pop();
+
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ));
+              },
+              child: const Text("Potvrdi")),
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Otkaži"))
+        ],
+      ),
+    );
+  }
+
+  Future<dynamic> _buildEditUposlenik(
+      BuildContext context, Map<dynamic, dynamic> request) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text("Potvrda ažuriranja podataka!"),
+        content: const Text(
+            'Da li ste sigurni da želite sačuvati trenutne izmjene!'),
+        actions: [
+          TextButton(
+              onPressed: () async {
+                await _uposlenikProvider.update(
+                    widget.uposlenik!.uposlenikId, request);
+
+                setState(() {
+                  _initialValue = Map.from(_formKey.currentState!.value);
+                });
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pop();
+              },
+              child: const Text("Potvrdi")),
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Otkaži"))
         ],
       ),
     );

@@ -1,7 +1,6 @@
 import 'package:ebarbershop_desktop/models/search_result.dart';
 import 'package:ebarbershop_desktop/models/uposlenik/uposlenik.dart';
 import 'package:ebarbershop_desktop/providers/uposlenik_provider.dart';
-import 'package:ebarbershop_desktop/screens/uposlenici/uposlenik_add_screen.dart';
 import 'package:ebarbershop_desktop/screens/uposlenici/uposlenik_edit_screen.dart';
 import 'package:ebarbershop_desktop/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
@@ -45,15 +44,22 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
       child: isLoading
           ? Container()
           : Column(
-             crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Align(
                   alignment: Alignment.topRight,
                   child: ElevatedButton.icon(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
+                      Navigator.of(context)
+                          .push(
+                        MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              const UposlenikAddScreen()));
+                              UposlenikEditScreen(),
+                        ),
+                      )
+                          .then((_) {
+                        fetchUposlenici();
+                      });
                     },
                     icon: const Icon(Icons.add),
                     label: const Text(
@@ -173,6 +179,7 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
                             Row(
                               children: [
                                 IconButton(
+                                    tooltip: 'Detalji/Uredi',
                                     onPressed: () {
                                       Navigator.of(context)
                                           .push(
@@ -192,6 +199,7 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
                                   width: 10.0,
                                 ),
                                 IconButton(
+                                    tooltip: 'Obriši',
                                     onPressed: () {},
                                     icon: const Icon(Icons.delete_forever))
                               ],
