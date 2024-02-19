@@ -18,6 +18,9 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
   late SearchResult<Uposlenik>? uposlenikSearchResult;
   bool isLoading = true;
 
+  TextEditingController _imeSearchController = TextEditingController();
+  TextEditingController _prezimeSearchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -79,6 +82,18 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
                   height: 40.0,
                 ),
                 _buildUposleniciList(),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                  child: Text(
+                    'Ukupno podataka: ${uposlenikSearchResult?.count}',
+                    style: const TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 1.0,
+                      fontSize: 15.0
+                    ),
+                  ),
+                )
               ],
             ),
     );
@@ -216,10 +231,11 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const SizedBox(
+        SizedBox(
           width: 500,
           child: TextField(
-            decoration: InputDecoration(
+            controller: _imeSearchController,
+            decoration: const InputDecoration(
               labelText: "Ime",
             ),
           ),
@@ -227,17 +243,27 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
         const SizedBox(
           width: 20.0,
         ),
-        const SizedBox(
+        SizedBox(
           width: 500,
           child: TextField(
-            decoration: InputDecoration(labelText: "Prezime"),
+            controller: _prezimeSearchController,
+            decoration: const InputDecoration(labelText: "Prezime"),
           ),
         ),
         const SizedBox(
           width: 20.0,
         ),
         ElevatedButton.icon(
-          onPressed: () {},
+          onPressed: () async {
+            var data = await _uposlenikProvider.get(filter: {
+              'ime': _imeSearchController.text,
+              'prezime': _prezimeSearchController.text
+            });
+
+            setState(() {
+              uposlenikSearchResult = data;
+            });
+          },
           icon: const Icon(Icons.search),
           label: const Text(
             'Pretraga',
@@ -248,6 +274,34 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
             shape:
                 const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
             backgroundColor: Colors.blueGrey,
+            foregroundColor: Colors.white,
+            minimumSize: const Size(100, 50),
+          ),
+        ),
+        const SizedBox(
+          width: 20.0,
+        ),
+        ElevatedButton.icon(
+          onPressed: () async {
+            _imeSearchController.text = "";
+            _prezimeSearchController.text = "";
+
+            var data = await _uposlenikProvider.get();
+
+            setState(() {
+              uposlenikSearchResult = data;
+            });
+          },
+          icon: const Icon(Icons.refresh),
+          label: const Text(
+            'Reset',
+            style: TextStyle(fontSize: 16.0),
+          ),
+          style: ElevatedButton.styleFrom(
+            elevation: 8.0,
+            shape:
+                const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+            backgroundColor: Colors.blueGrey[300],
             foregroundColor: Colors.white,
             minimumSize: const Size(100, 50),
           ),
