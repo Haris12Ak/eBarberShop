@@ -18,11 +18,19 @@ class _MasterScreenState extends State<MasterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: Text(widget.title ?? ""),
+        title: Text(
+          widget.title ?? "",
+          style: const TextStyle(
+              fontSize: 22.0,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1.0,
+              color: Colors.black54,
+              fontStyle: FontStyle.italic),
+        ),
         elevation: 0.0,
-        backgroundColor: Colors.grey[200],
+        backgroundColor: Colors.grey[300],
         actions: [
           Align(
             alignment: Alignment.center,
@@ -50,7 +58,7 @@ class _MasterScreenState extends State<MasterScreen> {
       ),
       drawer: DrawerWidget(widget: widget),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
+        padding: const EdgeInsets.fromLTRB(40.0, 20.0, 40.0, 10.0),
         child: widget.child ?? Container(),
       ),
     );

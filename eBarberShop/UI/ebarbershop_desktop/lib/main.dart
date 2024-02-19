@@ -1,11 +1,15 @@
 import 'package:ebarbershop_desktop/providers/login_provider.dart';
+import 'package:ebarbershop_desktop/providers/uposlenik_provider.dart';
 import 'package:ebarbershop_desktop/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
   runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(create: (_) => LoginProvider())],
+    providers: [
+      ChangeNotifierProvider(create: (_) => LoginProvider()),
+      ChangeNotifierProvider(create: (_) => UposlenikProvider())
+    ],
     child: const MyApp(),
   ));
 }
