@@ -2,6 +2,7 @@ import 'package:ebarbershop_desktop/models/proizvodi/proizvodi.dart';
 import 'package:ebarbershop_desktop/models/search_result.dart';
 import 'package:ebarbershop_desktop/providers/proizvodi_provider.dart';
 import 'package:ebarbershop_desktop/screens/proizvodi/proizvodi_edit_screen.dart';
+import 'package:ebarbershop_desktop/utils/util.dart';
 import 'package:ebarbershop_desktop/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,8 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
   late ProizvodiProvider _proizvodiProvider;
   late SearchResult<Proizvodi>? proizvodiSearchResult;
   bool isLoading = true;
-
+  TextEditingController _nazivSearchController = TextEditingController();
+  TextEditingController _sifraSearchController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -157,6 +159,17 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
                 ),
               ),
               DataColumn(
+                label: Expanded(
+                  child: Text(
+                    'Slika',
+                    style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black54),
+                  ),
+                ),
+              ),
+              DataColumn(
                 label: Text(
                   'Akcije',
                   style: TextStyle(
@@ -173,6 +186,13 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
                           DataCell(Text(e.vrstaProizvodaNaziv ?? "")),
                           DataCell(Text(e.sifra)),
                           DataCell(Text(e.cijena.toStringAsFixed(2))),
+                          DataCell(e.slika != ""
+                              ? SizedBox(
+                                  width: 40,
+                                  height: 40,
+                                  child: imageFromBase64String(e.slika!),
+                                )
+                              : const Text('')),
                           DataCell(
                             Row(
                               children: [
@@ -199,7 +219,54 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
                                 IconButton(
                                   tooltip: 'Obriši',
                                   onPressed: () {
-                                    
+                                    try {
+                                      // ignore: use_build_context_synchronously
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            AlertDialog(
+                                          title: const Text('Potvrda'),
+                                          content: Text(
+                                              'Jeste li sigurni da želite ukloniti proizvod: ${e.naziv} !'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () async {
+                                                await _proizvodiProvider
+                                                    .delete(e.proizvodiId);
+
+                                                Navigator.of(context).pop();
+
+                                                fetchProizvodi();
+                                              },
+                                              child: const Text('Da'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text('Ne'),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    } on Exception catch (e) {
+                                      // ignore: use_build_context_synchronously
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            AlertDialog(
+                                          title: const Text("Error"),
+                                          content: Text(e.toString()),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                              child: const Text("OK"),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }
                                   },
                                   icon: const Icon(Icons.delete_forever),
                                 ),
@@ -217,10 +284,11 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const SizedBox(
+        SizedBox(
           width: 500,
           child: TextField(
-            decoration: InputDecoration(
+            controller: _nazivSearchController,
+            decoration: const InputDecoration(
               labelText: "Naziv",
             ),
           ),
@@ -228,10 +296,11 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
         const SizedBox(
           width: 20.0,
         ),
-        const SizedBox(
+        SizedBox(
           width: 500,
           child: TextField(
-            decoration: InputDecoration(labelText: "Šifra"),
+            controller: _sifraSearchController,
+            decoration: const InputDecoration(labelText: "Šifra"),
           ),
         ),
         const SizedBox(
@@ -239,7 +308,14 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
         ),
         ElevatedButton.icon(
           onPressed: () async {
-           
+            var data = await _proizvodiProvider.get(filter: {
+              'naziv': _nazivSearchController.text,
+              'sifra': _sifraSearchController.text
+            });
+
+            setState(() {
+              proizvodiSearchResult = data;
+            });
           },
           icon: const Icon(Icons.search),
           label: const Text(
@@ -260,7 +336,14 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
         ),
         ElevatedButton.icon(
           onPressed: () async {
-            
+            _nazivSearchController.text = "";
+            _sifraSearchController.text = "";
+
+            var data = await _proizvodiProvider.get();
+
+            setState(() {
+              proizvodiSearchResult = data;
+            });
           },
           icon: const Icon(Icons.refresh),
           label: const Text(
