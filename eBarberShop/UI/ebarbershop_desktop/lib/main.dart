@@ -1,5 +1,7 @@
 import 'package:ebarbershop_desktop/providers/login_provider.dart';
+import 'package:ebarbershop_desktop/providers/proizvodi_provider.dart';
 import 'package:ebarbershop_desktop/providers/uposlenik_provider.dart';
+import 'package:ebarbershop_desktop/providers/vrste_proizvoda_provider.dart';
 import 'package:ebarbershop_desktop/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +10,9 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => LoginProvider()),
-      ChangeNotifierProvider(create: (_) => UposlenikProvider())
+      ChangeNotifierProvider(create: (_) => UposlenikProvider()),
+      ChangeNotifierProvider(create: (_) => ProizvodiProvider()),
+      ChangeNotifierProvider(create: (_) => VrsteProizvodaProvider())
     ],
     child: const MyApp(),
   ));

@@ -79,6 +79,20 @@ class BaseProvider<T> with ChangeNotifier {
     }
   }
 
+  Future<void> delete(int id) async {
+    var url = "$_baseUrl$_endpoint/$id";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var response = await http.delete(uri, headers: headers);
+
+    if (isValidResponseCode(response)) {
+      notifyListeners();
+    } else {
+      throw Exception("Unknown error");
+    }
+  }
+
   Map<String, String> createHeaders() {
     String username = Authorization.username ?? "";
     String password = Authorization.password ?? "";

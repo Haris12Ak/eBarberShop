@@ -93,7 +93,7 @@ class DrawerWidget extends StatelessWidget {
               'Proizvodi',
               style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500),
             ),
-            leading: const Icon(Icons.pending),
+            leading: const Icon(Icons.category),
             selectedColor: Colors.blue[800],
             selectedTileColor: Colors.grey[350],
             selected: widget.selectedOption == 'Proizvodi',

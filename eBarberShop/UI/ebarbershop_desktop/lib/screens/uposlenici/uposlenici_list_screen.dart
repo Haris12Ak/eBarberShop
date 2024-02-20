@@ -18,8 +18,9 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
   late SearchResult<Uposlenik>? uposlenikSearchResult;
   bool isLoading = true;
 
-  TextEditingController _imeSearchController = TextEditingController();
-  TextEditingController _prezimeSearchController = TextEditingController();
+  final TextEditingController _imeSearchController = TextEditingController();
+  final TextEditingController _prezimeSearchController =
+      TextEditingController();
 
   @override
   void initState() {
@@ -87,11 +88,10 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
                   child: Text(
                     'Ukupno podataka: ${uposlenikSearchResult?.count}',
                     style: const TextStyle(
-                      color: Colors.black54,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1.0,
-                      fontSize: 15.0
-                    ),
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 1.0,
+                        fontSize: 15.0),
                   ),
                 )
               ],
@@ -215,7 +215,56 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
                                 ),
                                 IconButton(
                                     tooltip: 'Obriši',
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      try {
+                                        // ignore: use_build_context_synchronously
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              AlertDialog(
+                                            title: const Text('Potvrda'),
+                                            content: Text(
+                                                'Jeste li sigurni da želite ukloniti uposlenika: ${e.ime} ${e.prezime} !'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () async {
+                                                  await _uposlenikProvider
+                                                      .delete(e.uposlenikId);
+
+                                                  Navigator.of(context).pop();
+
+                                                  fetchUposlenici();
+                                                },
+                                                child: const Text('Da'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text('Ne'),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      } on Exception catch (e) {
+                                        // ignore: use_build_context_synchronously
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              AlertDialog(
+                                            title: const Text("Error"),
+                                            content: Text(e.toString()),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                child: const Text("OK"),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }
+                                    },
                                     icon: const Icon(Icons.delete_forever))
                               ],
                             ),

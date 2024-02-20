@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace eBarberShop.Model
+﻿namespace eBarberShop.Model
 {
     public class Proizvodi
     {
@@ -16,5 +10,8 @@ namespace eBarberShop.Model
         public byte[]? Slika { get; set; }
         public bool? Status { get; set; }
         public int VrstaProizvodaId { get; set; }
+        public VrsteProizvoda VrstaProizvoda { get; set; }
+
+        public string? VrstaProizvodaNaziv => VrstaProizvoda?.Naziv;
     }
 }
