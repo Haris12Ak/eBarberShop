@@ -5,6 +5,8 @@ import 'package:ebarbershop_desktop/screens/novosti/novosti_edit_screen.dart';
 import 'package:ebarbershop_desktop/utils/util.dart';
 import 'package:ebarbershop_desktop/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class NovostiListScreen extends StatefulWidget {
@@ -20,6 +22,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
   bool isLoading = true;
 
   final TextEditingController _naslovSearchController = TextEditingController();
+  DateTime? _selectedDate;
 
   @override
   void initState() {
@@ -112,13 +115,41 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
         const SizedBox(
           width: 20.0,
         ),
+        SizedBox(
+          width: 300,
+          child: FormBuilderDateTimePicker(
+            name: 'date',
+            initialValue: _selectedDate,
+            decoration: InputDecoration(
+                contentPadding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                prefixIcon: const Icon(Icons.date_range),
+                labelText: 'Odaberite datum',
+                floatingLabelStyle: const TextStyle(
+                  color: Colors.black54,
+                  fontSize: 17.0,
+                  fontWeight: FontWeight.w600,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(0.0),
+                )),
+            inputType: InputType.date,
+            format: DateFormat("yyyy-MM-dd"),
+            onChanged: (DateTime? newDate) {
+              setState(() {
+                _selectedDate = newDate;
+              });
+            },
+          ),
+        ),
         const SizedBox(
           width: 20.0,
         ),
         ElevatedButton.icon(
           onPressed: () async {
-            var data = await _novostiProvider
-                .get(filter: {'naslov': _naslovSearchController.text});
+            var data = await _novostiProvider.get(filter: {
+              'naslov': _naslovSearchController.text,
+              'datumObjave': _selectedDate,
+            });
 
             setState(() {
               novostiSearchResult = data;
@@ -144,6 +175,10 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
         ElevatedButton.icon(
           onPressed: () async {
             _naslovSearchController.text = "";
+
+            setState(() {
+              _selectedDate = null;
+            });
 
             var data = await _novostiProvider.get();
 
