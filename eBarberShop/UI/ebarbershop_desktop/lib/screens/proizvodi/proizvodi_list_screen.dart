@@ -17,6 +17,7 @@ class ProizvodiListScreen extends StatefulWidget {
 class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
   late ProizvodiProvider _proizvodiProvider;
   late SearchResult<Proizvodi>? proizvodiSearchResult;
+
   bool isLoading = true;
   TextEditingController _nazivSearchController = TextEditingController();
   TextEditingController _sifraSearchController = TextEditingController();
@@ -79,7 +80,7 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
                 const SizedBox(
                   height: 40.0,
                 ),
-                _buildUposleniciList(),
+                _buildProizvodiList(),
                 Container(
                   padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
                   child: Text(
@@ -96,7 +97,7 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
     );
   }
 
-  Expanded _buildUposleniciList() {
+  Expanded _buildProizvodiList() {
     return Expanded(
       child: SingleChildScrollView(
         child: DataTable(

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace eBarberShop.Model.Search
+﻿namespace eBarberShop.Model.Search
 {
     public class NovostiSearch : BaseSearch
     {
         public DateTime? DatumObjave { get; set; }
+        public string? Naslov { get; set; }
     }
 }

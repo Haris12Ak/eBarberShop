@@ -20,6 +20,16 @@ String formatNumber(dynamic) {
   return f.format(dynamic);
 }
 
+String formatDate(dynamic){
+  var f = DateFormat('yyyy-MM-dd HH:mm');
+
+  if(dynamic == null){
+    return "";
+  }
+
+  return f.format(dynamic);
+}
+
 Image imageFromBase64String(String base64Image) {
   return Image.memory(base64Decode(base64Image));
 }

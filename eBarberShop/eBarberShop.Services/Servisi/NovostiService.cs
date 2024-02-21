@@ -1,12 +1,8 @@
 ﻿using AutoMapper;
+using eBarberShop.Model;
 using eBarberShop.Model.Search;
-using eBarberShop.Services.Database;
 using eBarberShop.Services.Interfejsi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace eBarberShop.Services.Servisi
 {
@@ -16,14 +12,34 @@ namespace eBarberShop.Services.Servisi
         {
         }
 
-        public override IQueryable<Novosti> AddFilter(IQueryable<Novosti> query, NovostiSearch? search)
+        public override async Task<Model.PagedResult<Model.Novosti>> Get(NovostiSearch? search)
         {
+            var query = _dbContext.Set<Database.Novosti>().Include("Korisnik").AsQueryable();
+
+            PagedResult<Model.Novosti> result = new PagedResult<Model.Novosti>();
+
             if (search?.DatumObjave.HasValue == true)
             {
                 query = query.Where(x => x.DatumObjave.Date == search.DatumObjave.Value.Date);
             }
 
-            return base.AddFilter(query, search);
+            if (!string.IsNullOrWhiteSpace(search?.Naslov))
+            {
+                query = query.Where(x => x.Naslov.ToLower().Contains(search.Naslov.ToLower()));
+            }
+
+            result.Count = await query.CountAsync();
+
+            if (search?.PageSize.HasValue == true && search?.Page.HasValue == true)
+            {
+                query = query.Take(search.PageSize.Value).Skip(search.Page.Value * search.PageSize.Value);
+            }
+
+            var list = await query.ToListAsync();
+
+            result.Result = _mapper.Map<List<Model.Novosti>>(list);
+
+            return result;
         }
     }
 }

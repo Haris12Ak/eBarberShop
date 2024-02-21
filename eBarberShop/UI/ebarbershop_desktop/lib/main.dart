@@ -1,4 +1,5 @@
 import 'package:ebarbershop_desktop/providers/login_provider.dart';
+import 'package:ebarbershop_desktop/providers/novosti_provider.dart';
 import 'package:ebarbershop_desktop/providers/proizvodi_provider.dart';
 import 'package:ebarbershop_desktop/providers/uposlenik_provider.dart';
 import 'package:ebarbershop_desktop/providers/vrste_proizvoda_provider.dart';
@@ -12,7 +13,8 @@ void main() {
       ChangeNotifierProvider(create: (_) => LoginProvider()),
       ChangeNotifierProvider(create: (_) => UposlenikProvider()),
       ChangeNotifierProvider(create: (_) => ProizvodiProvider()),
-      ChangeNotifierProvider(create: (_) => VrsteProizvodaProvider())
+      ChangeNotifierProvider(create: (_) => VrsteProizvodaProvider()),
+      ChangeNotifierProvider(create: (_) => NovostiProvider())
     ],
     child: const MyApp(),
   ));
