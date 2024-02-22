@@ -279,6 +279,7 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
   Row _buildSearch() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         SizedBox(
           width: 500,

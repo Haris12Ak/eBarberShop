@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
+using eBarberShop.Model.Search;
+using eBarberShop.Services.Database;
 using eBarberShop.Services.Interfejsi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eBarberShop.Services.Servisi
 {
@@ -12,6 +9,16 @@ namespace eBarberShop.Services.Servisi
     {
         public SlikeService(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {
+        }
+
+        public override IQueryable<Slike> AddInclude(IQueryable<Slike> query, SlikeSearch? search)
+        {
+            if (search?.DatumObjave.HasValue == true)
+            {
+                query = query.Where(x => x.DatumPostavljanja.Date == search.DatumObjave.Value.Date);
+            }
+
+            return base.AddInclude(query, search);
         }
     }
 }

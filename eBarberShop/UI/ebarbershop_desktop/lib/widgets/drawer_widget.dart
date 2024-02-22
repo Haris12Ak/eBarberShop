@@ -1,6 +1,7 @@
 import 'package:ebarbershop_desktop/screens/home_screen.dart';
 import 'package:ebarbershop_desktop/screens/novosti/novosti_list_screen.dart';
 import 'package:ebarbershop_desktop/screens/proizvodi/proizvodi_list_screen.dart';
+import 'package:ebarbershop_desktop/screens/slike/slike_list_screen.dart';
 import 'package:ebarbershop_desktop/screens/uposlenici/uposlenici_list_screen.dart';
 import 'package:ebarbershop_desktop/utils/util.dart';
 import 'package:ebarbershop_desktop/widgets/master_screen.dart';
@@ -102,6 +103,22 @@ class DrawerWidget extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                     builder: (context) => const ProizvodiListScreen()),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text(
+              'Slike',
+              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500),
+            ),
+            leading: const Icon(Icons.image),
+            selectedColor: Colors.blue[800],
+            selectedTileColor: Colors.grey[350],
+            selected: widget.selectedOption == 'Slike',
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => const SlikeListScreen()),
               );
             },
           ),

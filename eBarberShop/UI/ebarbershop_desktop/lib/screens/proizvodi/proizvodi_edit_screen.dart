@@ -375,56 +375,54 @@ class _ProizvodiEditScreenState extends State<ProizvodiEditScreen> {
           const SizedBox(
             height: 50.0,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ElevatedButton.icon(
-                onPressed: () async {
-                  _formKey.currentState?.saveAndValidate();
-
-                  var request = Map.from(_formKey.currentState!.value);
-
-                  if (_base64Image != null && _base64Image != "") {
-                    request['slika'] = _base64Image;
+          Align(
+            alignment: Alignment.bottomRight,
+            child: ElevatedButton.icon(
+              onPressed: () async {
+                _formKey.currentState?.saveAndValidate();
+            
+                var request = Map.from(_formKey.currentState!.value);
+            
+                if (_base64Image != null && _base64Image != "") {
+                  request['slika'] = _base64Image;
+                }
+            
+                try {
+                  if (widget.proizvod != null) {
+                    _buildEditProizvod(context, request);
+                  } else {
+                    _buildAddProizvod(context, request);
                   }
-
-                  try {
-                    if (widget.proizvod != null) {
-                      _buildEditProizvod(context, request);
-                    } else {
-                      _buildAddProizvod(context, request);
-                    }
-                  } on Exception catch (e) {
-                    // ignore: use_build_context_synchronously
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: const Text("Error"),
-                        content: Text(e.toString()),
-                        actions: [
-                          TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text("OK"))
-                        ],
-                      ),
-                    );
-                  }
-                },
-                icon: const Icon(Icons.save_alt),
-                label: const Text(
-                  'Spremi',
-                  style: TextStyle(fontSize: 16.0),
-                ),
-                style: ElevatedButton.styleFrom(
-                  elevation: 8.0,
-                  shape: const BeveledRectangleBorder(
-                      borderRadius: BorderRadius.zero),
-                  backgroundColor: Colors.blueGrey,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(100, 50),
-                ),
+                } on Exception catch (e) {
+                  // ignore: use_build_context_synchronously
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text("Error"),
+                      content: Text(e.toString()),
+                      actions: [
+                        TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text("OK"))
+                      ],
+                    ),
+                  );
+                }
+              },
+              icon: const Icon(Icons.save_alt),
+              label: const Text(
+                'Spremi',
+                style: TextStyle(fontSize: 16.0),
               ),
-            ],
+              style: ElevatedButton.styleFrom(
+                elevation: 8.0,
+                shape: const BeveledRectangleBorder(
+                    borderRadius: BorderRadius.zero),
+                backgroundColor: Colors.blueGrey,
+                foregroundColor: Colors.white,
+                minimumSize: const Size(100, 50),
+              ),
+            ),
           )
         ],
       ),

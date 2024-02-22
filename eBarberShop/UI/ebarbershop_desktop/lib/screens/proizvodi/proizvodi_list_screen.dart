@@ -284,6 +284,7 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
   Row _buildSearch() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         SizedBox(
           width: 500,

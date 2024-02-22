@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:ebarbershop_desktop/models/novosti/novosti.dart';
-import 'package:ebarbershop_desktop/providers/novosti_provider.dart';
+import 'package:ebarbershop_desktop/models/slike/slike.dart';
+import 'package:ebarbershop_desktop/providers/slike_provider.dart';
 import 'package:ebarbershop_desktop/utils/util.dart';
 import 'package:ebarbershop_desktop/widgets/button_back_widget.dart';
 import 'package:ebarbershop_desktop/widgets/master_screen.dart';
@@ -12,19 +12,18 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
-class NovostiEditScreen extends StatefulWidget {
-  Novosti? novost;
-
-  NovostiEditScreen({super.key, this.novost});
+class SlikeAddEditScreen extends StatefulWidget {
+  Slike? slika;
+  SlikeAddEditScreen({super.key, this.slika});
 
   @override
-  State<NovostiEditScreen> createState() => _NovostiEditScreenState();
+  State<SlikeAddEditScreen> createState() => _SlikeAddEditScreenState();
 }
 
-class _NovostiEditScreenState extends State<NovostiEditScreen> {
+class _SlikeAddEditScreenState extends State<SlikeAddEditScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   Map<String, dynamic> _initialValue = {};
-  late NovostiProvider _novostiProvider;
+  late SlikeProvider _slikeProvider;
 
   String? selectedImageName;
   File? _image;
@@ -35,16 +34,13 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
     super.initState();
 
     _initialValue = {
-      'novostiId': widget.novost?.novostiId,
-      'naslov': widget.novost?.naslov,
-      'sadrzaj': widget.novost?.sadrzaj,
-      'datumObjave': widget.novost?.datumObjave,
-      'slika': widget.novost?.slika,
-      'korisnikId': widget.novost?.korisnikId,
-      'korisnikImePrezime': widget.novost?.korisnikImePrezime
+      'slikeId': widget.slika?.slikeId,
+      'opis': widget.slika?.opis,
+      'slika': widget.slika?.slika,
+      'datumPostavljanja': widget.slika?.datumPostavljanja,
     };
 
-    _novostiProvider = context.read<NovostiProvider>();
+    _slikeProvider = context.read<SlikeProvider>();
   }
 
   Future getImage() async {
@@ -67,7 +63,7 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
-      title: widget.novost == null ? 'Dodaj novost' : 'Detalji novosti',
+      title: widget.slika == null ? 'Dodaj sliku' : 'Detalji slike',
       child: Column(
         children: [
           const ButtonBackWidget(),
@@ -102,32 +98,8 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    FormBuilderTextField(
-                      name: 'naslov',
-                      decoration: InputDecoration(
-                        contentPadding:
-                            const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(0.0),
-                          gapPadding: 5.0,
-                        ),
-                        focusColor: Colors.blue,
-                        hoverColor: Colors.grey[200],
-                        fillColor: Colors.white,
-                        filled: true,
-                        labelText: 'Naslov',
-                        floatingLabelStyle: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
                     const Text(
-                      'Sadržaj',
+                      'Opis',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 16.0,
@@ -138,7 +110,7 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
                       height: 8.0,
                     ),
                     FormBuilderTextField(
-                      name: 'sadrzaj',
+                      name: 'opis',
                       minLines: 9,
                       maxLines: null,
                       decoration: InputDecoration(
@@ -158,7 +130,7 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
                       color: Colors.grey,
                     ),
                     Text(
-                      widget.novost != null ? 'Datum objave:' : "",
+                      widget.slika != null ? 'Datum objave:' : "",
                       style: TextStyle(
                         color: Colors.grey[600],
                         fontSize: 16.0,
@@ -169,10 +141,10 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
                       height: 8.0,
                     ),
                     Text(
-                      widget.novost != null &&
-                              _initialValue['datumObjave'] != null &&
-                              _initialValue['datumObjave'] != ""
-                          ? formatDate(_initialValue['datumObjave'])
+                      widget.slika != null &&
+                              _initialValue['datumPostavljanja'] != null &&
+                              _initialValue['datumPostavljanja'] != ""
+                          ? formatDate(_initialValue['datumPostavljanja'])
                           : "",
                       style: const TextStyle(
                           fontSize: 15.0,
@@ -272,14 +244,13 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
                   request['slika'] = _base64Image;
                 }
 
-                request['datumObjave'] = DateTime.now().toIso8601String();
-                request['korisnikId'] = Authorization.korisnikId.toString();
+                request['datumPostavljanja'] = DateTime.now().toIso8601String();
 
                 try {
-                  if (widget.novost != null) {
-                    _buildEditNovost(context, request);
+                  if (widget.slika != null) {
+                    _buildEditImage(context, request);
                   } else {
-                    _buldAddNovost(context, request);
+                    _buildAddNewImage(context, request);
                   }
                 } on Exception catch (e) {
                   // ignore: use_build_context_synchronously
@@ -311,25 +282,57 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
                 minimumSize: const Size(100, 50),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
-  Future<dynamic> _buldAddNovost(
+  Future<dynamic> _buildEditImage(
+      BuildContext context, Map<dynamic, dynamic> request) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text("Potvrda ažuriranja podataka!"),
+        content: const Text(
+            'Da li ste sigurni da želite sačuvati trenutne izmjene!'),
+        actions: [
+          TextButton(
+              onPressed: () async {
+                await _slikeProvider.update(widget.slika!.slikeId, request);
+
+                setState(() {
+                  _initialValue = Map.from(_formKey.currentState!.value);
+                  _initialValue['datumPostavljanja'] =
+                      DateTime.parse(request['datumPostavljanja']);
+                  _initialValue['slika'] = request['slika'];
+                });
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pop();
+              },
+              child: const Text("Potvrdi")),
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Otkaži"))
+        ],
+      ),
+    );
+  }
+
+  Future<dynamic> _buildAddNewImage(
       BuildContext context, Map<dynamic, dynamic> request) {
     return showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
         title: const Text("Potvrda!"),
-        content: const Text(
-            'Da li ste sigurni da želite dodati novost sa unesenim informacijama!'),
+        content: const Text('Da li ste sigurni da želite dodati novu sliku!'),
         actions: [
           TextButton(
               onPressed: () async {
                 if (_formKey.currentState!.saveAndValidate()) {
-                  await _novostiProvider.insert(request);
+                  await _slikeProvider.insert(request);
                 }
                 // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
@@ -340,7 +343,7 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
                     builder: (BuildContext context) => AlertDialog(
                           title: const Text('Poruka!'),
                           content:
-                              const Text('Uspješno ste dodali novu novost!.'),
+                              const Text('Uspješno ste dodali novu sliku!.'),
                           actions: [
                             TextButton(
                               onPressed: () {
@@ -354,40 +357,6 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
                             ),
                           ],
                         ));
-              },
-              child: const Text("Potvrdi")),
-          TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("Otkaži"))
-        ],
-      ),
-    );
-  }
-
-  Future<dynamic> _buildEditNovost(
-      BuildContext context, Map<dynamic, dynamic> request) {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: const Text("Potvrda ažuriranja podataka!"),
-        content: const Text(
-            'Da li ste sigurni da želite sačuvati trenutne izmjene!'),
-        actions: [
-          TextButton(
-              onPressed: () async {
-                await _novostiProvider.update(
-                    widget.novost!.novostiId, request);
-
-                setState(() {
-                  _initialValue = Map.from(_formKey.currentState!.value);
-                  _initialValue['datumObjave'] =
-                      DateTime.parse(request['datumObjave']);
-                  _initialValue['slika'] = request['slika'];
-                });
-                // ignore: use_build_context_synchronously
-                Navigator.of(context).pop();
               },
               child: const Text("Potvrdi")),
           TextButton(

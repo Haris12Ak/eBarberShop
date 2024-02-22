@@ -1,7 +1,7 @@
-import 'package:ebarbershop_desktop/models/novosti/novosti.dart';
 import 'package:ebarbershop_desktop/models/search_result.dart';
-import 'package:ebarbershop_desktop/providers/novosti_provider.dart';
-import 'package:ebarbershop_desktop/screens/novosti/novosti_edit_screen.dart';
+import 'package:ebarbershop_desktop/models/slike/slike.dart';
+import 'package:ebarbershop_desktop/providers/slike_provider.dart';
+import 'package:ebarbershop_desktop/screens/slike/slike_add_edit_screen.dart';
 import 'package:ebarbershop_desktop/utils/util.dart';
 import 'package:ebarbershop_desktop/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
@@ -9,33 +9,29 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class NovostiListScreen extends StatefulWidget {
-  const NovostiListScreen({super.key});
+class SlikeListScreen extends StatefulWidget {
+  const SlikeListScreen({super.key});
 
   @override
-  State<NovostiListScreen> createState() => _NovostiListScreenState();
+  State<SlikeListScreen> createState() => _SlikeListScreenState();
 }
 
-class _NovostiListScreenState extends State<NovostiListScreen> {
-  late NovostiProvider _novostiProvider;
-  late SearchResult<Novosti>? novostiSearchResult;
+class _SlikeListScreenState extends State<SlikeListScreen> {
+  late SlikeProvider _slikeProvider;
+  SearchResult<Slike>? slikeSearchResult;
   bool isLoading = true;
-
-  final TextEditingController _naslovSearchController = TextEditingController();
   DateTime? _selectedDate;
 
   @override
   void initState() {
     super.initState();
+    _slikeProvider = context.read<SlikeProvider>();
 
-    _novostiProvider = context.read<NovostiProvider>();
-
-    fetctNovosti();
+    fetchSlike();
   }
 
-  Future fetctNovosti() async {
-    novostiSearchResult = await _novostiProvider.get();
-
+  Future fetchSlike() async {
+    slikeSearchResult = await _slikeProvider.get();
     setState(() {
       isLoading = false;
     });
@@ -44,8 +40,8 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
-      title: 'Novosti',
-      selectedOption: 'Novosti',
+      title: 'Slike',
+      selectedOption: 'Slike',
       child: isLoading
           ? Container()
           : Column(
@@ -58,16 +54,16 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
                       Navigator.of(context)
                           .push(
                         MaterialPageRoute(
-                          builder: (context) => NovostiEditScreen(),
+                          builder: (context) => SlikeAddEditScreen(),
                         ),
                       )
                           .then((_) {
-                        fetctNovosti();
+                        fetchSlike();
                       });
                     },
                     icon: const Icon(Icons.add),
                     label: const Text(
-                      'Dodaj novost',
+                      'Dodaj sliku',
                       style: TextStyle(fontSize: 16.0),
                     ),
                     style: ElevatedButton.styleFrom(
@@ -82,18 +78,18 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
                 const SizedBox(
                   height: 40.0,
                 ),
-                _buildNovostiList(),
+                _buildForm(context),
                 Container(
                   padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
                   child: Text(
-                    'Ukupno podataka: ${novostiSearchResult?.count}',
+                    'Ukupno podataka: ${slikeSearchResult?.count}',
                     style: const TextStyle(
                         color: Colors.black54,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 1.0,
                         fontSize: 15.0),
                   ),
-                )
+                ),
               ],
             ),
     );
@@ -104,18 +100,6 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        SizedBox(
-          width: 500,
-          child: TextField(
-            controller: _naslovSearchController,
-            decoration: const InputDecoration(
-              labelText: "Naslov",
-            ),
-          ),
-        ),
-        const SizedBox(
-          width: 20.0,
-        ),
         SizedBox(
           width: 300,
           child: FormBuilderDateTimePicker(
@@ -147,13 +131,11 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
         ),
         ElevatedButton.icon(
           onPressed: () async {
-            var data = await _novostiProvider.get(filter: {
-              'naslov': _naslovSearchController.text,
-              'datumObjave': _selectedDate,
-            });
+            var data = await _slikeProvider
+                .get(filter: {'datumObjave': _selectedDate});
 
             setState(() {
-              novostiSearchResult = data;
+              slikeSearchResult = data;
             });
           },
           icon: const Icon(Icons.search),
@@ -175,16 +157,14 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
         ),
         ElevatedButton.icon(
           onPressed: () async {
-            _naslovSearchController.text = "";
-
             setState(() {
               _selectedDate = null;
             });
 
-            var data = await _novostiProvider.get();
+            var data = await _slikeProvider.get();
 
             setState(() {
-              novostiSearchResult = data;
+              slikeSearchResult = data;
             });
           },
           icon: const Icon(Icons.refresh),
@@ -205,17 +185,19 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
     );
   }
 
-  Expanded _buildNovostiList() {
+  Expanded _buildForm(BuildContext context) {
     return Expanded(
       child: SingleChildScrollView(
         child: DataTable(
+            dividerThickness: 2.0,
+            dataRowMaxHeight: 100,
             dataTextStyle: const TextStyle(fontSize: 16.0),
             decoration: const BoxDecoration(color: Colors.white70),
             columns: const <DataColumn>[
               DataColumn(
                 label: Expanded(
                   child: Text(
-                    'Novost ID',
+                    'Slika ID',
                     style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.w700,
@@ -226,7 +208,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
               DataColumn(
                 label: Expanded(
                   child: Text(
-                    'Naslov',
+                    'Slika',
                     style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.w700,
@@ -248,18 +230,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
               DataColumn(
                 label: Expanded(
                   child: Text(
-                    'Objavio korisnik',
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black54),
-                  ),
-                ),
-              ),
-              DataColumn(
-                label: Expanded(
-                  child: Text(
-                    'Slika',
+                    'Opis',
                     style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.w700,
@@ -277,19 +248,18 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
                 ),
               ),
             ],
-            rows: novostiSearchResult?.result
-                    .map((Novosti e) => DataRow(cells: <DataCell>[
-                          DataCell(Text(e.novostiId.toString())),
-                          DataCell(Text(e.naslov)),
-                          DataCell(Text(formatDate(e.datumObjave))),
-                          DataCell(Text(e.korisnikImePrezime ?? "")),
+            rows: slikeSearchResult?.result
+                    .map((Slike e) => DataRow(cells: <DataCell>[
+                          DataCell(Text(e.slikeId.toString())),
                           DataCell(e.slika != ""
                               ? SizedBox(
-                                  width: 40,
-                                  height: 40,
-                                  child: imageFromBase64String(e.slika!),
+                                  width: 80,
+                                  height: 80,
+                                  child: imageFromBase64String(e.slika),
                                 )
                               : const Text('')),
+                          DataCell(Text(formatDate(e.datumPostavljanja))),
+                          DataCell(Text(e.opis ?? "")),
                           DataCell(
                             Row(
                               children: [
@@ -300,20 +270,20 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
                                           .push(
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              NovostiEditScreen(
-                                            novost: e,
+                                              SlikeAddEditScreen(
+                                            slika: e,
                                           ),
                                         ),
                                       )
                                           .then((_) {
-                                        fetctNovosti();
+                                        fetchSlike();
                                       });
                                     },
                                     icon: const Icon(Icons.edit)),
                                 const SizedBox(
                                   width: 10.0,
                                 ),
-                                _buildDeleteNovost(e)
+                                _buildDeleteImage(context, e),
                               ],
                             ),
                           )
@@ -324,7 +294,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
     );
   }
 
-  IconButton _buildDeleteNovost(Novosti e) {
+  IconButton _buildDeleteImage(BuildContext context, Slike e) {
     return IconButton(
         tooltip: 'Obriši',
         onPressed: () {
@@ -335,15 +305,15 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
               builder: (BuildContext context) => AlertDialog(
                 title: const Text('Potvrda'),
                 content: Text(
-                    'Jeste li sigurni da želite ukloniti novost objavljena datuma: ${formatDate(e.datumObjave)} !'),
+                    'Jeste li sigurni da želite ukloniti sliku objavljenu datuma: ${formatDate(e.datumPostavljanja)} !'),
                 actions: [
                   TextButton(
                     onPressed: () async {
-                      await _novostiProvider.delete(e.novostiId);
+                      await _slikeProvider.delete(e.slikeId);
 
                       Navigator.of(context).pop();
 
-                      fetctNovosti();
+                      fetchSlike();
                     },
                     child: const Text('Da'),
                   ),

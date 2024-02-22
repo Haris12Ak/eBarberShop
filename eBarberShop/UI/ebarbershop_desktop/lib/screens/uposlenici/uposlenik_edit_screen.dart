@@ -186,7 +186,8 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
               child: FormBuilderTextField(
                 name: 'adresa',
                 decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                  contentPadding:
+                      const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(0.0),
                     gapPadding: 5.0,
@@ -208,53 +209,51 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
           const SizedBox(
             height: 50.0,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ElevatedButton.icon(
-                onPressed: () async {
-                  _formKey.currentState?.saveAndValidate();
+          Align(
+            alignment: Alignment.bottomRight,
+            child: ElevatedButton.icon(
+              onPressed: () async {
+                _formKey.currentState?.saveAndValidate();
 
-                  var request = Map.from(_formKey.currentState!.value);
+                var request = Map.from(_formKey.currentState!.value);
 
-                  try {
-                    if (widget.uposlenik != null) {
-                      // ignore: use_build_context_synchronously
-                      _buildEditUposlenik(context, request);
-                    } else {
-                      _buildAddUposlenik(context, request);
-                    }
-                  } on Exception catch (e) {
+                try {
+                  if (widget.uposlenik != null) {
                     // ignore: use_build_context_synchronously
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: const Text("Error"),
-                        content: Text(e.toString()),
-                        actions: [
-                          TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text("OK"))
-                        ],
-                      ),
-                    );
+                    _buildEditUposlenik(context, request);
+                  } else {
+                    _buildAddUposlenik(context, request);
                   }
-                },
-                icon: const Icon(Icons.save_alt),
-                label: const Text(
-                  'Spremi',
-                  style: TextStyle(fontSize: 16.0),
-                ),
-                style: ElevatedButton.styleFrom(
-                  elevation: 8.0,
-                  shape: const BeveledRectangleBorder(
-                      borderRadius: BorderRadius.zero),
-                  backgroundColor: Colors.blueGrey,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(100, 50),
-                ),
+                } on Exception catch (e) {
+                  // ignore: use_build_context_synchronously
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text("Error"),
+                      content: Text(e.toString()),
+                      actions: [
+                        TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text("OK"))
+                      ],
+                    ),
+                  );
+                }
+              },
+              icon: const Icon(Icons.save_alt),
+              label: const Text(
+                'Spremi',
+                style: TextStyle(fontSize: 16.0),
               ),
-            ],
+              style: ElevatedButton.styleFrom(
+                elevation: 8.0,
+                shape: const BeveledRectangleBorder(
+                    borderRadius: BorderRadius.zero),
+                backgroundColor: Colors.blueGrey,
+                foregroundColor: Colors.white,
+                minimumSize: const Size(100, 50),
+              ),
+            ),
           )
         ],
       ),
