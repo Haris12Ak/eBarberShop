@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace eBarberShop.Services.Database
+﻿namespace eBarberShop.Services.Database
 {
     public partial class Rezervacija
     {
         public int RezervacijaId { get; set; }
-        public DateTime DatumRezervacije { get; set; }
-        public DateTime VrijemePocetka { get; set; }
-        public DateTime VrijemeZavrsetka { get; set; }
+        public DateTime Datum { get; set; }
+        public DateTime Vrijeme { get; set; }
         public bool? Status { get; set; }
         public int KorisnikId { get; set; }
         public int UposlenikId { get; set; }

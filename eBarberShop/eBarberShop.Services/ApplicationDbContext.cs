@@ -1,19 +1,14 @@
 ﻿using eBarberShop.Services.Database;
 using eBarberShop.Services.Helper;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eBarberShop.Services
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) 
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -94,19 +89,18 @@ namespace eBarberShop.Services
 
             modelBuilder.Entity<Rezervacija>()
                 .HasData(
-                new Rezervacija { RezervacijaId = 1, DatumRezervacije = new DateTime(2024, 1, 5, 9, 0, 0), VrijemePocetka = new DateTime(2024, 1, 5, 9, 0, 0), VrijemeZavrsetka = new DateTime(2024, 1, 5, 9, 20, 0), KorisnikId = 3, UposlenikId = 1 },
-                new Rezervacija { RezervacijaId = 2, DatumRezervacije = new DateTime(2024, 1, 5, 9, 0, 0), VrijemePocetka = new DateTime(2024, 1, 5, 9, 20, 0), VrijemeZavrsetka = new DateTime(2024, 1, 5, 9, 40, 0), KorisnikId = 4, UposlenikId = 1 },
-                new Rezervacija { RezervacijaId = 3, DatumRezervacije = new DateTime(2024, 1, 25, 10, 0, 0), VrijemePocetka = new DateTime(2024, 1, 25, 10, 0, 0), VrijemeZavrsetka = new DateTime(2024, 1, 25, 10, 20, 0), KorisnikId = 3, UposlenikId = 2 },
-                new Rezervacija { RezervacijaId = 4, DatumRezervacije = new DateTime(2024, 1, 25, 11, 0, 0), VrijemePocetka = new DateTime(2024, 1, 25, 11, 0, 0), VrijemeZavrsetka = new DateTime(2024, 1, 25, 11, 20, 0), KorisnikId = 4, UposlenikId = 2 }
+                new Rezervacija { RezervacijaId = 1, Datum = new DateTime(2024, 1, 5, 0, 0, 0), Vrijeme = new DateTime(2024, 1, 5, 9, 30, 0), KorisnikId = 3, UposlenikId = 1 },
+                new Rezervacija { RezervacijaId = 2, Datum = new DateTime(2024, 1, 5, 0, 0, 0), Vrijeme = new DateTime(2024, 1, 5, 10, 15, 0), KorisnikId = 4, UposlenikId = 1 },
+                new Rezervacija { RezervacijaId = 3, Datum = new DateTime(2024, 1, 6, 0, 0, 0), Vrijeme = new DateTime(2024, 1, 6, 9, 0, 0), KorisnikId = 3, UposlenikId = 2 },
+                new Rezervacija { RezervacijaId = 4, Datum = new DateTime(2024, 1, 6, 0, 0, 0), Vrijeme = new DateTime(2024, 1, 6, 11, 30, 0), KorisnikId = 4, UposlenikId = 2 }
                 );
 
             modelBuilder.Entity<Usluga>()
                 .HasData(
                 new Usluga { UslugaId = 1, Naziv = "Sisanje i oblikovanje", Cijena = 10, Trajanje = 15 },
-                new Usluga { UslugaId = 2, Naziv = "Bojanje kose", Cijena = 10, Trajanje = 20 },
-                new Usluga { UslugaId = 3, Naziv = "Feniranje i stilizovanje", Cijena = 15, Trajanje = 20 },
-                new Usluga { UslugaId = 4, Naziv = "Permanente i trajno oblikovanje", Cijena = 25, Trajanje = 30 },
-                new Usluga { UslugaId = 5, Naziv = "Frizure za posebne prilike", Cijena = 20, Trajanje = 30 }
+                new Usluga { UslugaId = 2, Naziv = "Bojanje kose", Cijena = 30, Trajanje = 45 },
+                new Usluga { UslugaId = 3, Naziv = "Feniranje i stilizovanje", Cijena = 15, Trajanje = 30 },
+                new Usluga { UslugaId = 4, Naziv = "Permanente i trajno oblikovanje", Cijena = 50, Trajanje = 60 }
                 );
 
             modelBuilder.Entity<RezervacijaUsluge>()
