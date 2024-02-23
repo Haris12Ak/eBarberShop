@@ -1,8 +1,11 @@
 import 'package:ebarbershop_desktop/providers/login_provider.dart';
 import 'package:ebarbershop_desktop/providers/novosti_provider.dart';
 import 'package:ebarbershop_desktop/providers/proizvodi_provider.dart';
+import 'package:ebarbershop_desktop/providers/rezervacija_provider.dart';
+import 'package:ebarbershop_desktop/providers/rezervacija_usluge_provider.dart';
 import 'package:ebarbershop_desktop/providers/slike_provider.dart';
 import 'package:ebarbershop_desktop/providers/uposlenik_provider.dart';
+import 'package:ebarbershop_desktop/providers/usluga_provider.dart';
 import 'package:ebarbershop_desktop/providers/vrste_proizvoda_provider.dart';
 import 'package:ebarbershop_desktop/screens/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +19,10 @@ void main() {
       ChangeNotifierProvider(create: (_) => ProizvodiProvider()),
       ChangeNotifierProvider(create: (_) => VrsteProizvodaProvider()),
       ChangeNotifierProvider(create: (_) => NovostiProvider()),
-      ChangeNotifierProvider(create: (_) => SlikeProvider())
+      ChangeNotifierProvider(create: (_) => SlikeProvider()),
+      ChangeNotifierProvider(create: (_) => UslugaProvider()),
+      ChangeNotifierProvider(create: (_) => RezervacijaUslugeProvider()),
+      ChangeNotifierProvider(create: (_) => RezervacijaProvider())
     ],
     child: const MyApp(),
   ));

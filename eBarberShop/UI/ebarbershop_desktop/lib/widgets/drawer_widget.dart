@@ -1,6 +1,7 @@
 import 'package:ebarbershop_desktop/screens/home_screen.dart';
 import 'package:ebarbershop_desktop/screens/novosti/novosti_list_screen.dart';
 import 'package:ebarbershop_desktop/screens/proizvodi/proizvodi_list_screen.dart';
+import 'package:ebarbershop_desktop/screens/rezervacije/rezervacije_screen.dart';
 import 'package:ebarbershop_desktop/screens/slike/slike_list_screen.dart';
 import 'package:ebarbershop_desktop/screens/uposlenici/uposlenici_list_screen.dart';
 import 'package:ebarbershop_desktop/utils/util.dart';
@@ -119,6 +120,22 @@ class DrawerWidget extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                     builder: (context) => const SlikeListScreen()),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text(
+              'Rezervacije',
+              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500),
+            ),
+            leading: const Icon(Icons.calendar_month_outlined),
+            selectedColor: Colors.blue[800],
+            selectedTileColor: Colors.grey[350],
+            selected: widget.selectedOption == 'Rezervacije',
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => const RezervacijeScreen()),
               );
             },
           ),

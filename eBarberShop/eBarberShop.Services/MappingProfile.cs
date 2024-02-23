@@ -1,9 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eBarberShop.Services
 {
@@ -65,7 +60,10 @@ namespace eBarberShop.Services
 
             CreateMap<Database.NarudzbeDetalji, Model.NarudzbeDetalji>();
 
+            CreateMap<Database.RezervacijaUsluge, Model.UslugaRezervacije>();
             CreateMap<Database.RezervacijaUsluge, Model.RezervacijaUsluge>();
+            CreateMap<Model.Requests.RezervacijaUslugeInsertRequest, Database.RezervacijaUsluge>();
+            CreateMap<Model.Requests.RezervacijaUslugeUpdateRequest, Database.RezervacijaUsluge>();
 
         }
     }

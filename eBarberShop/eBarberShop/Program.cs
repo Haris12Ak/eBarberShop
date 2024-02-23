@@ -25,6 +25,7 @@ builder.Services.AddTransient<IRezervacijaService, RezervacijaService>();
 builder.Services.AddTransient<ISlikeService, SlikeService>();
 builder.Services.AddTransient<INarudzbeService, NarudzbeService>();
 builder.Services.AddTransient<IKosaricaService, KosaricaService>();
+builder.Services.AddTransient<IRezervacijaUslugeService, RezervacijaUslugeService>();
 
 
 builder.Services.AddControllers(x =>

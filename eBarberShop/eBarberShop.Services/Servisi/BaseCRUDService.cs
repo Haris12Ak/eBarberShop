@@ -1,13 +1,5 @@
 ﻿using AutoMapper;
 using eBarberShop.Model.Search;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using Microsoft.Identity.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eBarberShop.Services.Servisi
 {
@@ -63,11 +55,10 @@ namespace eBarberShop.Services.Servisi
             return _mapper.Map<T>(entity);
         }
 
-        
         public virtual async Task BeforeInsert(Tdb entity, TInsert insert)
         {
-            
+
         }
-        
+
     }
 }

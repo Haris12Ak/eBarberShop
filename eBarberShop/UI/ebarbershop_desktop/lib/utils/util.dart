@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -20,10 +18,30 @@ String formatNumber(dynamic) {
   return f.format(dynamic);
 }
 
-String formatDate(dynamic){
+String formatDate(dynamic) {
   var f = DateFormat('yyyy-MM-dd HH:mm');
 
-  if(dynamic == null){
+  if (dynamic == null) {
+    return "";
+  }
+
+  return f.format(dynamic);
+}
+
+String getDateFormat(dynamic) {
+  var f = DateFormat('yyyy/MM/dd');
+
+  if (dynamic == null) {
+    return "";
+  }
+
+  return f.format(dynamic);
+}
+
+String getTimeFormat(dynamic){
+  var f = DateFormat('HH:mm');
+
+  if (dynamic == null) {
     return "";
   }
 

@@ -3,11 +3,6 @@ using eBarberShop.Model.Search;
 using eBarberShop.Services.Database;
 using eBarberShop.Services.Interfejsi;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eBarberShop.Services.Servisi
 {
@@ -19,12 +14,27 @@ namespace eBarberShop.Services.Servisi
 
         public override IQueryable<Rezervacija> AddInclude(IQueryable<Rezervacija> query, RezervacijaSearch? search)
         {
-            if(search?.IsUslugeIncluded == true)
+            if (search?.IsUslugeIncluded == true)
             {
                 query = query.Include("RezervacijaUsluge.Usluga");
             }
 
             return base.AddInclude(query, search);
+        }
+
+        public override async Task<Model.Rezervacija> Delete(int id)
+        {
+            var rezervacija = await _dbContext.Set<Database.Rezervacija>().FindAsync(id);
+
+            if (rezervacija == null)
+                return null;
+
+            _dbContext.RezervacijaUsluge.RemoveRange(rezervacija.RezervacijaUsluge);
+
+            _dbContext.Rezervacija.Remove(rezervacija);
+            await _dbContext.SaveChangesAsync();
+
+            return _mapper.Map<Model.Rezervacija>(rezervacija);
         }
     }
 }
