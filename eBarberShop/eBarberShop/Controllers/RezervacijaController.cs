@@ -2,7 +2,6 @@
 using eBarberShop.Model.Requests;
 using eBarberShop.Model.Search;
 using eBarberShop.Services.Interfejsi;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eBarberShop.Controllers
@@ -12,6 +11,12 @@ namespace eBarberShop.Controllers
     {
         public RezervacijaController(ILogger<BaseCRUDController<Rezervacija, RezervacijaSearch, RezervacijaInsertRequest, RezervacijaUpdateRequest>> logger, IRezervacijaService service) : base(logger, service)
         {
+        }
+
+        [HttpGet("/GetTermine")]
+        public async Task<List<Model.Termini>> GetTermine([FromQuery] TerminiSearch? search)
+        {
+            return await (_service as IRezervacijaService).GetTermine(search);
         }
     }
 }

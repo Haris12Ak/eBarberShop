@@ -68,26 +68,8 @@ class _RezervacijeUslugeScreenState extends State<RezervacijeUslugeScreen> {
                 const SizedBox(
                   height: 25.0,
                 ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(Icons.add),
-                    label: const Text(
-                      'Dodaj termin',
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      elevation: 8.0,
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.black,
-                      minimumSize: const Size(100, 50),
-                    ),
-                  ),
-                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     SizedBox(
                       width: 300,
@@ -125,7 +107,7 @@ class _RezervacijeUslugeScreenState extends State<RezervacijeUslugeScreen> {
                             await _rezervacijaUslugeProvider.GetRezervacije(
                                 widget.usluga.uslugaId,
                                 filter: {'datumTermina': _selectedDate});
-
+                
                         setState(() {
                           uslugeRezervacijeInfoResult = data;
                         });
@@ -152,11 +134,11 @@ class _RezervacijeUslugeScreenState extends State<RezervacijeUslugeScreen> {
                         setState(() {
                           _selectedDate = null;
                         });
-
+                
                         var data =
                             await _rezervacijaUslugeProvider.GetRezervacije(
                                 widget.usluga.uslugaId);
-
+                
                         setState(() {
                           uslugeRezervacijeInfoResult = data;
                         });
@@ -213,7 +195,7 @@ class _RezervacijeUslugeScreenState extends State<RezervacijeUslugeScreen> {
           DataColumn(
             label: Expanded(
               child: Text(
-                'Rezervacija ID',
+                'Ime i prezime klijenta',
                 style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.w700,
@@ -244,17 +226,6 @@ class _RezervacijeUslugeScreenState extends State<RezervacijeUslugeScreen> {
             ),
           ),
           DataColumn(
-            label: Expanded(
-              child: Text(
-                'Ime i prezime klijenta',
-                style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black54),
-              ),
-            ),
-          ),
-          DataColumn(
             label: Text(
               '',
               style: TextStyle(
@@ -266,10 +237,9 @@ class _RezervacijeUslugeScreenState extends State<RezervacijeUslugeScreen> {
         ],
         rows: uslugeRezervacijeInfoResult?.result
                 .map((UslugeRezervacijeInfo e) => DataRow(cells: <DataCell>[
-                      DataCell(Text(e.rezervacijaId.toString())),
+                      DataCell(Text('${e.imeKlijenta} ${e.prezimeKlijenta}')),
                       DataCell(Text(getDateFormat(e.datumRezervacije))),
                       DataCell(Text(getTimeFormat(e.vrijemeRezervacije))),
-                      DataCell(Text('${e.imeKlijenta} ${e.prezimeKlijenta}')),
                       DataCell(
                         _buildDeleteTermin(context, e),
                       )

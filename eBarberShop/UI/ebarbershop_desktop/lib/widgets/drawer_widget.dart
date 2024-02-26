@@ -2,6 +2,7 @@ import 'package:ebarbershop_desktop/screens/home_screen.dart';
 import 'package:ebarbershop_desktop/screens/novosti/novosti_list_screen.dart';
 import 'package:ebarbershop_desktop/screens/proizvodi/proizvodi_list_screen.dart';
 import 'package:ebarbershop_desktop/screens/rezervacije/rezervacije_screen.dart';
+import 'package:ebarbershop_desktop/screens/rezervacije/rezervacije_termini_screen.dart';
 import 'package:ebarbershop_desktop/screens/slike/slike_list_screen.dart';
 import 'package:ebarbershop_desktop/screens/uposlenici/uposlenici_list_screen.dart';
 import 'package:ebarbershop_desktop/utils/util.dart';
@@ -128,7 +129,7 @@ class DrawerWidget extends StatelessWidget {
               'Rezervacije',
               style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500),
             ),
-            leading: const Icon(Icons.calendar_month_outlined),
+            leading: const Icon(Icons.calendar_month),
             selectedColor: Colors.blue[800],
             selectedTileColor: Colors.grey[350],
             selected: widget.selectedOption == 'Rezervacije',
@@ -144,7 +145,7 @@ class DrawerWidget extends StatelessWidget {
               'Novosti',
               style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500),
             ),
-            leading: const Icon(Icons.feed_outlined),
+            leading: const Icon(Icons.feed),
             selectedColor: Colors.blue[800],
             selectedTileColor: Colors.grey[350],
             selected: widget.selectedOption == 'Novosti',
@@ -152,6 +153,22 @@ class DrawerWidget extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                     builder: (context) => const NovostiListScreen()),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text(
+              'Termini',
+              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500),
+            ),
+            leading: const Icon(Icons.more_time),
+            selectedColor: Colors.blue[800],
+            selectedTileColor: Colors.grey[350],
+            selected: widget.selectedOption == 'Termini',
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => const RezervacijeTerminiScreen()),
               );
             },
           ),

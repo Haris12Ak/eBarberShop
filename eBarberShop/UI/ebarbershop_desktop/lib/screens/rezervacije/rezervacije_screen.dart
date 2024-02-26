@@ -153,7 +153,7 @@ class _RezervacijeScreenState extends State<RezervacijeScreen> {
                                 },
                                 tooltip: 'Prikaži',
                                 icon: Icon(
-                                  Icons.list,
+                                  Icons.checklist_rtl,
                                   color: Colors.grey[800],
                                   size: 35.0,
                                 ),
