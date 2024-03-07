@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace eBarberShop.Model
+﻿namespace eBarberShop.Model
 {
     public class Narudzbe
     {
@@ -17,6 +11,9 @@ namespace eBarberShop.Model
         public int KorisnikId { get; set; }
 
         public virtual Korisnici Korisnik { get; set; }
+
+        public string? imeKorisnika => Korisnik?.Ime;
+        public string? prezimeKorisnika => Korisnik?.Prezime;
 
         public virtual ICollection<NarudzbeDetalji> NarudzbeDetalji { get; set; } = new List<NarudzbeDetalji>();
     }

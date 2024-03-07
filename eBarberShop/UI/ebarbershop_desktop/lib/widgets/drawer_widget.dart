@@ -1,4 +1,5 @@
 import 'package:ebarbershop_desktop/screens/home_screen.dart';
+import 'package:ebarbershop_desktop/screens/narudzbe/narudzbe_list_screen.dart';
 import 'package:ebarbershop_desktop/screens/novosti/novosti_list_screen.dart';
 import 'package:ebarbershop_desktop/screens/proizvodi/proizvodi_list_screen.dart';
 import 'package:ebarbershop_desktop/screens/rezervacije/rezervacije_screen.dart';
@@ -153,6 +154,22 @@ class DrawerWidget extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                     builder: (context) => const NovostiListScreen()),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text(
+              'Narudžbe',
+              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500),
+            ),
+            leading: const Icon(Icons.shopping_cart_checkout),
+            selectedColor: Colors.blue[800],
+            selectedTileColor: Colors.grey[350],
+            selected: widget.selectedOption == 'Narudzbe',
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => const NarudzbeListScreen()),
               );
             },
           ),
