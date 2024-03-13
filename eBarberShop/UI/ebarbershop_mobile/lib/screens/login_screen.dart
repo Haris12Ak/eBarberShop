@@ -1,6 +1,6 @@
 import 'package:ebarbershop_mobile/models/korisnik/korisnik.dart';
 import 'package:ebarbershop_mobile/providers/login_provider.dart';
-import 'package:ebarbershop_mobile/screens/second_screen.dart';
+import 'package:ebarbershop_mobile/screens/home_screen.dart';
 import 'package:ebarbershop_mobile/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -198,9 +198,10 @@ class _LoginScreenState extends State<LoginScreen> {
             Authorization.korisnikId = korisnikResponse!.korisniciId;
 
             // ignore: use_build_context_synchronously
-            Navigator.push(
+            Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => const SecondScreen()),
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+              (route) => false,
             );
           } else {
             String errorMessage =
