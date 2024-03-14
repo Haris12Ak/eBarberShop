@@ -128,7 +128,7 @@ class _NovostiScreenState extends State<NovostiScreen> {
                                 overflow: TextOverflow.fade,
                                 maxLines: 4,
                                 textAlign: TextAlign.justify,
-                                style: const TextStyle(color: Colors.black),
+                                style: const TextStyle(color: Colors.black87),
                               )),
                             ],
                           )),

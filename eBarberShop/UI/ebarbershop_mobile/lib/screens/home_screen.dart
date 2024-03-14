@@ -1,4 +1,5 @@
 import 'package:ebarbershop_mobile/screens/novosti/novosti_screen.dart';
+import 'package:ebarbershop_mobile/screens/recenzije/recenzije_screen.dart';
 import 'package:ebarbershop_mobile/screens/rezervacije/rezervacije_list_screen.dart';
 import 'package:ebarbershop_mobile/utils/util.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +14,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _widgetOptions = <Widget>[
-    const NovostiScreen(),
-    const RezervacijeListScreen(),
-    const Text('Profile Page'),
+  static const List<Widget> _widgetOptions = <Widget>[
+    NovostiScreen(),
+    RezervacijeListScreen(),
+    RecenzijeScreen(),
+    Text('Profile Page'),
   ];
 
   void _onItemTapped(int index) {
@@ -47,10 +49,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   const Text(
                     'Dobro došli!',
                     style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15,
-                        ),
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
+                    ),
                   ),
                   const SizedBox(
                     width: 8.0,
@@ -73,9 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
-        onTap: _onItemTapped,
+        type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -86,10 +86,17 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Rezervacije',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.star),
+            label: 'Recenzije',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profil',
           ),
         ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue,
+        onTap: _onItemTapped,
       ),
     );
   }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace eBarberShop.Model
+﻿namespace eBarberShop.Model
 {
     public class Recenzije
     {
@@ -13,5 +7,10 @@ namespace eBarberShop.Model
         public int Ocjena { get; set; }
         public DateTime DatumObjave { get; set; }
         public int KorisnikId { get; set; }
+        public Korisnici Korisnik { get; set; }
+
+        public string? imeKorisnika => Korisnik?.Ime;
+        public string? prezimeKorisnika => Korisnik?.Prezime;
+
     }
 }

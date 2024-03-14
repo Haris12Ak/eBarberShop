@@ -1,5 +1,6 @@
 import 'package:ebarbershop_mobile/providers/login_provider.dart';
 import 'package:ebarbershop_mobile/providers/novosti_provider.dart';
+import 'package:ebarbershop_mobile/providers/recenzije_provider.dart';
 import 'package:ebarbershop_mobile/providers/slike_provider.dart';
 import 'package:ebarbershop_mobile/screens/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,8 @@ void main() {
     providers: [
       ChangeNotifierProvider(create: (_) => LoginProvider()),
       ChangeNotifierProvider(create: (_) => NovostiProvider()),
-      ChangeNotifierProvider(create: (_) => SlikeProvider())
+      ChangeNotifierProvider(create: (_) => SlikeProvider()),
+      ChangeNotifierProvider(create: (_) => RecenzijeProvider())
     ],
     child: const MyApp(),
   ));

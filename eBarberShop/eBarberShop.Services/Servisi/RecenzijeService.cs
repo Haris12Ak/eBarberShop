@@ -1,12 +1,8 @@
 ﻿using AutoMapper;
+using eBarberShop.Model;
 using eBarberShop.Model.Search;
-using eBarberShop.Services.Database;
 using eBarberShop.Services.Interfejsi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace eBarberShop.Services.Servisi
 {
@@ -16,9 +12,36 @@ namespace eBarberShop.Services.Servisi
         {
         }
 
-        public override IQueryable<Recenzije> AddFilter(IQueryable<Recenzije> query, RecenzijeSearch? search)
+        public override async Task<Model.PagedResult<Model.Recenzije>> Get(RecenzijeSearch? search)
         {
-            if(search?.DatumObjave.HasValue == true)
+            var query = _dbContext.Set<Database.Recenzije>()
+                .Include("Korisnik")
+                .AsQueryable();
+
+            PagedResult<Model.Recenzije> result = new PagedResult<Model.Recenzije>();
+
+            if (search?.DatumObjave.HasValue == true)
+            {
+                query = query.Where(x => x.DatumObjave.Date == search.DatumObjave.Value.Date);
+            }
+
+            result.Count = await query.CountAsync();
+
+            if (search?.PageSize.HasValue == true && search?.Page.HasValue == true)
+            {
+                query = query.Take(search.PageSize.Value).Skip(search.Page.Value * search.PageSize.Value);
+            }
+
+            var list = await query.ToListAsync();
+
+            result.Result = _mapper.Map<List<Model.Recenzije>>(list);
+
+            return result;
+        }
+
+        public override IQueryable<Database.Recenzije> AddFilter(IQueryable<Database.Recenzije> query, RecenzijeSearch? search)
+        {
+            if (search?.DatumObjave.HasValue == true)
             {
                 query = query.Where(x => x.DatumObjave.Date == search.DatumObjave.Value.Date);
             }
