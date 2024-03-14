@@ -9,5 +9,6 @@ namespace eBarberShop.Model.Search
     public class RecenzijeSearch : BaseSearch
     {
         public DateTime? DatumObjave { get; set; }
+        public bool? isKorisnikInclude { get; set; }
     }
 }

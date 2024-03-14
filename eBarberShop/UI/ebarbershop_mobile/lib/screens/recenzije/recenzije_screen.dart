@@ -2,6 +2,7 @@ import 'package:ebarbershop_mobile/models/recenzije/recenzije.dart';
 import 'package:ebarbershop_mobile/models/search_result.dart';
 import 'package:ebarbershop_mobile/providers/recenzije_provider.dart';
 import 'package:ebarbershop_mobile/screens/recenzije/recenzije_add_screen.dart';
+import 'package:ebarbershop_mobile/screens/recenzije/recenzije_korisnika_screen.dart';
 import 'package:ebarbershop_mobile/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -16,8 +17,22 @@ class RecenzijeScreen extends StatefulWidget {
 
 class _RecenzijeScreenState extends State<RecenzijeScreen> {
   late RecenzijeProvider _recenzijeProvider;
-  SearchResult<Recenzije>? recenzijeRezult;
+  SearchResult<Recenzije>? recenzijeResult;
   bool isLoading = true;
+  double ocjena = 0.0;
+
+  double calculateAvarageRaiting(List<Recenzije> recenzije) {
+    if (recenzije.isEmpty) {
+      return 0.0;
+    }
+
+    double total = 0.0;
+    for (var recenzija in recenzije) {
+      total += recenzija.ocjena;
+    }
+
+    return total / recenzije.length;
+  }
 
   @override
   void initState() {
@@ -27,7 +42,8 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
   }
 
   Future fetchRecenzije() async {
-    recenzijeRezult = await _recenzijeProvider.get();
+    recenzijeResult =
+        await _recenzijeProvider.get(filter: {'isKorisnikInclude': true});
 
     setState(() {
       isLoading = false;
@@ -41,7 +57,8 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
             child: CircularProgressIndicator(),
           )
         : Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(
                 height: 10.0,
@@ -51,30 +68,75 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
                 child: Text(
                   'Recenzije',
                   style: TextStyle(
-                    fontSize: 20.0,
+                    fontSize: 22.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               const SizedBox(
-                height: 10.0,
+                height: 5.0,
               ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                const RecenzijeAddScreen()));
-                  },
-                  child: Icon(
-                    Icons.rate_review,
-                    size: 35.0,
-                    color: Colors.amberAccent[700]!.withOpacity(0.8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.star_border_purple500_outlined,
+                    color: Colors.amber,
+                    size: 25.0,
                   ),
-                ),
+                  const SizedBox(
+                    width: 8.0,
+                  ),
+                  Text(
+                    formatNumber(
+                      calculateAvarageRaiting(recenzijeResult!.result),
+                    ),
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey[900],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  const RecenzijeAddScreen())).then(
+                        (value) => fetchRecenzije(),
+                      );
+                    },
+                    child: Icon(
+                      Icons.rate_review_outlined,
+                      size: 35.0,
+                      color: Colors.amberAccent[700]!.withOpacity(0.8),
+                    ),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      const RecenzijeKorisnikaScreen()))
+                          .then((value) => fetchRecenzije());
+                    },
+                    style: ElevatedButton.styleFrom(
+                        elevation: 0.0, foregroundColor: Colors.black),
+                    icon: const Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    label: const Text('Moje recenzije'),
+                  ),
+                ],
               ),
               const SizedBox(
                 height: 10.0,
@@ -86,11 +148,11 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
                       crossAxisCount: 2,
                       mainAxisSpacing: 10.0,
                       crossAxisSpacing: 10.0,
-                      mainAxisExtent: 280.0,
+                      mainAxisExtent: 250.0,
                     ),
-                    itemCount: recenzijeRezult!.result.length,
+                    itemCount: recenzijeResult!.result.length,
                     itemBuilder: (BuildContext context, int index) {
-                      Recenzije recenzija = recenzijeRezult!.result[index];
+                      Recenzije recenzija = recenzijeResult!.result[index];
                       return GestureDetector(
                         onTap: () {
                           _buildShowBottomDialog(context, recenzija);
@@ -111,7 +173,7 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
                                 height: 10.0,
                               ),
                               Text(
-                                '${recenzija.imeKorisnika} ${recenzija.prezimeKorisnika}',
+                                '${recenzija.imeKorisnika ?? ""} ${recenzija.prezimeKorisnika ?? ""}',
                                 style: TextStyle(
                                   fontSize: 15.0,
                                   color: Colors.grey[800],
@@ -143,13 +205,15 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
                                 height: 10.0,
                               ),
                               Expanded(
-                                child: Text(
-                                  recenzija.sadrzaj,
-                                  overflow: TextOverflow.fade,
-                                  textAlign: TextAlign.left,
-                                  maxLines: 6,
-                                  style: const TextStyle(
-                                    color: Colors.black87,
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    recenzija.sadrzaj,
+                                    overflow: TextOverflow.fade,
+                                    maxLines: 5,
+                                    style: const TextStyle(
+                                      color: Colors.black87,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -180,7 +244,7 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${recenzija.imeKorisnika} ${recenzija.prezimeKorisnika}',
+                '${recenzija.imeKorisnika ?? ""} ${recenzija.prezimeKorisnika ?? ""}',
                 style: const TextStyle(
                   fontSize: 20.0,
                   color: Colors.black,

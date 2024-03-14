@@ -1,29 +1,50 @@
-import 'package:ebarbershop_mobile/models/recenzije/recenzije_insert_request.dart';
+import 'package:ebarbershop_mobile/models/recenzije/recenzije.dart';
 import 'package:ebarbershop_mobile/providers/recenzije_provider.dart';
 import 'package:ebarbershop_mobile/utils/util.dart';
 import 'package:ebarbershop_mobile/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
-class RecenzijeAddScreen extends StatefulWidget {
-  const RecenzijeAddScreen({super.key});
+// ignore: must_be_immutable
+class RecenzijeEditScreen extends StatefulWidget {
+  Recenzije recenzija;
+  RecenzijeEditScreen({super.key, required this.recenzija});
 
   @override
-  State<RecenzijeAddScreen> createState() => _RecenzijeAddScreenState();
+  State<RecenzijeEditScreen> createState() => _RecenzijeEditScreenState();
 }
 
-class _RecenzijeAddScreenState extends State<RecenzijeAddScreen> {
-  final TextEditingController _sadrzaj = TextEditingController();
-  double _raiting = 0.0;
+class _RecenzijeEditScreenState extends State<RecenzijeEditScreen> {
+  final _formKey = GlobalKey<FormBuilderState>();
+  Map<String, dynamic> _initialValue = {};
+  late RecenzijeProvider _recenzijeProvider;
+
+  double _rating = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _initialValue = {
+      'sadrzaj': widget.recenzija.sadrzaj,
+      'ocjena': widget.recenzija.ocjena,
+    };
+
+    _recenzijeProvider = context.read<RecenzijeProvider>();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-        title: 'Dodaj recenziju',
-        child: SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+      title: 'Uredi',
+      child: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+          child: FormBuilder(
+            key: _formKey,
+            initialValue: _initialValue,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -41,7 +62,7 @@ class _RecenzijeAddScreenState extends State<RecenzijeAddScreen> {
                     const SizedBox(width: 10.0),
                     RatingBar.builder(
                       itemSize: 35.0,
-                      initialRating: 1,
+                      initialRating: _initialValue['ocjena'],
                       minRating: 1,
                       direction: Axis.horizontal,
                       allowHalfRating: true,
@@ -53,15 +74,15 @@ class _RecenzijeAddScreenState extends State<RecenzijeAddScreen> {
                       ),
                       onRatingUpdate: (rating) {
                         setState(() {
-                          _raiting = rating;
+                          _rating = rating;
                         });
                       },
                     ),
                   ],
                 ),
                 const SizedBox(height: 15.0),
-                TextFormField(
-                  controller: _sadrzaj,
+                FormBuilderTextField(
+                  name: 'sadrzaj',
                   minLines: 15,
                   maxLines: null,
                   decoration: const InputDecoration(
@@ -73,29 +94,31 @@ class _RecenzijeAddScreenState extends State<RecenzijeAddScreen> {
                 const SizedBox(height: 15.0),
                 ElevatedButton.icon(
                     onPressed: () async {
-                      var recenzijeProvider = Provider.of<RecenzijeProvider>(
-                          context,
-                          listen: false);
+                      _formKey.currentState?.saveAndValidate();
 
-                      var dateTime = DateTime.now();
+                      var request = Map.from(_formKey.currentState!.value);
 
-                      RecenzijeInsertRequest request = RecenzijeInsertRequest(
-                        _sadrzaj.text,
-                        _raiting,
-                        dateTime,
-                        Authorization.korisnikId!,
-                      );
+                      request['datumObjave'] = DateTime.now().toIso8601String();
+                      request['korisnikId'] =
+                          Authorization.korisnikId!.toString();
+
+                      if (_rating != 0.0) {
+                        request['ocjena'] = _rating;
+                      } else {
+                        request['ocjena'] = _initialValue['ocjena'];
+                      }
 
                       try {
-                        await recenzijeProvider.insert(request);
+                        await _recenzijeProvider.update(
+                            widget.recenzija.recenzijeId, request);
 
                         // ignore: use_build_context_synchronously
                         showDialog(
                             context: context,
                             builder: (BuildContext context) => AlertDialog(
                                   title: const Text('Poruka'),
-                                  content:
-                                      const Text('Recenzija uspješno dodana!.'),
+                                  content: const Text(
+                                      'Recenzija uspješno editovana !.'),
                                   actions: [
                                     TextButton(
                                       onPressed: () async {
@@ -128,10 +151,12 @@ class _RecenzijeAddScreenState extends State<RecenzijeAddScreen> {
                       foregroundColor: Colors.white,
                     ),
                     icon: const Icon(Icons.save_alt),
-                    label: const Text('Spremi')),
+                    label: const Text('Sačuvaj izmjene')),
               ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
