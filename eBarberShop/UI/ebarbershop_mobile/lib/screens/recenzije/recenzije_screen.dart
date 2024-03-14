@@ -125,7 +125,7 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
                                 ignoring: true,
                                 child: RatingBar.builder(
                                   itemSize: 25.0,
-                                  initialRating: recenzija.ocjena.toDouble(),
+                                  initialRating: recenzija.ocjena,
                                   minRating: 0,
                                   direction: Axis.horizontal,
                                   allowHalfRating: true,

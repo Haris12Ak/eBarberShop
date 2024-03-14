@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace eBarberShop.Model.Requests
+﻿namespace eBarberShop.Model.Requests
 {
     public class RecenzijeUpdateRequest
     {
         public string Sadrzaj { get; set; }
-        public int Ocjena { get; set; }
+        public double Ocjena { get; set; }
         public DateTime DatumObjave { get; set; }
         public int KorisnikId { get; set; }
     }

@@ -9,7 +9,7 @@ part of 'recenzije.dart';
 Recenzije _$RecenzijeFromJson(Map<String, dynamic> json) => Recenzije(
       json['recenzijeId'] as int,
       json['sadrzaj'] as String,
-      json['ocjena'] as int,
+      (json['ocjena'] as num).toDouble(),
       DateTime.parse(json['datumObjave'] as String),
       json['korisnikId'] as int,
       json['imeKorisnika'] as String?,

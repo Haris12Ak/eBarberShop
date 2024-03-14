@@ -6,7 +6,7 @@ part 'recenzije.g.dart';
 class Recenzije {
   int recenzijeId;
   String sadrzaj;
-  int ocjena;
+  double ocjena;
   DateTime datumObjave;
   int korisnikId;
   String? imeKorisnika;
