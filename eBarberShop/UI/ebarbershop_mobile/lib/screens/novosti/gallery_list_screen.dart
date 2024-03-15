@@ -30,10 +30,12 @@ class _GalleryListScreenState extends State<GalleryListScreen> {
   Future fetcSlike() async {
     var data = await _slikeProvider.get();
 
-    setState(() {
-      slikeResult = data;
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        slikeResult = data;
+        isLoading = false;
+      });
+    }
   }
 
   @override

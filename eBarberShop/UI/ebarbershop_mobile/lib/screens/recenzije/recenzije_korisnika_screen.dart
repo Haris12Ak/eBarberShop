@@ -31,9 +31,11 @@ class _RecenzijeKorisnikaScreenState extends State<RecenzijeKorisnikaScreen> {
     recenzijeResult = await _recenzijeProvider.GetRecenzijeByKorisnikId(
         Authorization.korisnikId!);
 
-    setState(() {
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override

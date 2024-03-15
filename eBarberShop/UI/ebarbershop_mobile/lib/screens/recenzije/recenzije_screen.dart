@@ -45,9 +45,11 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
     recenzijeResult =
         await _recenzijeProvider.get(filter: {'isKorisnikInclude': true});
 
-    setState(() {
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -238,60 +240,62 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
         return Container(
           padding: const EdgeInsets.all(10.0),
           width: double.infinity,
-          height: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${recenzija.imeKorisnika ?? ""} ${recenzija.prezimeKorisnika ?? ""}',
-                style: const TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600,
+          height: 450,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${recenzija.imeKorisnika ?? ""} ${recenzija.prezimeKorisnika ?? ""}',
+                  style: const TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 2.0),
-              Text(
-                formatDate(recenzija.datumObjave),
-                style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.black45,
-                    fontWeight: FontWeight.w400),
-              ),
-              const SizedBox(height: 10.0),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.star,
-                    color: Colors.amber,
-                    size: 30.0,
-                  ),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
-                  Text(
-                    recenzija.ocjena.toString(),
-                    style: const TextStyle(
-                        fontSize: 17.0,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87),
-                  ),
-                ],
-              ),
-              Divider(
-                color: Colors.grey[350],
-                height: 40.0,
-              ),
-              Text(
-                recenzija.sadrzaj,
-                textAlign: TextAlign.justify,
-                style: TextStyle(
-                  color: Colors.grey[850],
-                  fontSize: 15,
+                const SizedBox(height: 2.0),
+                Text(
+                  formatDate(recenzija.datumObjave),
+                  style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black45,
+                      fontWeight: FontWeight.w400),
                 ),
-              ),
-            ],
+                const SizedBox(height: 10.0),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                      size: 30.0,
+                    ),
+                    const SizedBox(
+                      width: 10.0,
+                    ),
+                    Text(
+                      recenzija.ocjena.toString(),
+                      style: const TextStyle(
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black87),
+                    ),
+                  ],
+                ),
+                Divider(
+                  color: Colors.grey[350],
+                  height: 40.0,
+                ),
+                Text(
+                  recenzija.sadrzaj,
+                  textAlign: TextAlign.justify,
+                  style: TextStyle(
+                    color: Colors.grey[850],
+                    fontSize: 15,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

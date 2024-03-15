@@ -32,9 +32,11 @@ class _NovostiScreenState extends State<NovostiScreen> {
   Future fetchNovosti() async {
     novostiResult = await _novostiProvider.get();
 
-    setState(() {
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
