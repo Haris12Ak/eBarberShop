@@ -34,11 +34,15 @@ namespace eBarberShop.Services.Servisi
             if (entity == null)
                 return null;
 
+            await BeforeUpdate(entity, update);
+
             _mapper.Map(update, entity);
+
             await _dbContext.SaveChangesAsync();
 
             return _mapper.Map<T>(entity);
         }
+
 
         public virtual async Task<T> Delete(int id)
         {
@@ -56,6 +60,10 @@ namespace eBarberShop.Services.Servisi
         }
 
         public virtual async Task BeforeInsert(Tdb entity, TInsert insert)
+        {
+
+        }
+        public virtual async Task BeforeUpdate(Tdb entity, TUpdate update)
         {
 
         }

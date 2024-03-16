@@ -1,27 +1,30 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'korisnik.dart';
+part of 'korisnik_update_request.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Korisnik _$KorisnikFromJson(Map<String, dynamic> json) => Korisnik(
-      json['korisniciId'] as int,
+KorisnikUpdateRequest _$KorisnikUpdateRequestFromJson(
+        Map<String, dynamic> json) =>
+    KorisnikUpdateRequest(
       json['ime'] as String,
       json['prezime'] as String,
       json['korisnickoIme'] as String,
-      json['email'] as String?,
+      json['email'] as String,
       json['adresa'] as String?,
       json['brojTelefona'] as String?,
       json['status'] as bool?,
       json['slika'] as String?,
       json['gradId'] as int,
-      json['gradNaziv'] as String?,
+      json['lozinka'] as String?,
+      json['lozinkaPotvrda'] as String?,
     );
 
-Map<String, dynamic> _$KorisnikToJson(Korisnik instance) => <String, dynamic>{
-      'korisniciId': instance.korisniciId,
+Map<String, dynamic> _$KorisnikUpdateRequestToJson(
+        KorisnikUpdateRequest instance) =>
+    <String, dynamic>{
       'ime': instance.ime,
       'prezime': instance.prezime,
       'korisnickoIme': instance.korisnickoIme,
@@ -31,5 +34,6 @@ Map<String, dynamic> _$KorisnikToJson(Korisnik instance) => <String, dynamic>{
       'status': instance.status,
       'slika': instance.slika,
       'gradId': instance.gradId,
-      'gradNaziv': instance.gradNaziv,
+      'lozinka': instance.lozinka,
+      'lozinkaPotvrda': instance.lozinkaPotvrda,
     };

@@ -61,5 +61,25 @@ namespace eBarberShop.Services.Servisi
 
             throw new UserException("Korisnicko ime ili lozinka nisu ispravni!");
         }
+
+        public override async Task<Model.Korisnici> GetById(int id)
+        {
+            var data = await _dbContext.Set<Database.Korisnici>().Include("Grad").FirstOrDefaultAsync(x => x.KorisniciId == id);
+
+            if (data == null)
+                return null;
+
+            return _mapper.Map<Model.Korisnici>(data);
+        }
+
+        public override async Task BeforeUpdate(Database.Korisnici entity, KorisniciUpdateRequest update)
+        {
+            if (update.Lozinka != "")
+            {
+                var salt = PasswordHelper.GenerateSalt();
+                entity.LozinkaSalt = salt;
+                entity.LozinkaHash = PasswordHelper.GenerateHash(salt, update.Lozinka);
+            }
+        }
     }
 }
