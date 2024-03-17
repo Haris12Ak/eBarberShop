@@ -4,5 +4,6 @@
     {
         public DateTime? DatumObjave { get; set; }
         public string? Naslov { get; set; }
+        public bool? IsKorisnikInclude { get; set; }    
     }
 }

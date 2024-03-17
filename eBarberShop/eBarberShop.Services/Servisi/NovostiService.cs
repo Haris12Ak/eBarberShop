@@ -12,12 +12,8 @@ namespace eBarberShop.Services.Servisi
         {
         }
 
-        public override async Task<Model.PagedResult<Model.Novosti>> Get(NovostiSearch? search)
+        public override IQueryable<Database.Novosti> AddFilter(IQueryable<Database.Novosti> query, NovostiSearch? search)
         {
-            var query = _dbContext.Set<Database.Novosti>().Include("Korisnik").AsQueryable();
-
-            PagedResult<Model.Novosti> result = new PagedResult<Model.Novosti>();
-
             if (search?.DatumObjave.HasValue == true)
             {
                 query = query.Where(x => x.DatumObjave.Date == search.DatumObjave.Value.Date);
@@ -28,18 +24,27 @@ namespace eBarberShop.Services.Servisi
                 query = query.Where(x => x.Naslov.ToLower().Contains(search.Naslov.ToLower()));
             }
 
-            result.Count = await query.CountAsync();
+            return base.AddFilter(query, search);
+        }
 
-            if (search?.PageSize.HasValue == true && search?.Page.HasValue == true)
+        public override IQueryable<Database.Novosti> AddInclude(IQueryable<Database.Novosti> query, NovostiSearch? search)
+        {
+            if (search?.IsKorisnikInclude == true)
             {
-                query = query.Take(search.PageSize.Value).Skip(search.Page.Value * search.PageSize.Value);
+                query = query.Include("Korisnik");
             }
 
-            var list = await query.ToListAsync();
+            return base.AddInclude(query, search);
+        }
 
-            result.Result = _mapper.Map<List<Model.Novosti>>(list);
+        public override async Task<Novosti> GetById(int id)
+        {
+            var data = await _dbContext.Set<Database.Novosti>().Include("Korisnik").Where(x => x.NovostiId == id).FirstOrDefaultAsync();
 
-            return result;
+            if (data == null)
+                return null;
+
+            return _mapper.Map<Model.Novosti>(data);
         }
     }
 }

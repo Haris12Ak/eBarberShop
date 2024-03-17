@@ -30,7 +30,8 @@ class _NovostiScreenState extends State<NovostiScreen> {
   }
 
   Future fetchNovosti() async {
-    novostiResult = await _novostiProvider.get();
+    novostiResult =
+        await _novostiProvider.get();
 
     if (mounted) {
       setState(() {
@@ -68,14 +69,11 @@ class _NovostiScreenState extends State<NovostiScreen> {
                               builder: (BuildContext context) =>
                                   const GalleryListScreen()));
                     },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0.0,
-                      backgroundColor: Colors.blueGrey,
-                      foregroundColor: Colors.white,
-                    ),
+                     style: ElevatedButton.styleFrom(
+                        elevation: 0.0, foregroundColor: Colors.black),
                     icon: const Icon(
                       Icons.image,
-                      size: 25.0,
+                      color: Colors.black87,
                     ),
                     label: const Text('Galerija'),
                   ),
@@ -95,7 +93,7 @@ class _NovostiScreenState extends State<NovostiScreen> {
                             context,
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    NovostiDetailScreen(novost: novost)));
+                                    NovostiDetailScreen(novostId: novost.novostiId)));
                       },
                       child: Container(
                           color: Colors.white,
