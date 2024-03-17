@@ -114,6 +114,7 @@ class _RecenzijeEditScreenState extends State<RecenzijeEditScreen> {
 
                         // ignore: use_build_context_synchronously
                         showDialog(
+                            barrierDismissible: false,
                             context: context,
                             builder: (BuildContext context) => AlertDialog(
                                   title: const Text('Poruka'),

@@ -14,6 +14,7 @@ Recenzije _$RecenzijeFromJson(Map<String, dynamic> json) => Recenzije(
       json['korisnikId'] as int,
       json['imeKorisnika'] as String?,
       json['prezimeKorisnika'] as String?,
+      json['slikaKorisnika'] as String?,
     );
 
 Map<String, dynamic> _$RecenzijeToJson(Recenzije instance) => <String, dynamic>{
@@ -24,4 +25,5 @@ Map<String, dynamic> _$RecenzijeToJson(Recenzije instance) => <String, dynamic>{
       'korisnikId': instance.korisnikId,
       'imeKorisnika': instance.imeKorisnika,
       'prezimeKorisnika': instance.prezimeKorisnika,
+      'slikaKorisnika': instance.slikaKorisnika,
     };

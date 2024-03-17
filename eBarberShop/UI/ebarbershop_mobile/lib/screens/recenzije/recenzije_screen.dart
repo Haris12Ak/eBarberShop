@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ebarbershop_mobile/models/recenzije/recenzije.dart';
 import 'package:ebarbershop_mobile/models/search_result.dart';
 import 'package:ebarbershop_mobile/providers/recenzije_provider.dart';
@@ -133,10 +135,10 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
                     style: ElevatedButton.styleFrom(
                         elevation: 0.0, foregroundColor: Colors.black),
                     icon: const Icon(
-                      Icons.star,
-                      color: Colors.amber,
+                      Icons.keyboard_arrow_left,
+                      color: Colors.black87,
                     ),
-                    label: const Text('Moje recenzije'),
+                    label: const Text('Pregled recenzije'),
                   ),
                 ],
               ),
@@ -165,11 +167,35 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Image(
-                                image:
-                                    AssetImage('assets/images/person_icon.png'),
+                              Container(
                                 width: 80,
                                 height: 80,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[350],
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: recenzija.slikaKorisnika != "" &&
+                                        recenzija.slikaKorisnika != null
+                                    ? ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        child: Image(
+                                          image: MemoryImage(
+                                            base64Decode(recenzija
+                                                .slikaKorisnika
+                                                .toString()),
+                                          ),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        child: const Image(
+                                          image: AssetImage(
+                                              'assets/images/person_icon.png'),
+                                        ),
+                                      ),
                               ),
                               const SizedBox(
                                 height: 10.0,

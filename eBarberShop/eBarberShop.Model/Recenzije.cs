@@ -11,6 +11,7 @@
 
         public string? imeKorisnika => Korisnik?.Ime;
         public string? prezimeKorisnika => Korisnik?.Prezime;
+        public byte[]? slikaKorisnika => Korisnik?.Slika;
 
     }
 }

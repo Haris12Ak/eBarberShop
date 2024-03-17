@@ -91,6 +91,7 @@ class _RecenzijeAddScreenState extends State<RecenzijeAddScreen> {
 
                         // ignore: use_build_context_synchronously
                         showDialog(
+                            barrierDismissible: false,
                             context: context,
                             builder: (BuildContext context) => AlertDialog(
                                   title: const Text('Poruka'),
@@ -106,18 +107,12 @@ class _RecenzijeAddScreenState extends State<RecenzijeAddScreen> {
                                     ),
                                   ],
                                 ));
-                      } on Exception catch (e) {
+                      } catch (e) {
                         // ignore: use_build_context_synchronously
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text("Error"),
-                            content: Text(e.toString()),
-                            actions: [
-                              TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text("OK"))
-                            ],
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content:
+                                Text("Moguće je dodati recenziju samo jednom."),
                           ),
                         );
                       }

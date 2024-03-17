@@ -1,6 +1,7 @@
 import 'package:ebarbershop_mobile/models/recenzije/recenzije.dart';
 import 'package:ebarbershop_mobile/models/search_result.dart';
 import 'package:ebarbershop_mobile/providers/recenzije_provider.dart';
+import 'package:ebarbershop_mobile/screens/recenzije/recenzije_add_screen.dart';
 import 'package:ebarbershop_mobile/screens/recenzije/recenzije_edit_screen.dart';
 import 'package:ebarbershop_mobile/utils/util.dart';
 import 'package:ebarbershop_mobile/widgets/master_screen_widget.dart';
@@ -41,20 +42,42 @@ class _RecenzijeKorisnikaScreenState extends State<RecenzijeKorisnikaScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-        title: 'Moje recenzije',
+        title: 'Recenzija',
         child: isLoading
             ? const Center(
                 child: CircularProgressIndicator(),
               )
             : recenzijeResult!.result.isEmpty
                 ? Center(
-                    child: Text(
-                      'Nemate recenzija !',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 17.0,
-                          color: Colors.grey[600],
-                          fontWeight: FontWeight.w600),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Niste dodali recenziju !',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 17.0,
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(
+                          height: 15.0,
+                        ),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            const RecenzijeAddScreen()))
+                                .then((value) => fetchRecenzijeByKorisnikId());
+                          },
+                          style: ElevatedButton.styleFrom(
+                              elevation: 0.0, foregroundColor: Colors.black),
+                          icon: const Icon(Icons.add),
+                          label: const Text('Dodaj recenziju'),
+                        )
+                      ],
                     ),
                   )
                 : ListView.builder(
@@ -117,6 +140,7 @@ class _RecenzijeKorisnikaScreenState extends State<RecenzijeKorisnikaScreen> {
 
           // ignore: use_build_context_synchronously
           showDialog(
+              barrierDismissible: false,
               context: context,
               builder: (BuildContext context) => AlertDialog(
                     title: const Text('Poruka'),
