@@ -111,6 +111,7 @@ class _RecenzijeAddScreenState extends State<RecenzijeAddScreen> {
                         // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
+                            showCloseIcon: true,
                             content:
                                 Text("Moguće je dodati recenziju samo jednom."),
                           ),

@@ -9,9 +9,5 @@
         public int KorisnikId { get; set; }
         public Korisnici Korisnik { get; set; }
 
-        public string? imeKorisnika => Korisnik?.Ime;
-        public string? prezimeKorisnika => Korisnik?.Prezime;
-        public byte[]? slikaKorisnika => Korisnik?.Slika;
-
     }
 }

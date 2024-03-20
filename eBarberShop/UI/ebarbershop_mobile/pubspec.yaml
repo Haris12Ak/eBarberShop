@@ -43,6 +43,7 @@ dependencies:
   flutter_form_builder: ^8.0.0
   file_picker: ^4.6.1
   image_picker: ^1.0.7
+  table_calendar: ^3.0.8
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +74,14 @@ flutter:
    - assets/images/barber_shop.png
    - assets/images/image_not_available.png
    - assets/images/person_icon.png
+   - assets/images/image1.jpg
+   - assets/images/calendar.png
+   - assets/images/gallery.png
+   - assets/images/persons.webp
+   - assets/images/barber_icon.jpg
+
+
+
   # - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

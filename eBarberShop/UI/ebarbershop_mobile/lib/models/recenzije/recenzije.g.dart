@@ -12,9 +12,9 @@ Recenzije _$RecenzijeFromJson(Map<String, dynamic> json) => Recenzije(
       (json['ocjena'] as num).toDouble(),
       DateTime.parse(json['datumObjave'] as String),
       json['korisnikId'] as int,
-      json['imeKorisnika'] as String?,
-      json['prezimeKorisnika'] as String?,
-      json['slikaKorisnika'] as String?,
+      json['korisnik'] == null
+          ? null
+          : Korisnik.fromJson(json['korisnik'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$RecenzijeToJson(Recenzije instance) => <String, dynamic>{
@@ -23,7 +23,5 @@ Map<String, dynamic> _$RecenzijeToJson(Recenzije instance) => <String, dynamic>{
       'ocjena': instance.ocjena,
       'datumObjave': instance.datumObjave.toIso8601String(),
       'korisnikId': instance.korisnikId,
-      'imeKorisnika': instance.imeKorisnika,
-      'prezimeKorisnika': instance.prezimeKorisnika,
-      'slikaKorisnika': instance.slikaKorisnika,
+      'korisnik': instance.korisnik,
     };

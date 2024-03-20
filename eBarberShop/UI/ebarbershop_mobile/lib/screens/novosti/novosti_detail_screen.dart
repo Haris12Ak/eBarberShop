@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ebarbershop_mobile/models/novosti/novosti.dart';
 import 'package:ebarbershop_mobile/providers/novosti_provider.dart';
 import 'package:ebarbershop_mobile/utils/util.dart';
@@ -52,25 +54,20 @@ class _NovostiDetailScreenState extends State<NovostiDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const SizedBox(
-                      height: 50.0,
+                      height: 10.0,
                     ),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: SizedBox(
-                        width: 150,
-                        height: 150,
-                        child: novost.slika != ""
-                            ? imageFromBase64String(novost.slika.toString())
-                            : const Image(
-                                image: AssetImage(
-                                    'assets/images/image_not_available.png'),
-                                width: 150,
-                                height: 150,
-                              ),
+                    SizedBox(
+                      height: 300,
+                      width: double.infinity,
+                      child: Image(
+                        image: MemoryImage(
+                          base64Decode(novost.slika.toString()),
+                        ),
+                        fit: BoxFit.contain,
                       ),
                     ),
                     const SizedBox(
-                      height: 50.0,
+                      height: 18.0,
                     ),
                     Text(
                       'Objavio: ${novost.korisnikImePrezime ?? ""}',

@@ -23,5 +23,7 @@ namespace eBarberShop.Services.Servisi
 
             return _mapper.Map<List<Model.UslugaRezervacije>>(data);
         }
+
+
     }
 }

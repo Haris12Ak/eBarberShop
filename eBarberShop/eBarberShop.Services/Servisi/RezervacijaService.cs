@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using eBarberShop.Model;
+using eBarberShop.Model.Requests;
 using eBarberShop.Model.Search;
 using eBarberShop.Services.Interfejsi;
 using Microsoft.EntityFrameworkCore;
@@ -8,8 +9,13 @@ namespace eBarberShop.Services.Servisi
 {
     public class RezervacijaService : BaseCRUDService<Model.Rezervacija, Database.Rezervacija, Model.Search.RezervacijaSearch, Model.Requests.RezervacijaInsertRequest, Model.Requests.RezervacijaUpdateRequest>, IRezervacijaService
     {
-        public RezervacijaService(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
+        IKorisniciService _korisniciService;
+        IUposlenikService _uposlenikService;
+
+        public RezervacijaService(ApplicationDbContext dbContext, IMapper mapper, IKorisniciService korisniciService, IUposlenikService uposlenikService) : base(dbContext, mapper)
         {
+            _korisniciService = korisniciService;
+            _uposlenikService = uposlenikService;
         }
 
         public override async Task<Model.PagedResult<Model.Rezervacija>> Get(RezervacijaSearch? search)
@@ -81,6 +87,60 @@ namespace eBarberShop.Services.Servisi
             var data = await query.OrderBy(x => x.Datum).OrderBy(y => y.Vrijeme).ToListAsync();
 
             return _mapper.Map<List<Model.Termini>>(data);
+        }
+
+        public async Task<Model.Rezervacija> RezervisiTermin(int uslugaId, RezervacijaInsertRequest request)
+        {
+            var korisnik = await _korisniciService.GetById(request.KorisnikId);
+
+            if (korisnik == null)
+                return null;
+
+            var uposlenik = await _uposlenikService.GetById(request.UposlenikId);
+
+            if (uposlenik == null)
+                return null;
+
+            bool isUposlenikDostupan = await IsUposlenikDostupan(uposlenik.UposlenikId, request.Datum, request.Vrijeme);
+
+            if (!isUposlenikDostupan)
+                throw new UserException("Odabrani uposlenik " + uposlenik.Ime + uposlenik.Prezime + " nije dostupan.Molimo odaberite drugog uposlenika ili drugi termin.");
+
+            var rezervacija = new Database.Rezervacija()
+            {
+                Datum = request.Datum,
+                Vrijeme = request.Vrijeme,
+                Status = request.Status,
+                KorisnikId = korisnik.KorisniciId,
+                UposlenikId = uposlenik.UposlenikId,
+            };
+
+            var usluga = await _dbContext.Set<Database.Usluga>().FindAsync(uslugaId);
+
+            if (usluga == null)
+                return null;
+
+            await _dbContext.Rezervacija.AddAsync(rezervacija);
+
+            rezervacija.RezervacijaUsluge.Add(new Database.RezervacijaUsluge()
+            {
+                Usluga = usluga,
+                Rezervacija = rezervacija
+            });
+
+            await _dbContext.SaveChangesAsync();
+
+            return _mapper.Map<Model.Rezervacija>(rezervacija);
+        }
+
+        private async Task<bool> IsUposlenikDostupan(int uposlenikId, DateTime datum, DateTime vrijeme)
+        {
+            var odabraniUposlenik = await _dbContext.Set<Database.Rezervacija>().FirstOrDefaultAsync(x => x.UposlenikId == uposlenikId && x.Datum.Date == datum.Date && x.Vrijeme == vrijeme);
+
+            if (odabraniUposlenik != null)
+                return false;
+            else
+                return true;
         }
     }
 }

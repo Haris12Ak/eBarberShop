@@ -206,7 +206,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
         size: 27.0,
       ),
       title: Text(
-        'Odjavi se',
+        'Odjava',
         style: TextStyle(fontWeight: FontWeight.w500, color: Colors.grey[800]),
       ),
       trailing: const Icon(Icons.navigate_next),

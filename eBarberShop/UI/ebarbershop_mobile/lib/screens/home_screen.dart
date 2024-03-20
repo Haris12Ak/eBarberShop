@@ -1,7 +1,7 @@
 import 'package:ebarbershop_mobile/screens/novosti/novosti_screen.dart';
 import 'package:ebarbershop_mobile/screens/profil/profil_screen.dart';
 import 'package:ebarbershop_mobile/screens/recenzije/recenzije_screen.dart';
-import 'package:ebarbershop_mobile/screens/rezervacije/rezervacije_list_screen.dart';
+import 'package:ebarbershop_mobile/screens/rezervacije/usluge_screen.dart';
 import 'package:ebarbershop_mobile/utils/util.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   static const List<Widget> _widgetOptions = <Widget>[
     NovostiScreen(),
-    RezervacijeListScreen(),
+    UslugeScreen(),
     RecenzijeScreen(),
     ProfilScreen()
   ];

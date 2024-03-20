@@ -174,15 +174,15 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
                                   color: Colors.grey[350],
                                   borderRadius: BorderRadius.circular(100),
                                 ),
-                                child: recenzija.slikaKorisnika != "" &&
-                                        recenzija.slikaKorisnika != null
+                                child: recenzija.korisnik?.slika != "" &&
+                                        recenzija.korisnik?.slika != null
                                     ? ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(100),
                                         child: Image(
                                           image: MemoryImage(
                                             base64Decode(recenzija
-                                                .slikaKorisnika
+                                                .korisnik!.slika
                                                 .toString()),
                                           ),
                                           fit: BoxFit.cover,
@@ -201,7 +201,7 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
                                 height: 10.0,
                               ),
                               Text(
-                                '${recenzija.imeKorisnika ?? ""} ${recenzija.prezimeKorisnika ?? ""}',
+                                recenzija.korisnik?.korisnickoIme ?? "",
                                 style: TextStyle(
                                   fontSize: 15.0,
                                   color: Colors.grey[800],
@@ -273,7 +273,7 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${recenzija.imeKorisnika ?? ""} ${recenzija.prezimeKorisnika ?? ""}',
+                  recenzija.korisnik?.korisnickoIme ?? "",
                   style: const TextStyle(
                     fontSize: 20.0,
                     color: Colors.black,
