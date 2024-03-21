@@ -2,6 +2,7 @@ import 'package:ebarbershop_mobile/models/search_result.dart';
 import 'package:ebarbershop_mobile/models/usluga/usluga.dart';
 import 'package:ebarbershop_mobile/providers/usluga_provider.dart';
 import 'package:ebarbershop_mobile/screens/rezervacije/rezervacija_screen.dart';
+import 'package:ebarbershop_mobile/screens/rezervacije/usluga_gallery_screen.dart';
 import 'package:ebarbershop_mobile/utils/util.dart';
 import 'package:ebarbershop_mobile/widgets/usluge_opcije_screen.dart';
 import 'package:flutter/material.dart';
@@ -156,10 +157,21 @@ class _UslugeScreenState extends State<UslugeScreen> {
                                           const SizedBox(
                                             height: 10.0,
                                           ),
-                                          const UslugeOpcijeScreen(
-                                              text: 'Galerija',
-                                              image: AssetImage(
-                                                  'assets/images/gallery.png')),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          UslugaGalleryScreen(
+                                                              usluga: usluga)));
+                                            },
+                                            child: const UslugeOpcijeScreen(
+                                                text: 'Galerija',
+                                                image: AssetImage(
+                                                    'assets/images/gallery.png')),
+                                          ),
                                           const SizedBox(
                                             height: 10.0,
                                           ),
