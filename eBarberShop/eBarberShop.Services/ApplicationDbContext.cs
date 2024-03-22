@@ -178,5 +178,6 @@ namespace eBarberShop.Services
         public virtual DbSet<Usluga> Usluga { get; set; }
         public virtual DbSet<Novosti> Novosti { get; set; }
         public virtual DbSet<Recenzije> Recenzije { get; set; }
+        public virtual DbSet<Ocjene> Ocjene { get; set; }
     }
 }

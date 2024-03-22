@@ -70,6 +70,10 @@ namespace eBarberShop.Services
             CreateMap<Database.SlikeUsluge, Model.SlikeUsluge>();
             CreateMap<Model.Requests.SlikeUslugeInsertRequest, Database.SlikeUsluge>();
             CreateMap<Model.Requests.SlikeUslugeUpdateRequest, Database.SlikeUsluge>();
+
+            CreateMap<Database.Ocjene, Model.Ocjene>();
+            CreateMap<Model.Requests.OcjeneInsertRequest, Database.Ocjene>();
+            CreateMap<Model.Requests.OcjeneUpdateRequest, Database.Ocjene>();
         }
     }
 }

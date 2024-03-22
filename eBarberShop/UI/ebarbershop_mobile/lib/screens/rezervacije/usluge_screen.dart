@@ -1,6 +1,7 @@
 import 'package:ebarbershop_mobile/models/search_result.dart';
 import 'package:ebarbershop_mobile/models/usluga/usluga.dart';
 import 'package:ebarbershop_mobile/providers/usluga_provider.dart';
+import 'package:ebarbershop_mobile/screens/rezervacije/prikaz_uposlenika_screen.dart';
 import 'package:ebarbershop_mobile/screens/rezervacije/rezervacija_screen.dart';
 import 'package:ebarbershop_mobile/screens/rezervacije/usluga_gallery_screen.dart';
 import 'package:ebarbershop_mobile/utils/util.dart';
@@ -89,102 +90,7 @@ class _UslugeScreenState extends State<UslugeScreen> {
                           Usluga usluga = uslugeResult!.result[index];
                           return GestureDetector(
                             onTap: () {
-                              showModalBottomSheet(
-                                backgroundColor: Colors.grey[100],
-                                useSafeArea: true,
-                                showDragHandle: true,
-                                isScrollControlled: true,
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Container(
-                                    padding: const EdgeInsets.all(10.0),
-                                    width: double.infinity,
-                                    height: 650,
-                                    child: SingleChildScrollView(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            usluga.naziv,
-                                            style: TextStyle(
-                                                fontSize: 20.0,
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.grey[800]),
-                                          ),
-                                          const SizedBox(height: 5.0),
-                                          Text(
-                                            'Cijena: ${formatNumber(usluga.cijena)} KM',
-                                            style: _customStyle,
-                                          ),
-                                          const SizedBox(height: 10.0),
-                                          const Text(
-                                            'Opis:',
-                                            style: _customStyle,
-                                          ),
-                                          const SizedBox(height: 5.0),
-                                          Text(
-                                            usluga.opis ?? "Nema opisa . . .",
-                                            style: usluga.opis != "" &&
-                                                    usluga.opis != null
-                                                ? _customStyle
-                                                : TextStyle(
-                                                    fontSize: 15.0,
-                                                    color: Colors.grey[500]),
-                                          ),
-                                          Divider(
-                                            height: 30.0,
-                                            thickness: 2.0,
-                                            color: Colors.grey[400],
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (BuildContext
-                                                              context) =>
-                                                          RezervacijaScreen(
-                                                              usluga: usluga)));
-                                            },
-                                            child: const UslugeOpcijeScreen(
-                                                text: 'Rezervacija',
-                                                image: AssetImage(
-                                                    'assets/images/calendar.png')),
-                                          ),
-                                          const SizedBox(
-                                            height: 10.0,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (BuildContext
-                                                              context) =>
-                                                          UslugaGalleryScreen(
-                                                              usluga: usluga)));
-                                            },
-                                            child: const UslugeOpcijeScreen(
-                                                text: 'Galerija',
-                                                image: AssetImage(
-                                                    'assets/images/gallery.png')),
-                                          ),
-                                          const SizedBox(
-                                            height: 10.0,
-                                          ),
-                                          const UslugeOpcijeScreen(
-                                              text: 'Osoblje',
-                                              image: AssetImage(
-                                                  'assets/images/persons.webp')),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
+                              _buildPrikazOpcijaUsluge(context, usluga);
                             },
                             child: Card(
                               color: Colors.white,
@@ -242,5 +148,108 @@ class _UslugeScreenState extends State<UslugeScreen> {
                   )
                 ],
               );
+  }
+
+  Future<dynamic> _buildPrikazOpcijaUsluge(
+      BuildContext context, Usluga usluga) {
+    return showModalBottomSheet(
+      backgroundColor: Colors.grey[100],
+      useSafeArea: true,
+      showDragHandle: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(10.0),
+          width: double.infinity,
+          height: 600,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                usluga.naziv,
+                style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey[800]),
+              ),
+              const SizedBox(height: 5.0),
+              Text(
+                'Cijena: ${formatNumber(usluga.cijena)} KM',
+                style: _customStyle,
+              ),
+              const SizedBox(height: 10.0),
+              const Text(
+                'Opis:',
+                style: _customStyle,
+              ),
+              const SizedBox(height: 5.0),
+              Text(
+                usluga.opis ?? "Nema opisa . . .",
+                style: usluga.opis != "" && usluga.opis != null
+                    ? _customStyle
+                    : TextStyle(fontSize: 15.0, color: Colors.grey[500]),
+              ),
+              Divider(
+                height: 30.0,
+                thickness: 2.0,
+                color: Colors.grey[400],
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      RezervacijaScreen(usluga: usluga)));
+                        },
+                        child: const UslugeOpcijeScreen(
+                            text: 'Rezervacija',
+                            image: AssetImage('assets/images/calendar.png')),
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      UslugaGalleryScreen(usluga: usluga)));
+                        },
+                        child: const UslugeOpcijeScreen(
+                            text: 'Galerija',
+                            image: AssetImage('assets/images/gallery.png')),
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      const UposleniciListScreen()));
+                        },
+                        child: const UslugeOpcijeScreen(
+                            text: 'Uposlenici',
+                            image: AssetImage('assets/images/persons.webp')),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

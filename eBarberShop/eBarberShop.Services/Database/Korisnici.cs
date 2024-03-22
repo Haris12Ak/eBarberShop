@@ -29,5 +29,6 @@ namespace eBarberShop.Services.Database
         public virtual ICollection<Rezervacija> Rezervacije { get; set; } = new List<Rezervacija>();
         public virtual ICollection<Novosti> Novosti { get; set; } = new List<Novosti>();
         public virtual ICollection<Recenzije> Recenzije { get; set; } = new List<Recenzije>();
+        public virtual ICollection<Ocjene> Ocjene { get; set; } = new List<Ocjene>();
     }
 }

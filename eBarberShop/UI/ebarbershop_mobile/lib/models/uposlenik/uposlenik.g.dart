@@ -13,6 +13,7 @@ Uposlenik _$UposlenikFromJson(Map<String, dynamic> json) => Uposlenik(
       json['kontaktTelefon'] as String,
       json['email'] as String?,
       json['adresa'] as String?,
+      (json['prosjecnaOcjena'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$UposlenikToJson(Uposlenik instance) => <String, dynamic>{
@@ -22,4 +23,5 @@ Map<String, dynamic> _$UposlenikToJson(Uposlenik instance) => <String, dynamic>{
       'kontaktTelefon': instance.kontaktTelefon,
       'email': instance.email,
       'adresa': instance.adresa,
+      'prosjecnaOcjena': instance.prosjecnaOcjena,
     };

@@ -1,12 +1,8 @@
 ﻿using AutoMapper;
+using eBarberShop.Model;
 using eBarberShop.Model.Search;
-using eBarberShop.Services.Database;
 using eBarberShop.Services.Interfejsi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace eBarberShop.Services.Servisi
 {
@@ -16,8 +12,22 @@ namespace eBarberShop.Services.Servisi
         {
         }
 
-        public override IQueryable<Uposlenik> AddFilter(IQueryable<Uposlenik> query, UposlenikSearch? search)
+        public async override Task<PagedResult<Model.Uposlenik>> Get(UposlenikSearch? search)
         {
+            var query = _dbContext.Set<Database.Uposlenik>().Include("Ocjene")
+                .Select(x => new Model.Uposlenik()
+                {
+                    UposlenikId = x.UposlenikId,
+                    Ime = x.Ime,
+                    Prezime = x.Prezime,
+                    KontaktTelefon = x.KontaktTelefon,
+                    Email = x.Email,
+                    Adresa = x.Adresa,
+                    ProsjecnaOcjena = x.Ocjene.Any() ? x.Ocjene.Average(y => y.Ocjena) : 0
+                }).AsQueryable();
+
+            PagedResult<Model.Uposlenik> result = new PagedResult<Model.Uposlenik>();
+
             if (!string.IsNullOrWhiteSpace(search?.Ime))
             {
                 query = query.Where(x => x.Ime.ToLower().StartsWith(search.Ime.ToLower()));
@@ -28,7 +38,18 @@ namespace eBarberShop.Services.Servisi
                 query = query.Where(x => x.Prezime.ToLower().StartsWith(search.Prezime.ToLower()));
             }
 
-            return base.AddFilter(query, search);
+            result.Count = query.Count();
+
+            if (search?.PageSize.HasValue == true && search?.Page.HasValue == true)
+            {
+                query = query.Take(search.PageSize.Value).Skip(search.Page.Value * search.PageSize.Value);
+            }
+
+            var list = await query.ToListAsync();
+
+            result.Result = _mapper.Map<List<Model.Uposlenik>>(list);
+
+            return result;
         }
     }
 }

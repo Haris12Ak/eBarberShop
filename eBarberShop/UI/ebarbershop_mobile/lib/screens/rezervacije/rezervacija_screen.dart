@@ -8,6 +8,7 @@ import 'package:ebarbershop_mobile/providers/uposlenik_provider.dart';
 import 'package:ebarbershop_mobile/utils/util.dart';
 import 'package:ebarbershop_mobile/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -389,11 +390,12 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
         padding: const EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 20.0,
-              mainAxisSpacing: 20.0,
-              childAspectRatio: 1,
-              mainAxisExtent: 200.0),
+            crossAxisCount: 2,
+            crossAxisSpacing: 20.0,
+            mainAxisSpacing: 20.0,
+            childAspectRatio: 1,
+            mainAxisExtent: 225.0,
+          ),
           itemCount: _uposlenici.length,
           itemBuilder: (context, index) {
             Uposlenik uposlenik = _uposlenici[index];
@@ -431,7 +433,24 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 8.0),
+                      const SizedBox(height: 5.0),
+                      IgnorePointer(
+                        ignoring: true,
+                        child: RatingBar.builder(
+                          itemSize: 20.0,
+                          initialRating: uposlenik.prosjecnaOcjena,
+                          minRating: 0,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          itemBuilder: (context, _) => const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          onRatingUpdate: (rating) {},
+                        ),
+                      ),
+                      const SizedBox(height: 5.0),
                       Text(
                         '${uposlenik.ime} ${uposlenik.prezime}',
                         style: const TextStyle(

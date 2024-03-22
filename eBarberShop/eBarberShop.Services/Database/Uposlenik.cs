@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace eBarberShop.Services.Database
+﻿namespace eBarberShop.Services.Database
 {
     public partial class Uposlenik
     {
@@ -16,5 +10,7 @@ namespace eBarberShop.Services.Database
         public string? Adresa { get; set; }
 
         public virtual ICollection<Rezervacija> Rezervacije { get; set; } = new List<Rezervacija>();
+        public virtual ICollection<Ocjene> Ocjene { get; set; } = new List<Ocjene>();
+
     }
 }
