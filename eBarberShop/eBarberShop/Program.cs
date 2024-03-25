@@ -28,6 +28,8 @@ builder.Services.AddTransient<IKosaricaService, KosaricaService>();
 builder.Services.AddTransient<IRezervacijaUslugeService, RezervacijaUslugeService>();
 builder.Services.AddTransient<ISlikeUslugeService, SlikeUslugeService>();
 builder.Services.AddTransient<IOcjeneService, OcjeneService>();
+builder.Services.AddScoped<IMessageProducer, MessageProducer>();
+
 
 builder.Services.AddControllers(x =>
 {

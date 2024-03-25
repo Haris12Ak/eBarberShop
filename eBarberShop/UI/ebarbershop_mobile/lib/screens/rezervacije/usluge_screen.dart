@@ -36,9 +36,11 @@ class _UslugeScreenState extends State<UslugeScreen> {
   Future fetchUsluge() async {
     uslugeResult = await _uslugaProvider.get();
 
-    setState(() {
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override

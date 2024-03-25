@@ -9,13 +9,15 @@ namespace eBarberShop.Services.Servisi
 {
     public class RezervacijaService : BaseCRUDService<Model.Rezervacija, Database.Rezervacija, Model.Search.RezervacijaSearch, Model.Requests.RezervacijaInsertRequest, Model.Requests.RezervacijaUpdateRequest>, IRezervacijaService
     {
-        IKorisniciService _korisniciService;
-        IUposlenikService _uposlenikService;
+        private readonly IMessageProducer _messageProducer;
+        private readonly IKorisniciService _korisniciService;
+        private readonly IUposlenikService _uposlenikService;
 
-        public RezervacijaService(ApplicationDbContext dbContext, IMapper mapper, IKorisniciService korisniciService, IUposlenikService uposlenikService) : base(dbContext, mapper)
+        public RezervacijaService(ApplicationDbContext dbContext, IMapper mapper, IKorisniciService korisniciService, IUposlenikService uposlenikService, IMessageProducer messageProducer) : base(dbContext, mapper)
         {
             _korisniciService = korisniciService;
             _uposlenikService = uposlenikService;
+            _messageProducer = messageProducer;
         }
 
         public override async Task<Model.PagedResult<Model.Rezervacija>> Get(RezervacijaSearch? search)
@@ -129,6 +131,21 @@ namespace eBarberShop.Services.Servisi
             });
 
             await _dbContext.SaveChangesAsync();
+
+            Model.ReservationNotifier reservationNotifier = new ReservationNotifier()
+            {
+                Id = rezervacija.RezervacijaId,
+                UposlenikIme = uposlenik.Ime,
+                UposlenikPrezime = uposlenik.Prezime,
+                UslugaNaziv = usluga.Naziv,
+                KorisnikIme = korisnik.Ime,
+                CijenaUsluge = usluga.Cijena,
+                Email = korisnik.Email,
+                Datum = rezervacija.Datum,
+                Vrijeme = rezervacija.Vrijeme
+            };
+
+            _messageProducer.SendingObject(reservationNotifier);
 
             return _mapper.Map<Model.Rezervacija>(rezervacija);
         }

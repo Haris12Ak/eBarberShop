@@ -29,10 +29,12 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
 
   Future fetchUposlenici() async {
     uposleniciResult = await _uposlenikProvider.get();
-
-    setState(() {
-      isLoading = false;
-    });
+    
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   List<Uposlenik> _filteredUposlenici(String query) {
