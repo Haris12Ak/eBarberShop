@@ -196,6 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
           if (korisnikResponse != null) {
             Authorization.korisnikId = korisnikResponse!.korisniciId;
+            Authorization.email = korisnikResponse!.email;
 
             // ignore: use_build_context_synchronously
             Navigator.pushAndRemoveUntil(

@@ -7,6 +7,7 @@ class Authorization {
   static int? korisnikId;
   static String? username;
   static String? password;
+  static String? email;
 }
 
 Image imageFromBase64String(String base64Image) {

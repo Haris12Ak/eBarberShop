@@ -24,16 +24,18 @@ class RezervacijaScreen extends StatefulWidget {
 class _RezervacijaScreenState extends State<RezervacijaScreen> {
   List<Termini> _termini = [];
   List<Uposlenik> _uposlenici = [];
+  bool isLoading = true;
+  final String _emailKorisnika = Authorization.email!;
 
   DateTime today = DateTime.now();
 
   int? selectedUsposlenik = -1;
 
+  final TextEditingController _emailController = TextEditingController();
+  bool _isEmailValid = true;
+
   static const TextStyle _customLabelStyle = TextStyle(
       fontSize: 16.0, fontWeight: FontWeight.w500, color: Colors.black54);
-
-  static const TextStyle _customContentStyle = TextStyle(
-      fontSize: 15.0, fontWeight: FontWeight.w500, color: Colors.black45);
 
   @override
   void initState() {
@@ -45,9 +47,13 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
 
   Future<void> _loadTermine() async {
     var termini = await fetchTermine(context);
-    setState(() {
-      _termini = termini;
-    });
+
+    if (mounted) {
+      setState(() {
+        _termini = termini;
+        isLoading = false;
+      });
+    }
   }
 
   Future<List<Termini>> fetchTermine(BuildContext context) async {
@@ -58,9 +64,12 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
 
   Future<void> _loadUposlenike() async {
     var uposlenici = await fetchUposlenike(context);
-    setState(() {
-      _uposlenici = uposlenici;
-    });
+    if (mounted) {
+      setState(() {
+        _uposlenici = uposlenici;
+        isLoading = false;
+      });
+    }
   }
 
   Future<List<Uposlenik>> fetchUposlenike(BuildContext context) async {
@@ -89,62 +98,67 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
   Widget build(BuildContext context) {
     return MasterScreenWidget(
       title: 'Rezervacija',
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const SizedBox(height: 7.0),
-          const Text('Odaberite datum', style: _customLabelStyle),
-          const SizedBox(height: 5.0),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            child: TableCalendar(
-                headerVisible: true,
-                firstDay: DateTime.utc(2010, 10, 16),
-                lastDay: DateTime.utc(2030, 3, 14),
-                focusedDay: today,
-                startingDayOfWeek: StartingDayOfWeek.monday,
-                rowHeight: 48.0,
-                headerStyle: const HeaderStyle(
-                    formatButtonVisible: false, titleCentered: true),
-                availableGestures: AvailableGestures.all,
-                calendarStyle: CalendarStyle(
-                  defaultTextStyle: const TextStyle(color: Colors.black),
-                  weekendTextStyle: TextStyle(color: Colors.red.shade300),
+      child: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(height: 7.0),
+                const Text('Odaberite datum', style: _customLabelStyle),
+                const SizedBox(height: 5.0),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: TableCalendar(
+                      headerVisible: true,
+                      firstDay: DateTime.utc(2010, 10, 16),
+                      lastDay: DateTime.utc(2030, 3, 14),
+                      focusedDay: today,
+                      startingDayOfWeek: StartingDayOfWeek.monday,
+                      rowHeight: 48.0,
+                      headerStyle: const HeaderStyle(
+                          formatButtonVisible: false, titleCentered: true),
+                      availableGestures: AvailableGestures.all,
+                      calendarStyle: CalendarStyle(
+                        defaultTextStyle: const TextStyle(color: Colors.black),
+                        weekendTextStyle: TextStyle(color: Colors.red.shade300),
+                      ),
+                      selectedDayPredicate: (day) => isSameDay(day, today),
+                      onDaySelected: _onDaySelected),
                 ),
-                selectedDayPredicate: (day) => isSameDay(day, today),
-                onDaySelected: _onDaySelected),
-          ),
-          const SizedBox(height: 15.0),
-          const Text('Odaberite vrijeme', style: _customLabelStyle),
-          const SizedBox(height: 5.0),
-          Expanded(
-            child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 4,
-                    mainAxisSpacing: 8.0,
-                    crossAxisSpacing: 8.0),
-                itemCount: countingNumberOfTimes(),
-                itemBuilder: (BuildContext context, int index) {
-                  final time = countingTime(index);
-                  bool isZauzetTermin =
-                      _termini.any((termin) => termin.vrijeme == time);
-                  return GestureDetector(
-                    onTap: () {
-                      if (!isZauzetTermin) {
-                        _buildRezervacijaTermina(context, time);
-                      }
-                    },
-                    child: _buildPrikazTermina(isZauzetTermin, time),
-                  );
-                }),
-          ),
-        ],
-      ),
+                const SizedBox(height: 15.0),
+                const Text('Odaberite vrijeme', style: _customLabelStyle),
+                const SizedBox(height: 5.0),
+                Expanded(
+                  child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 4,
+                              mainAxisSpacing: 8.0,
+                              crossAxisSpacing: 8.0),
+                      itemCount: countingNumberOfTimes(),
+                      itemBuilder: (BuildContext context, int index) {
+                        final time = countingTime(index);
+                        bool isZauzetTermin =
+                            _termini.any((termin) => termin.vrijeme == time);
+                        return GestureDetector(
+                          onTap: () {
+                            if (!isZauzetTermin) {
+                              _buildRezervacijaTermina(context, time);
+                            }
+                          },
+                          child: _buildPrikazTermina(isZauzetTermin, time),
+                        );
+                      }),
+                ),
+              ],
+            ),
     );
   }
 
@@ -157,103 +171,114 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
       builder: (BuildContext context) {
         return StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
-          return FutureBuilder<List<Uposlenik>>(
-            future: fetchUposlenike(context),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                _uposlenici = snapshot.data ?? [];
-                return ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20.0),
-                    topRight: Radius.circular(20.0),
+          return ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20.0),
+              topRight: Radius.circular(20.0),
+            ),
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Stack(
+                    alignment: AlignmentDirectional.center,
+                    children: [
+                      Container(
+                        color: Colors.grey.withOpacity(0.5),
+                        width: double.infinity,
+                        height: 56.0,
+                        child: Center(
+                          child: Text(widget.usluga.naziv,
+                              style: _customLabelStyle),
+                        ),
+                      ),
+                      Positioned(
+                        left: 0.0,
+                        top: 5.0,
+                        child: IconButton(
+                            icon: const Icon(
+                              Icons.arrow_back,
+                              color: Colors.black54,
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            }),
+                      ),
+                    ],
                   ),
-                  child: Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    color: Colors.white,
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Stack(
-                          alignment: AlignmentDirectional.center,
-                          children: [
-                            Container(
-                              color: Colors.grey.withOpacity(0.5),
-                              width: double.infinity,
-                              height: 56.0,
-                              child: Center(
-                                child: Text(widget.usluga.naziv,
-                                    style: _customLabelStyle),
-                              ),
-                            ),
-                            Positioned(
-                              left: 0.0,
-                              top: 5.0,
-                              child: IconButton(
-                                  icon: const Icon(
-                                    Icons.arrow_back,
-                                    color: Colors.black54,
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  }),
-                            ),
-                          ],
+                        const Text(
+                          'Unesite email za potvrdu rezervacije:',
+                          style: _customLabelStyle,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Datum:',
-                                style: _customLabelStyle,
-                              ),
-                              Text(
-                                getDateFormat(today),
-                                style: _customContentStyle,
-                              ),
-                              const SizedBox(height: 10.0),
-                              const Text(
-                                'Vrijeme:',
-                                style: _customLabelStyle,
-                              ),
-                              Text(
-                                getTimeFormat(time),
-                                style: _customContentStyle,
-                              ),
-                              const SizedBox(height: 10.0),
-                              const Text(
-                                'Odaberite uposlenika',
-                                style: _customLabelStyle,
-                              ),
-                            ],
+                        const SizedBox(height: 5.0),
+                        TextField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white24,
+                            contentPadding: const EdgeInsets.all(0),
+                            focusColor: Colors.black,
+                            hintText: 'Email',
+                            border: const OutlineInputBorder(),
+                            prefixIcon: const Icon(Icons.email),
+                            errorText: _isEmailValid
+                                ? null
+                                : 'Unesite ispravnu e-mail adresu',
                           ),
+                          onChanged: (value) {
+                            bool isValid = RegExp(
+                                    r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$')
+                                .hasMatch(value);
+                            setState(() {
+                              _isEmailValid = isValid;
+                              if (value == _emailKorisnika) {
+                                _isEmailValid = true;
+                              } else {
+                                _isEmailValid = false;
+                              }
+                            });
+                          },
                         ),
-                        Divider(
-                          height: 10.0,
-                          indent: 20.0,
-                          endIndent: 20.0,
-                          thickness: 1,
-                          color: Colors.grey.shade400,
+                        const SizedBox(height: 15.0),
+                        const Text(
+                          'Odaberite uposlenika',
+                          style: _customLabelStyle,
                         ),
-                        _buildListaUposlenika(setState),
-                        const SizedBox(height: 10.0),
-                        _buildRezervacijaButton(context, time),
-                        _buildOtkaziRezervaciju(context),
-                        const SizedBox(height: 10.0),
                       ],
                     ),
                   ),
-                );
-              }
-            },
+                  Divider(
+                    height: 10.0,
+                    indent: 20.0,
+                    endIndent: 20.0,
+                    thickness: 1,
+                    color: Colors.grey.shade400,
+                  ),
+                  _buildListaUposlenika(setState),
+                  const SizedBox(height: 10.0),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      'Vaša rezervacija će biti spremljena za datum ${getDateFormat(today)} u terminu ${getTimeFormat(time)} h. Ukoliko rezervacija bude uspješna bit će te obaviješteni mailom.',
+                      style: _customLabelStyle,
+                    ),
+                  ),
+                  _buildRezervacijaButton(context, time),
+                  _buildOtkaziRezervaciju(context),
+                  const SizedBox(height: 10.0),
+                ],
+              ),
+            ),
           );
         });
       },
@@ -289,7 +314,9 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
       padding: const EdgeInsets.all(10.0),
       child: ElevatedButton.icon(
         onPressed: () async {
-          if (selectedUsposlenik == -1) {
+          if (selectedUsposlenik == -1 ||
+              _emailController.text == "" ||
+              _isEmailValid == false) {
             showDialog(
                 barrierDismissible: false,
                 context: context,
@@ -302,7 +329,7 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
                       ),
                       iconColor: Colors.black,
                       content: const Text(
-                        'Odaberite uposlenika !',
+                        'Da bi rezervacija bila uspješna morate odabrati uposlenika i unijeti svoj email ! \nMolimo da unesete vaš ispravan email!',
                         style: TextStyle(
                             fontSize: 18.0,
                             color: Colors.black,
@@ -353,13 +380,13 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
                           ),
                         ],
                       ));
-            } on Exception catch (e) {
+            } on Exception {
               // ignore: use_build_context_synchronously
               showDialog(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
                   title: const Text("Error"),
-                  content: Text(e.toString()),
+                  content: const Text("Greška prilikom rezervacije termina!"),
                   actions: [
                     TextButton(
                         onPressed: () => Navigator.pop(context),
