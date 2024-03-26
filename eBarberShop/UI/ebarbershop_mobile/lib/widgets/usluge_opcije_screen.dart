@@ -14,19 +14,7 @@ class _UslugeOpcijeScreenState extends State<UslugeOpcijeScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15.0),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomLeft,
-          colors: [
-            Colors.black26,
-            Colors.white30,
-          ],
-        ),
-      ),
-      width: double.infinity,
+      padding: const EdgeInsets.all(15.0),
       child: Column(
         children: [
           Image(
@@ -39,7 +27,13 @@ class _UslugeOpcijeScreenState extends State<UslugeOpcijeScreen> {
           ),
           Text(
             widget.text,
-            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500, color: Colors.grey[700]),
+            style: TextStyle(
+              fontSize: 23.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[800],
+              fontFamily: 'EduNSWACTFoundation',
+              letterSpacing: 1.0,
+            ),
           )
         ],
       ),

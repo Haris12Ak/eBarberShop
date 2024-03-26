@@ -67,13 +67,16 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
               const SizedBox(
                 height: 10.0,
               ),
-              const Align(
+              Align(
                 alignment: Alignment.topCenter,
                 child: Text(
                   'Recenzije',
                   style: TextStyle(
-                    fontSize: 22.0,
+                    fontSize: 26.0,
                     fontWeight: FontWeight.bold,
+                    color: Colors.grey[800],
+                    fontFamily: 'EduNSWACTFoundation',
+                    letterSpacing: 1.0,
                   ),
                 ),
               ),

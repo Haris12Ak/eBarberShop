@@ -49,7 +49,7 @@ class _UslugaGalleryScreenState extends State<UslugaGalleryScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-      title: widget.usluga.naziv,
+      title: 'Galerija - ${widget.usluga.naziv}',
       child: GenericGalleryList<SlikeUsluge>(
         fetchData: (context) => fetchSlike(context),
         getSlika: (slikeUsluge) => slikeUsluge.slikaUsluga.toString(),

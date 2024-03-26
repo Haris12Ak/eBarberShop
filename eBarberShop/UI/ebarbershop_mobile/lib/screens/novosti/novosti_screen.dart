@@ -56,9 +56,10 @@ class _NovostiScreenState extends State<NovostiScreen> {
                   Text(
                     'Novosti',
                     style: TextStyle(
-                        fontSize: 17.0,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 26.0,
+                        fontWeight: FontWeight.w600,
                         letterSpacing: 1.0,
+                        fontFamily: 'EduNSWACTFoundation',
                         color: Colors.grey[800]),
                   ),
                   ElevatedButton.icon(

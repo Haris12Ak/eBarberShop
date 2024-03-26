@@ -34,8 +34,8 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
   final TextEditingController _emailController = TextEditingController();
   bool _isEmailValid = true;
 
-  static const TextStyle _customLabelStyle = TextStyle(
-      fontSize: 16.0, fontWeight: FontWeight.w500, color: Colors.black54);
+  static final TextStyle _customLabelStyle = TextStyle(
+      fontSize: 16.0, fontWeight: FontWeight.w500, color: Colors.grey.shade800);
 
   @override
   void initState() {
@@ -107,7 +107,7 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const SizedBox(height: 7.0),
-                const Text('Odaberite datum', style: _customLabelStyle),
+                Text('Odaberite datum', style: _customLabelStyle),
                 const SizedBox(height: 5.0),
                 Container(
                   decoration: BoxDecoration(
@@ -115,24 +115,27 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                   child: TableCalendar(
-                      headerVisible: true,
-                      firstDay: DateTime.utc(2010, 10, 16),
-                      lastDay: DateTime.utc(2030, 3, 14),
-                      focusedDay: today,
-                      startingDayOfWeek: StartingDayOfWeek.monday,
-                      rowHeight: 48.0,
-                      headerStyle: const HeaderStyle(
-                          formatButtonVisible: false, titleCentered: true),
-                      availableGestures: AvailableGestures.all,
-                      calendarStyle: CalendarStyle(
-                        defaultTextStyle: const TextStyle(color: Colors.black),
-                        weekendTextStyle: TextStyle(color: Colors.red.shade300),
-                      ),
-                      selectedDayPredicate: (day) => isSameDay(day, today),
-                      onDaySelected: _onDaySelected),
+                    headerVisible: true,
+                    firstDay: DateTime.now(),
+                    lastDay: DateTime.utc(2030, 3, 14),
+                    focusedDay: today,
+                    startingDayOfWeek: StartingDayOfWeek.monday,
+                    rowHeight: 48.0,
+                    headerStyle: const HeaderStyle(
+                        formatButtonVisible: false, titleCentered: true),
+                    availableGestures: AvailableGestures.all,
+                    calendarStyle: CalendarStyle(
+                      defaultTextStyle: const TextStyle(color: Colors.black),
+                      weekendTextStyle: TextStyle(color: Colors.red.shade300),
+                    ),
+                    selectedDayPredicate: (day) => isSameDay(day, today),
+                    onDaySelected: _onDaySelected,
+                    enabledDayPredicate: (day) =>
+                        day.weekday != DateTime.sunday,
+                  ),
                 ),
                 const SizedBox(height: 15.0),
-                const Text('Odaberite vrijeme', style: _customLabelStyle),
+                Text('Odaberite vrijeme', style: _customLabelStyle),
                 const SizedBox(height: 5.0),
                 Expanded(
                   child: GridView.builder(
@@ -200,9 +203,9 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
                         left: 0.0,
                         top: 5.0,
                         child: IconButton(
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.arrow_back,
-                              color: Colors.black54,
+                              color: Colors.grey.shade800,
                             ),
                             onPressed: () {
                               Navigator.of(context).pop();
@@ -216,7 +219,7 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'Unesite email za potvrdu rezervacije:',
                           style: _customLabelStyle,
                         ),
@@ -250,8 +253,8 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
                           },
                         ),
                         const SizedBox(height: 15.0),
-                        const Text(
-                          'Odaberite uposlenika',
+                        Text(
+                          'Odaberite frizera',
                           style: _customLabelStyle,
                         ),
                       ],
@@ -264,7 +267,18 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
                     thickness: 1,
                     color: Colors.grey.shade400,
                   ),
-                  _buildListaUposlenika(setState),
+                  _uposlenici.isEmpty
+                      ? Center(
+                          child: Text(
+                            'Nema dostupnih frizera !',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 17.0,
+                                color: Colors.grey[600],
+                                fontWeight: FontWeight.w600),
+                          ),
+                        )
+                      : _buildListaUposlenika(setState),
                   const SizedBox(height: 10.0),
                   Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -290,7 +304,6 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
       padding: const EdgeInsets.only(left: 10.0, right: 10.0),
       child: ElevatedButton.icon(
         onPressed: () {
-          Navigator.of(context).pop();
           Navigator.of(context).pop();
           Navigator.of(context).pop();
         },
@@ -329,7 +342,7 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
                       ),
                       iconColor: Colors.black,
                       content: const Text(
-                        'Da bi rezervacija bila uspješna morate odabrati uposlenika i unijeti svoj email ! \nMolimo da unesete vaš ispravan email!',
+                        'Da bi rezervacija bila uspješna morate odabrati želejnog frizera i unijeti svoj email ! \nMolimo da unesete vaš ispravan email!',
                         style: TextStyle(
                             fontSize: 18.0,
                             color: Colors.black,

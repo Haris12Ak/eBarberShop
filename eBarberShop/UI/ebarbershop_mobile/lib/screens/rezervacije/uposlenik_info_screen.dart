@@ -72,7 +72,7 @@ class _UposlenikInfoScreenState extends State<UposlenikInfoScreen> {
         backgroundColor: const Color.fromRGBO(241, 231, 204, 0.9),
         elevation: 0.0,
         title: const Text(
-          'Informacije uposlenika',
+          'Informacije frizera',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontStyle: FontStyle.normal,
@@ -188,39 +188,44 @@ class _UposlenikInfoScreenState extends State<UposlenikInfoScreen> {
                           const SizedBox(
                             height: 2.0,
                           ),
-                          IgnorePointer(
-                            ignoring: true,
-                            child: RatingBar.builder(
-                              itemSize: 25.0,
-                              initialRating: prosjecnaOcjenaUposlenika(
-                                  ocjeneResult!.result),
-                              minRating: 0,
-                              direction: Axis.horizontal,
-                              allowHalfRating: true,
-                              itemCount: 5,
-                              itemPadding:
-                                  const EdgeInsets.symmetric(horizontal: 2.0),
-                              itemBuilder: (context, _) => const Icon(
-                                Icons.star,
-                                color: Colors.amber,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              IgnorePointer(
+                                ignoring: true,
+                                child: RatingBar.builder(
+                                  itemSize: 25.0,
+                                  initialRating: prosjecnaOcjenaUposlenika(
+                                      ocjeneResult!.result),
+                                  minRating: 0,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  itemPadding: const EdgeInsets.symmetric(
+                                      horizontal: 2.0),
+                                  itemBuilder: (context, _) => const Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  onRatingUpdate: (rating) {},
+                                ),
                               ),
-                              onRatingUpdate: (rating) {},
-                            ),
+                              Text(
+                                formatNumber(prosjecnaOcjenaUposlenika(
+                                    ocjeneResult!.result)),
+                                style: _contentStyle,
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 10.0),
                           _buildPrikaziOcjene(context),
-                          Divider(
+                          const Divider(
                             height: 40.0,
-                            color: Colors.grey.shade400,
+                            color: Colors.black26,
+                            thickness: 2,
                           ),
                           const Text(
-                            'Ocjeni uposlenika',
-                            style: _labelStyle,
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 10.0),
-                          const Text(
-                            'Ocjena:',
+                            'Ocjeni frizera:',
                             style: _labelStyle,
                           ),
                           const SizedBox(height: 2.0),
