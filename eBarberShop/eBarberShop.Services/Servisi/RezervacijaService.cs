@@ -159,5 +159,28 @@ namespace eBarberShop.Services.Servisi
             else
                 return true;
         }
+
+        public async Task<List<TerminiKorisnikaInfo>> GetTermineByKorisnikId(int korisnikId)
+        {
+            var set = _dbContext.Set<Database.Rezervacija>();
+
+            var currentDateTime = DateTime.Now;
+
+            var entity = await set.Where(x => x.KorisnikId == korisnikId)
+                .Select(y => new TerminiKorisnikaInfo()
+                {
+                    RezervacijaId = y.RezervacijaId,
+                    Datum = y.Datum,
+                    Vrijeme = y.Vrijeme,
+                    IsAktivna = (y.Datum.Date > currentDateTime.Date ||
+                                           (y.Datum.Date == currentDateTime.Date && y.Vrijeme.TimeOfDay > currentDateTime.TimeOfDay))
+                                           ? true
+                                           : false,
+                })
+                .OrderByDescending(z => z.Vrijeme)
+                .ToListAsync();
+
+            return entity;
+        }
     }
 }

@@ -72,11 +72,10 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
                 child: Text(
                   'Recenzije',
                   style: TextStyle(
-                    fontSize: 26.0,
+                    fontSize: 24.0,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey[800],
-                    fontFamily: 'EduNSWACTFoundation',
-                    letterSpacing: 1.0,
+                    fontFamily: 'Dosis',
                   ),
                 ),
               ),
@@ -99,9 +98,11 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
                       calculateAvarageRaiting(recenzijeResult!.result),
                     ),
                     style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.grey[900],
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[700],
+                      fontFamily: 'Dosis',
+                      letterSpacing: 1,
                     ),
                   ),
                 ],

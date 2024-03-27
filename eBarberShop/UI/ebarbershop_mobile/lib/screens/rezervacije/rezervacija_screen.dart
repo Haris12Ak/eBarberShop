@@ -5,6 +5,7 @@ import 'package:ebarbershop_mobile/models/usluga/usluga.dart';
 import 'package:ebarbershop_mobile/providers/rezervacija_provider.dart';
 import 'package:ebarbershop_mobile/providers/termini_provider.dart';
 import 'package:ebarbershop_mobile/providers/uposlenik_provider.dart';
+import 'package:ebarbershop_mobile/screens/rezervacije/termini_info_screen.dart';
 import 'package:ebarbershop_mobile/utils/util.dart';
 import 'package:ebarbershop_mobile/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
@@ -106,9 +107,38 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text('Odaberite datum', style: _customLabelStyle),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        const TerminiInfroScreen()))
+                            .then((value) async => await _loadTermine());
+                      },
+                      style: ElevatedButton.styleFrom(
+                          elevation: 0.0,
+                          backgroundColor: Colors.grey.withOpacity(0.3),
+                          side: const BorderSide(
+                            color: Colors.black26,
+                          )),
+                      icon: Icon(
+                        Icons.date_range,
+                        color: Colors.grey.shade800,
+                      ),
+                      label: Text(
+                        'Moji termini',
+                        style: _customLabelStyle,
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 7.0),
-                Text('Odaberite datum', style: _customLabelStyle),
-                const SizedBox(height: 5.0),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.grey.withOpacity(0.3),
@@ -136,7 +166,7 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
                 ),
                 const SizedBox(height: 15.0),
                 Text('Odaberite vrijeme', style: _customLabelStyle),
-                const SizedBox(height: 5.0),
+                const SizedBox(height: 7.0),
                 Expanded(
                   child: GridView.builder(
                       gridDelegate:
@@ -342,7 +372,7 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
                       ),
                       iconColor: Colors.black,
                       content: const Text(
-                        'Da bi rezervacija bila uspješna morate odabrati želejnog frizera i unijeti svoj email ! \nMolimo da unesete vaš ispravan email!',
+                        'Da bi rezervacija bila uspješna morate odabrati željenog frizera i unijeti svoj email ! \nMolimo da unesete ispravano vaš email!',
                         style: TextStyle(
                             fontSize: 18.0,
                             color: Colors.black,

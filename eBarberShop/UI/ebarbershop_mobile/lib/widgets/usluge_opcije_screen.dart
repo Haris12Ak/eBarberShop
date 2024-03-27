@@ -27,12 +27,11 @@ class _UslugeOpcijeScreenState extends State<UslugeOpcijeScreen> {
           ),
           Text(
             widget.text,
-            style: TextStyle(
-              fontSize: 23.0,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey[800],
-              fontFamily: 'EduNSWACTFoundation',
-              letterSpacing: 1.0,
+            style: const TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+              fontFamily: 'Dosis',
             ),
           )
         ],

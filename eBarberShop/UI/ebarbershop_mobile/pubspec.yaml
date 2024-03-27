@@ -108,6 +108,9 @@ flutter:
      - family: Mukta
        fonts:
          - asset: fonts/Mukta-Medium.ttf
+     - family: Dosis
+       fonts:
+         - asset: fonts/Dosis-VariableFont_wght.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

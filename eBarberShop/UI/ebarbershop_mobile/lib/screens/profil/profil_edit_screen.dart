@@ -4,6 +4,7 @@ import 'package:ebarbershop_mobile/models/search_result.dart';
 import 'package:ebarbershop_mobile/providers/grad_provider.dart';
 import 'package:ebarbershop_mobile/providers/korisnik_provider.dart';
 import 'package:ebarbershop_mobile/screens/login_screen.dart';
+import 'package:ebarbershop_mobile/utils/util.dart';
 import 'package:ebarbershop_mobile/widgets/generic_form_builder_text_filed.dart';
 import 'package:ebarbershop_mobile/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
@@ -223,6 +224,8 @@ class _ProfilEditScreenState extends State<ProfilEditScreen> {
             setState(() {
               _initialValue = Map.from(_formKey.currentState!.value);
             });
+
+            Authorization.email = _initialValue['email'];
 
             if (lozinkaController.text != "" ||
                 _initialValue['korisnickoIme'] !=

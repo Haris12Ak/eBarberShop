@@ -30,11 +30,10 @@ class _UslugeScreenState extends State<UslugeScreen> {
       fontSize: 16.0, fontWeight: FontWeight.w500, color: Colors.black54);
 
   static final TextStyle _titleStyle = TextStyle(
-    fontSize: 26.0,
+    fontSize: 24.0,
     fontWeight: FontWeight.bold,
     color: Colors.grey[800],
-    fontFamily: 'EduNSWACTFoundation',
-    letterSpacing: 1.0,
+    fontFamily: 'Dosis',
   );
 
   @override
@@ -74,13 +73,14 @@ class _UslugeScreenState extends State<UslugeScreen> {
               const SizedBox(
                 height: 5.0,
               ),
-              const Text(
+              Text(
                 'Za detalje o cijenama i dostupnim terminima, molimo vas da odaberete željenu uslugu i termin. ',
                 style: TextStyle(
-                  fontSize: 23.0,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black,
-                  fontFamily: 'EduNSWACTFoundation',
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey[700],
+                  fontFamily: 'Dosis',
+                  letterSpacing: 1,
                 ),
               ),
               const SizedBox(
@@ -237,12 +237,11 @@ class _UslugeScreenState extends State<UslugeScreen> {
                     children: [
                       Text(
                         usluga.naziv,
-                        style: TextStyle(
-                          fontSize: 23.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[800],
-                          fontFamily: 'EduNSWACTFoundation',
-                          letterSpacing: 1.0,
+                        style: const TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                          fontFamily: 'Dosis',
                         ),
                       ),
                       const SizedBox(height: 5.0),
