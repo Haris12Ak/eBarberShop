@@ -117,7 +117,7 @@ class _TerminiInfroScreenState extends State<TerminiInfroScreen> {
                           style: TextStyle(
                               fontSize: 16.0,
                               fontWeight: FontWeight.w500,
-                              color: Colors.green.shade400),
+                              color: Colors.green.shade400.withOpacity(.8)),
                         ),
                         Text(
                           'Neaktivni: ${calculateNotActiveAppointment(terminiKorisnikaResult!.result)}',
@@ -125,7 +125,7 @@ class _TerminiInfroScreenState extends State<TerminiInfroScreen> {
                           style: TextStyle(
                               fontSize: 16.0,
                               fontWeight: FontWeight.w500,
-                              color: Colors.red.shade400),
+                              color: Colors.red.shade400.withOpacity(.8)),
                         ),
                       ],
                     ),
@@ -138,13 +138,9 @@ class _TerminiInfroScreenState extends State<TerminiInfroScreen> {
     TerminiKorisnikaInfo termin = terminiKorisnikaResult!.result[index];
     return Container(
       decoration: BoxDecoration(
-        color: termin.isAktivna ? Colors.green.shade100 : Colors.red.shade100,
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.grey.shade600,
-            width: 1.0,
-          ),
-        ),
+        color: termin.isAktivna
+            ? Colors.green.shade100.withOpacity(.5)
+            : Colors.red.shade100.withOpacity(.5),
       ),
       margin: const EdgeInsets.only(bottom: 8.0, top: 5.0),
       padding: const EdgeInsets.all(5.0),
@@ -153,12 +149,12 @@ class _TerminiInfroScreenState extends State<TerminiInfroScreen> {
             ? Icon(
                 Icons.check,
                 size: 28.0,
-                color: Colors.green.shade800,
+                color: Colors.green.shade800.withOpacity(.7),
               )
             : Icon(
                 Icons.close,
                 size: 28.0,
-                color: Colors.red.shade800,
+                color: Colors.red.shade800.withOpacity(.7),
               ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -169,7 +165,7 @@ class _TerminiInfroScreenState extends State<TerminiInfroScreen> {
             ),
             const Text(
               '|',
-              style: TextStyle(fontSize: 25.0),
+              style: TextStyle(fontSize: 24.0),
             ),
             Text(
               getTimeFormat(termin.vrijeme),

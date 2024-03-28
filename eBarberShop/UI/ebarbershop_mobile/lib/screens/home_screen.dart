@@ -1,5 +1,6 @@
 import 'package:ebarbershop_mobile/screens/novosti/novosti_screen.dart';
 import 'package:ebarbershop_mobile/screens/profil/profil_screen.dart';
+import 'package:ebarbershop_mobile/screens/proizvodi/proizvodi_screen.dart';
 import 'package:ebarbershop_mobile/screens/recenzije/recenzije_screen.dart';
 import 'package:ebarbershop_mobile/screens/rezervacije/usluge_screen.dart';
 import 'package:ebarbershop_mobile/utils/util.dart';
@@ -19,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     NovostiScreen(),
     UslugeScreen(),
     RecenzijeScreen(),
+    ProizvodiScreen(),
     ProfilScreen()
   ];
 
@@ -89,6 +91,10 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.star),
             label: 'Recenzije',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Proizvodi',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

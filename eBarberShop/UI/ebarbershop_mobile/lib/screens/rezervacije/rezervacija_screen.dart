@@ -464,7 +464,7 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
             crossAxisSpacing: 20.0,
             mainAxisSpacing: 20.0,
             childAspectRatio: 1,
-            mainAxisExtent: 225.0,
+            mainAxisExtent: 220,
           ),
           itemCount: _uposlenici.length,
           itemBuilder: (context, index) {
@@ -526,6 +526,7 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
                         style: const TextStyle(
                             color: Colors.black87, fontWeight: FontWeight.w500),
                         textAlign: TextAlign.center,
+                        overflow: TextOverflow.clip,
                       ),
                     ],
                   ),
