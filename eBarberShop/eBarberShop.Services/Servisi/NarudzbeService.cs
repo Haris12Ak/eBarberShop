@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using eBarberShop.Model;
+using eBarberShop.Model.Requests;
 using eBarberShop.Model.Search;
 using eBarberShop.Services.Interfejsi;
 using Microsoft.EntityFrameworkCore;
@@ -8,8 +9,10 @@ namespace eBarberShop.Services.Servisi
 {
     public class NarudzbeService : BaseCRUDService<Model.Narudzbe, Database.Narudzbe, Model.Search.NarudzbeSearch, Model.Requests.NarudzbeInsertRequest, Model.Requests.NarudzbeUpdateRequest>, INarudzbeService
     {
-        public NarudzbeService(ApplicationDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
+        private readonly IKorisniciService _korisniciService;
+        public NarudzbeService(ApplicationDbContext dbContext, IMapper mapper, IKorisniciService korisniciService) : base(dbContext, mapper)
         {
+            _korisniciService = korisniciService;
         }
 
         public override async Task<Model.PagedResult<Model.Narudzbe>> Get(NarudzbeSearch? search)
@@ -54,5 +57,37 @@ namespace eBarberShop.Services.Servisi
 
             return base.AddInclude(query, search);
         }
+
+        public async override Task<Narudzbe> Insert(NarudzbeInsertRequest insert)
+        {
+            var set = _dbContext.Set<Database.Narudzbe>();
+
+            var korisnik = _korisniciService.GetById(insert.KorisnikId);
+
+            if (korisnik == null)
+            {
+                return null;
+            }
+
+            string orderNumber = Helper.NumberGenerator.GenerateNumber();
+
+            var entity = new Database.Narudzbe()
+            {
+                BrojNarudzbe = orderNumber,
+                DatumNarudzbe = insert.DatumNarudzbe,
+                UkupanIznos = insert.UkupanIznos,
+                Status = insert.Status,
+                Otkazano = insert.Otkazano,
+                KorisnikId = insert.KorisnikId
+            };
+
+            await set.AddAsync(entity);
+
+            await _dbContext.SaveChangesAsync();
+
+            return _mapper.Map<Model.Narudzbe>(entity);
+        }
+
+
     }
 }

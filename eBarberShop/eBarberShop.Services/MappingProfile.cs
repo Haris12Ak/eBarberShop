@@ -74,6 +74,10 @@ namespace eBarberShop.Services
             CreateMap<Database.Ocjene, Model.Ocjene>();
             CreateMap<Model.Requests.OcjeneInsertRequest, Database.Ocjene>();
             CreateMap<Model.Requests.OcjeneUpdateRequest, Database.Ocjene>();
+
+            CreateMap<Database.NarudzbeDetalji, Model.NarudzbeDetalji>();
+            CreateMap<Model.Requests.NarudzbeDetaljiInsertRequest, Database.NarudzbeDetalji>();
+            CreateMap<Model.Requests.NarudzbeDetaljiUpdateRequest, Database.NarudzbeDetalji>();
         }
     }
 }

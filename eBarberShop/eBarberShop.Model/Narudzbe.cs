@@ -15,6 +15,6 @@
         public string? imeKorisnika => Korisnik?.Ime;
         public string? prezimeKorisnika => Korisnik?.Prezime;
 
-        public virtual ICollection<NarudzbeDetalji> NarudzbeDetalji { get; set; } = new List<NarudzbeDetalji>();
+        //public virtual ICollection<NarudzbeDetalji> NarudzbeDetalji { get; set; } = new List<NarudzbeDetalji>();
     }
 }

@@ -29,7 +29,7 @@ builder.Services.AddTransient<IRezervacijaUslugeService, RezervacijaUslugeServic
 builder.Services.AddTransient<ISlikeUslugeService, SlikeUslugeService>();
 builder.Services.AddTransient<IOcjeneService, OcjeneService>();
 builder.Services.AddScoped<IMessageProducer, MessageProducer>();
-
+builder.Services.AddScoped<INarudzbeDetaljiService, NarudzbeDetaljiService>();
 
 builder.Services.AddControllers(x =>
 {
