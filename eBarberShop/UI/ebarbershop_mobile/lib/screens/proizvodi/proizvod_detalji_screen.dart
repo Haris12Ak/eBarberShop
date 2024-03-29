@@ -63,7 +63,7 @@ class _ProizvodDetaljiScreenState extends State<ProizvodDetaljiScreen> {
                         ? Image(
                             width: 150,
                             height: 150,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                             image: MemoryImage(
                               base64Decode(
                                 widget.proizvod.slika.toString(),
@@ -79,7 +79,7 @@ class _ProizvodDetaljiScreenState extends State<ProizvodDetaljiScreen> {
                             child: const Image(
                               width: 150,
                               height: 150,
-                              fit: BoxFit.cover,
+                              fit: BoxFit.contain,
                               image: AssetImage(
                                   'assets/images/image_not_available.png'),
                             ),

@@ -30,6 +30,11 @@ namespace eBarberShop.Services.Servisi
                 query = query.Where(x => x.Sifra.ToLower().StartsWith(search.Sifra.ToLower()));
             }
 
+            if (!string.IsNullOrWhiteSpace(search?.VrstaProizvoda))
+            {
+                query = query.Where(x => x.VrstaProizvoda.Naziv.ToLower().StartsWith(search.VrstaProizvoda.ToLower()));
+            }
+
             result.Count = await query.CountAsync();
 
             if (search?.PageSize.HasValue == true && search?.Page.HasValue == true)

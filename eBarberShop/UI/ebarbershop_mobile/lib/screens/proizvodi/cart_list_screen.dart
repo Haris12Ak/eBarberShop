@@ -23,7 +23,6 @@ class _CartListScreenState extends State<CartListScreen> {
   late CartProvider _cartProvider;
   late NarudzbeProvider _narudzbeProvider;
   late NarudzbeDetaljiProvider _narudzbeDetaljiProvider;
-  int kolicina = 0;
 
   static final TextStyle _customStyle = TextStyle(
     fontSize: 20.0,

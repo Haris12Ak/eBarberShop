@@ -15,6 +15,7 @@ import 'package:ebarbershop_mobile/providers/slike_usluge_provider.dart';
 import 'package:ebarbershop_mobile/providers/termini_provider.dart';
 import 'package:ebarbershop_mobile/providers/uposlenik_provider.dart';
 import 'package:ebarbershop_mobile/providers/usluga_provider.dart';
+import 'package:ebarbershop_mobile/providers/vrste_proizvoda_provider.dart';
 import 'package:ebarbershop_mobile/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +39,8 @@ void main() {
       ChangeNotifierProvider(create: (_) => ProizvodiProvider()),
       ChangeNotifierProvider(create: (_) => CartProvider()),
       ChangeNotifierProvider(create: (_) => NarudzbeProvider()),
-      ChangeNotifierProvider(create: (_) => NarudzbeDetaljiProvider())
+      ChangeNotifierProvider(create: (_) => NarudzbeDetaljiProvider()),
+      ChangeNotifierProvider(create: (_) => VrsteProizvodaProvider())
     ],
     child: const MyApp(),
   ));

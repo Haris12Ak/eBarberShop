@@ -62,7 +62,7 @@ namespace eBarberShop.Services.Servisi
         {
             var set = _dbContext.Set<Database.Narudzbe>();
 
-            var korisnik = _korisniciService.GetById(insert.KorisnikId);
+            var korisnik = await _korisniciService.GetById(insert.KorisnikId);
 
             if (korisnik == null)
             {
@@ -78,7 +78,7 @@ namespace eBarberShop.Services.Servisi
                 UkupanIznos = insert.UkupanIznos,
                 Status = insert.Status,
                 Otkazano = insert.Otkazano,
-                KorisnikId = insert.KorisnikId
+                KorisnikId = korisnik.KorisniciId
             };
 
             await set.AddAsync(entity);
