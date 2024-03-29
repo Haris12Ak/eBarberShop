@@ -14,6 +14,7 @@ RezervacijaInsertRequest _$RezervacijaInsertRequestFromJson(
       json['status'] as bool?,
       json['korisnikId'] as int,
       json['uposlenikId'] as int,
+      json['uslugaId'] as int,
     );
 
 Map<String, dynamic> _$RezervacijaInsertRequestToJson(
@@ -24,4 +25,5 @@ Map<String, dynamic> _$RezervacijaInsertRequestToJson(
       'status': instance.status,
       'korisnikId': instance.korisnikId,
       'uposlenikId': instance.uposlenikId,
+      'uslugaId': instance.uslugaId,
     };

@@ -60,11 +60,6 @@ namespace eBarberShop.Services
 
             CreateMap<Database.NarudzbeDetalji, Model.NarudzbeDetalji>();
 
-            CreateMap<Database.RezervacijaUsluge, Model.UslugaRezervacije>();
-            CreateMap<Database.RezervacijaUsluge, Model.RezervacijaUsluge>();
-            CreateMap<Model.Requests.RezervacijaUslugeInsertRequest, Database.RezervacijaUsluge>();
-            CreateMap<Model.Requests.RezervacijaUslugeUpdateRequest, Database.RezervacijaUsluge>();
-
             CreateMap<Database.Rezervacija, Model.Termini>();
 
             CreateMap<Database.SlikeUsluge, Model.SlikeUsluge>();

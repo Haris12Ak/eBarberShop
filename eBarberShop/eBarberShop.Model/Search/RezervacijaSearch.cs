@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace eBarberShop.Model.Search
+﻿namespace eBarberShop.Model.Search
 {
     public class RezervacijaSearch : BaseSearch
     {
-        public bool? IsUslugeIncluded { get; set; }
+        public bool? IsUslugaIncluded { get; set; }
         public DateTime? Datum { get; set; }
         public string? ImePrezimeUposlenika { get; set; }
     }

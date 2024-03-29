@@ -19,12 +19,6 @@ namespace eBarberShop.Controllers
             return await (_service as IRezervacijaService).GetTermine(search);
         }
 
-        [HttpPost("/RezervisiTermin/{uslugaId}")]
-        public async Task<Model.Rezervacija> RezervisiTermin(int uslugaId, [FromBody] RezervacijaInsertRequest request)
-        {
-            return await (_service as IRezervacijaService).RezervisiTermin(uslugaId, request);
-        }
-
         [HttpGet("/GetTermineByKorisnikId/{korisnikId}")]
         public async Task<List<Model.TerminiKorisnikaInfo>> GetTermineByKorisnikId(int korisnikId)
         {

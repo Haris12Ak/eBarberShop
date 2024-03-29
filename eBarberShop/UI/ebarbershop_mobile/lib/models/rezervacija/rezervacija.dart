@@ -10,9 +10,10 @@ class Rezervacija {
   bool? status;
   int korisnikId;
   int uposlenikId;
+  int uslugaId;
 
   Rezervacija(this.rezervacijaId, this.datum, this.vrijeme, this.status,
-      this.korisnikId, this.uposlenikId);
+      this.korisnikId, this.uposlenikId, this.uslugaId);
 
   factory Rezervacija.fromJson(Map<String, dynamic> json) => _$RezervacijaFromJson(json);
 

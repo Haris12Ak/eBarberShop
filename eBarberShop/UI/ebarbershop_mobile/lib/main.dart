@@ -9,7 +9,6 @@ import 'package:ebarbershop_mobile/providers/ocjene_provider.dart';
 import 'package:ebarbershop_mobile/providers/proizvodi_provider.dart';
 import 'package:ebarbershop_mobile/providers/recenzije_provider.dart';
 import 'package:ebarbershop_mobile/providers/rezervacija_provider.dart';
-import 'package:ebarbershop_mobile/providers/rezervacija_usluge_provider.dart';
 import 'package:ebarbershop_mobile/providers/slike_provider.dart';
 import 'package:ebarbershop_mobile/providers/slike_usluge_provider.dart';
 import 'package:ebarbershop_mobile/providers/termini_provider.dart';
@@ -31,7 +30,6 @@ void main() {
       ChangeNotifierProvider(create: (_) => GradProvider()),
       ChangeNotifierProvider(create: (_) => UslugaProvider()),
       ChangeNotifierProvider(create: (_) => RezervacijaProvider()),
-      ChangeNotifierProvider(create: (_) => RezervacijaUslugeProvider()),
       ChangeNotifierProvider(create: (_) => TerminiProvider()),
       ChangeNotifierProvider(create: (_) => UposlenikProvider()),
       ChangeNotifierProvider(create: (_) => SlikeUslugeProvider()),

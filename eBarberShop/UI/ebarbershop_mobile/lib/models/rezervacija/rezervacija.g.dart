@@ -13,6 +13,7 @@ Rezervacija _$RezervacijaFromJson(Map<String, dynamic> json) => Rezervacija(
       json['status'] as bool?,
       json['korisnikId'] as int,
       json['uposlenikId'] as int,
+      json['uslugaId'] as int,
     );
 
 Map<String, dynamic> _$RezervacijaToJson(Rezervacija instance) =>
@@ -23,4 +24,5 @@ Map<String, dynamic> _$RezervacijaToJson(Rezervacija instance) =>
       'status': instance.status,
       'korisnikId': instance.korisnikId,
       'uposlenikId': instance.uposlenikId,
+      'uslugaId': instance.uslugaId,
     };

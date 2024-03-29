@@ -7,5 +7,6 @@
         public bool? Status { get; set; }
         public int KorisnikId { get; set; }
         public int UposlenikId { get; set; }
+        public int UslugaId { get; set; }
     }
 }

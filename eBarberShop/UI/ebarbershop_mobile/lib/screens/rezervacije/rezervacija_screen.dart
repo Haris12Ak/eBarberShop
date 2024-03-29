@@ -397,12 +397,17 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
             var rezervacijaProvider =
                 Provider.of<RezervacijaProvider>(context, listen: false);
 
-            RezervacijaInsertRequest request = RezervacijaInsertRequest(today,
-                time, true, Authorization.korisnikId!, selectedUsposlenik!);
+            RezervacijaInsertRequest request = RezervacijaInsertRequest(
+              today,
+              time,
+              true,
+              Authorization.korisnikId!,
+              selectedUsposlenik!,
+              widget.usluga.uslugaId,
+            );
 
             try {
-              await rezervacijaProvider.rezervisiTermin(
-                  widget.usluga.uslugaId, request);
+              await rezervacijaProvider.insert(request);
 
               // ignore: use_build_context_synchronously
               showDialog(

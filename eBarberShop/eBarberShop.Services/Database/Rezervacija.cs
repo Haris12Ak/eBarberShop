@@ -8,10 +8,10 @@
         public bool? Status { get; set; }
         public int KorisnikId { get; set; }
         public int UposlenikId { get; set; }
+        public int UslugaId { get; set; }
 
         public virtual Korisnici Korisnik { get; set; }
         public virtual Uposlenik Uposlenik { get; set; }
-
-        public virtual ICollection<RezervacijaUsluge> RezervacijaUsluge { get; set; } = new List<RezervacijaUsluge>();
+        public virtual Usluga Usluga { get; set; }
     }
 }

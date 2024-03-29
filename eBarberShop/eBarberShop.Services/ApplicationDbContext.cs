@@ -66,6 +66,7 @@ namespace eBarberShop.Services
                 new KorisniciUloge { KorisniciUlogeId = 4, KorisnikId = 4, UlogaId = 3, DatumIzmjene = DateTime.Now }
                 );
 
+
             modelBuilder.Entity<Novosti>()
                 .HasData(
                 new Novosti { NovostiId = 1, Naslov = "Novi trendovi u frizurama", Sadrzaj = "Osvježite svoj izgled uz najnovije frizure koje su hit ove sezone! Naši stručnjaci su u toku sa najnovijim trendovima, stoga posjetite naš salon i otkrijte kako možete osvježiti svoj stil", DatumObjave = DateTime.Now, KorisnikId = 1 },
@@ -87,12 +88,12 @@ namespace eBarberShop.Services
                 new Uposlenik { UposlenikId = 4, Ime = "Uposlenik_4", Prezime = "Uposlenik_4", Adresa = "ulica 8", Email = "uposlenik_4@gmail.com", KontaktTelefon = "063/098-563" }
                 );
 
-            modelBuilder.Entity<Rezervacija>()
+            modelBuilder.Entity<Ocjene>()
                 .HasData(
-                new Rezervacija { RezervacijaId = 1, Datum = new DateTime(2024, 1, 5, 0, 0, 0), Vrijeme = new DateTime(2024, 1, 5, 9, 30, 0), KorisnikId = 3, UposlenikId = 1 },
-                new Rezervacija { RezervacijaId = 2, Datum = new DateTime(2024, 1, 5, 0, 0, 0), Vrijeme = new DateTime(2024, 1, 5, 10, 15, 0), KorisnikId = 4, UposlenikId = 1 },
-                new Rezervacija { RezervacijaId = 3, Datum = new DateTime(2024, 1, 6, 0, 0, 0), Vrijeme = new DateTime(2024, 1, 6, 9, 0, 0), KorisnikId = 3, UposlenikId = 2 },
-                new Rezervacija { RezervacijaId = 4, Datum = new DateTime(2024, 1, 6, 0, 0, 0), Vrijeme = new DateTime(2024, 1, 6, 11, 30, 0), KorisnikId = 4, UposlenikId = 2 }
+                new Ocjene { Id = 1, Datum = DateTime.Now, Ocjena = 5, UposlenikId = 1, KorisnikId = 1, },
+                new Ocjene { Id = 2, Datum = DateTime.Now, Ocjena = 5, UposlenikId = 2, KorisnikId = 2, },
+                new Ocjene { Id = 3, Datum = DateTime.Now, Ocjena = 5, UposlenikId = 3, KorisnikId = 3, },
+                new Ocjene { Id = 4, Datum = DateTime.Now, Ocjena = 5, UposlenikId = 4, KorisnikId = 4, }
                 );
 
             modelBuilder.Entity<Usluga>()
@@ -103,12 +104,12 @@ namespace eBarberShop.Services
                 new Usluga { UslugaId = 4, Naziv = "Permanente i trajno oblikovanje", Cijena = 50, Trajanje = 60 }
                 );
 
-            modelBuilder.Entity<RezervacijaUsluge>()
+            modelBuilder.Entity<Rezervacija>()
                 .HasData(
-                new RezervacijaUsluge { RezervacijaUslugeId = 1, RezervacijaId = 1, UslugaId = 1 },
-                new RezervacijaUsluge { RezervacijaUslugeId = 2, RezervacijaId = 2, UslugaId = 2 },
-                new RezervacijaUsluge { RezervacijaUslugeId = 3, RezervacijaId = 3, UslugaId = 4 },
-                new RezervacijaUsluge { RezervacijaUslugeId = 4, RezervacijaId = 4, UslugaId = 3 }
+                new Rezervacija { RezervacijaId = 1, Datum = new DateTime(2024, 1, 5, 0, 0, 0), Vrijeme = new DateTime(2024, 1, 5, 9, 30, 0), KorisnikId = 3, UposlenikId = 1, UslugaId = 1 },
+                new Rezervacija { RezervacijaId = 2, Datum = new DateTime(2024, 1, 5, 0, 0, 0), Vrijeme = new DateTime(2024, 1, 5, 10, 15, 0), KorisnikId = 4, UposlenikId = 1, UslugaId = 2 },
+                new Rezervacija { RezervacijaId = 3, Datum = new DateTime(2024, 1, 6, 0, 0, 0), Vrijeme = new DateTime(2024, 1, 6, 9, 0, 0), KorisnikId = 3, UposlenikId = 2, UslugaId = 1 },
+                new Rezervacija { RezervacijaId = 4, Datum = new DateTime(2024, 1, 6, 0, 0, 0), Vrijeme = new DateTime(2024, 1, 6, 11, 30, 0), KorisnikId = 4, UposlenikId = 2, UslugaId = 2 }
                 );
 
             modelBuilder.Entity<VrsteProizvoda>()
@@ -130,14 +131,6 @@ namespace eBarberShop.Services
                 new Proizvodi { ProizvodiId = 6, Cijena = 6, Naziv = "taft POWER", Sifra = "0007", VrstaProizvodaId = 4 },
                 new Proizvodi { ProizvodiId = 7, Cijena = 7.5m, Naziv = "Garnier Color Naturals", Sifra = "0008", VrstaProizvodaId = 5 },
                 new Proizvodi { ProizvodiId = 8, Cijena = 8, Naziv = "Loreal", Sifra = "0008", VrstaProizvodaId = 5 }
-                );
-
-            modelBuilder.Entity<Kosarica>()
-                .HasData(
-                new Kosarica { KosaricaId = 1, Kolicina = 1, UkupanIznos = 8, ProizvodId = 1, KorisnikId = 3 },
-                new Kosarica { KosaricaId = 2, Kolicina = 2, UkupanIznos = 16, ProizvodId = 1, KorisnikId = 3 },
-                new Kosarica { KosaricaId = 3, Kolicina = 1, UkupanIznos = 6, ProizvodId = 6, KorisnikId = 4 },
-                new Kosarica { KosaricaId = 4, Kolicina = 1, UkupanIznos = 7.5m, ProizvodId = 7, KorisnikId = 4 }
                 );
 
             modelBuilder.Entity<Narudzbe>()
@@ -164,14 +157,12 @@ namespace eBarberShop.Services
         public virtual DbSet<Korisnici> Korisnici { get; set; }
         public virtual DbSet<KorisniciUloge> KorisniciUloge { get; set; }
         public virtual DbSet<Uloge> Uloge { get; set; }
-        public virtual DbSet<Kosarica> Kosarica { get; set; }
         public virtual DbSet<Narudzbe> Narudzbe { get; set; }
         public virtual DbSet<NarudzbeDetalji> NarudzbeDetalji { get; set; }
         public virtual DbSet<Placanje> Placanje { get; set; }
         public virtual DbSet<Proizvodi> Proizvodi { get; set; }
         public virtual DbSet<VrsteProizvoda> VrsteProizvoda { get; set; }
         public virtual DbSet<Rezervacija> Rezervacija { get; set; }
-        public virtual DbSet<RezervacijaUsluge> RezervacijaUsluge { get; set; }
         public virtual DbSet<Slike> Slike { get; set; }
         public virtual DbSet<SlikeUsluge> SlikeUsluge { get; set; }
         public virtual DbSet<Uposlenik> Uposlenik { get; set; }

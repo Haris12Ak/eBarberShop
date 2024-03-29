@@ -12,6 +12,7 @@ TerminiKorisnikaInfo _$TerminiKorisnikaInfoFromJson(
       json['rezervacijaId'] as int,
       DateTime.parse(json['datum'] as String),
       DateTime.parse(json['vrijeme'] as String),
+      json['nazivUsluge'] as String,
       json['isAktivna'] as bool,
     );
 
@@ -21,5 +22,6 @@ Map<String, dynamic> _$TerminiKorisnikaInfoToJson(
       'rezervacijaId': instance.rezervacijaId,
       'datum': instance.datum.toIso8601String(),
       'vrijeme': instance.vrijeme.toIso8601String(),
+      'nazivUsluge': instance.nazivUsluge,
       'isAktivna': instance.isAktivna,
     };

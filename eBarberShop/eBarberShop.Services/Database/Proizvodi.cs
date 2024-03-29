@@ -14,7 +14,5 @@
         public virtual VrsteProizvoda VrstaProizvoda { get; set; }
 
         public virtual ICollection<NarudzbeDetalji> NarudzbeDetalji { get; set; } = new List<NarudzbeDetalji>();
-        public virtual ICollection<Kosarica> Kosarica { get; set; } = new List<Kosarica>();
-
     }
 }

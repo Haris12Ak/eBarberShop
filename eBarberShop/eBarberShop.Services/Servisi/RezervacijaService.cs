@@ -12,12 +12,14 @@ namespace eBarberShop.Services.Servisi
         private readonly IMessageProducer _messageProducer;
         private readonly IKorisniciService _korisniciService;
         private readonly IUposlenikService _uposlenikService;
+        private readonly IUslugaService _uslugaService;
 
-        public RezervacijaService(ApplicationDbContext dbContext, IMapper mapper, IKorisniciService korisniciService, IUposlenikService uposlenikService, IMessageProducer messageProducer) : base(dbContext, mapper)
+        public RezervacijaService(ApplicationDbContext dbContext, IMapper mapper, IKorisniciService korisniciService, IUposlenikService uposlenikService, IMessageProducer messageProducer, IUslugaService uslugaService) : base(dbContext, mapper)
         {
             _korisniciService = korisniciService;
             _uposlenikService = uposlenikService;
             _messageProducer = messageProducer;
+            _uslugaService = uslugaService;
         }
 
         public override async Task<Model.PagedResult<Model.Rezervacija>> Get(RezervacijaSearch? search)
@@ -38,6 +40,11 @@ namespace eBarberShop.Services.Servisi
                 );
             }
 
+            if (search?.IsUslugaIncluded == true)
+            {
+                query = query.Include("Usluga");
+            }
+
             result.Count = await query.CountAsync();
 
             if (search?.PageSize.HasValue == true && search?.Page.HasValue == true)
@@ -50,31 +57,6 @@ namespace eBarberShop.Services.Servisi
             result.Result = _mapper.Map<List<Model.Rezervacija>>(list);
 
             return result;
-        }
-
-        public override IQueryable<Database.Rezervacija> AddInclude(IQueryable<Database.Rezervacija> query, RezervacijaSearch? search)
-        {
-            if (search?.IsUslugeIncluded == true)
-            {
-                query = query.Include("RezervacijaUsluge.Usluga");
-            }
-
-            return base.AddInclude(query, search);
-        }
-
-        public override async Task<Model.Rezervacija> Delete(int id)
-        {
-            var rezervacija = await _dbContext.Set<Database.Rezervacija>().FindAsync(id);
-
-            if (rezervacija == null)
-                return null;
-
-            _dbContext.RezervacijaUsluge.RemoveRange(rezervacija.RezervacijaUsluge);
-
-            _dbContext.Rezervacija.Remove(rezervacija);
-            await _dbContext.SaveChangesAsync();
-
-            return _mapper.Map<Model.Rezervacija>(rezervacija);
         }
 
         public async Task<List<Termini>> GetTermine(TerminiSearch? search)
@@ -91,44 +73,39 @@ namespace eBarberShop.Services.Servisi
             return _mapper.Map<List<Model.Termini>>(data);
         }
 
-        public async Task<Model.Rezervacija> RezervisiTermin(int uslugaId, RezervacijaInsertRequest request)
+        public async override Task<Rezervacija> Insert(RezervacijaInsertRequest insert)
         {
-            var korisnik = await _korisniciService.GetById(request.KorisnikId);
+            var korisnik = await _korisniciService.GetById(insert.KorisnikId);
 
             if (korisnik == null)
                 return null;
 
-            var uposlenik = await _uposlenikService.GetById(request.UposlenikId);
+            var usluga = await _uslugaService.GetById(insert.UslugaId);
+
+            if (usluga == null)
+                return null;
+
+            var uposlenik = await _uposlenikService.GetById(insert.UposlenikId);
 
             if (uposlenik == null)
                 return null;
 
-            bool isUposlenikDostupan = await IsUposlenikDostupan(uposlenik.UposlenikId, request.Datum, request.Vrijeme);
+            bool isUposlenikDostupan = await IsUposlenikDostupan(uposlenik.UposlenikId, insert.Datum, insert.Vrijeme);
 
             if (!isUposlenikDostupan)
                 throw new UserException("Odabrani uposlenik " + uposlenik.Ime + uposlenik.Prezime + " nije dostupan.Molimo odaberite drugog uposlenika ili drugi termin.");
 
             var rezervacija = new Database.Rezervacija()
             {
-                Datum = request.Datum,
-                Vrijeme = request.Vrijeme,
-                Status = request.Status,
+                Datum = insert.Datum,
+                Vrijeme = insert.Vrijeme,
+                Status = insert.Status,
                 KorisnikId = korisnik.KorisniciId,
                 UposlenikId = uposlenik.UposlenikId,
+                UslugaId = usluga.UslugaId
             };
 
-            var usluga = await _dbContext.Set<Database.Usluga>().FindAsync(uslugaId);
-
-            if (usluga == null)
-                return null;
-
             await _dbContext.Rezervacija.AddAsync(rezervacija);
-
-            rezervacija.RezervacijaUsluge.Add(new Database.RezervacijaUsluge()
-            {
-                Usluga = usluga,
-                Rezervacija = rezervacija
-            });
 
             await _dbContext.SaveChangesAsync();
 
@@ -167,11 +144,13 @@ namespace eBarberShop.Services.Servisi
             var currentDateTime = DateTime.Now;
 
             var entity = await set.Where(x => x.KorisnikId == korisnikId)
+                .Include("Usluga")
                 .Select(y => new TerminiKorisnikaInfo()
                 {
                     RezervacijaId = y.RezervacijaId,
                     Datum = y.Datum,
                     Vrijeme = y.Vrijeme,
+                    NazivUsluge = y.Usluga.Naziv,
                     IsAktivna = (y.Datum.Date > currentDateTime.Date ||
                                            (y.Datum.Date == currentDateTime.Date && y.Vrijeme.TimeOfDay > currentDateTime.TimeOfDay))
                                            ? true

@@ -202,8 +202,8 @@ namespace eBarberShop.Services.Migrations
                             GradId = 8,
                             Ime = "Admin",
                             KorisnickoIme = "admin",
-                            LozinkaHash = "Lznyl0CVJFRyvZ+Yqegg0TKUJQM=",
-                            LozinkaSalt = "6F7c7fMhQm/j1t1PcG+Axw==",
+                            LozinkaHash = "MibXNNuTfcVDdn7azEUpufMXl6k=",
+                            LozinkaSalt = "x9iF/LoRyj+HZVEufAHnhQ==",
                             Prezime = "Admin"
                         },
                         new
@@ -215,8 +215,8 @@ namespace eBarberShop.Services.Migrations
                             GradId = 7,
                             Ime = "Uposlenik",
                             KorisnickoIme = "uposlenik",
-                            LozinkaHash = "k8GrF4QUtgWGr1kKIfdn2heKhVM=",
-                            LozinkaSalt = "wRo33cB8n9eN62XUtR6UbA==",
+                            LozinkaHash = "r9ZMv6KLPF5jxaHOQu1i0sC70zI=",
+                            LozinkaSalt = "IODJ4cm5upvUKDD65Eu/Mg==",
                             Prezime = "Uposlenik"
                         },
                         new
@@ -228,8 +228,8 @@ namespace eBarberShop.Services.Migrations
                             GradId = 4,
                             Ime = "Test",
                             KorisnickoIme = "test",
-                            LozinkaHash = "I+yx/EEZwXqB2J+23XLgizYtriU=",
-                            LozinkaSalt = "Z2NNoPcthFUFCdaicsbBiQ==",
+                            LozinkaHash = "3k1Kl7HncnEtc1ymP3PlQzvEYhA=",
+                            LozinkaSalt = "JUFmi1KS3TQuf6PgOef7pA==",
                             Prezime = "Test"
                         },
                         new
@@ -241,8 +241,8 @@ namespace eBarberShop.Services.Migrations
                             GradId = 4,
                             Ime = "Klijent",
                             KorisnickoIme = "klijent",
-                            LozinkaHash = "JOAKNgs3t+vTqch/a4CxOTRJ1L0=",
-                            LozinkaSalt = "0I+/dN48sRTSZGYhwa6qbg==",
+                            LozinkaHash = "ieXacih8ZJ1DjKNYLE4b4xzN7EA=",
+                            LozinkaSalt = "QMBBpbVKJkqrq7mmF+LbqQ==",
                             Prezime = "Klijent"
                         });
                 });
@@ -276,93 +276,30 @@ namespace eBarberShop.Services.Migrations
                         new
                         {
                             KorisniciUlogeId = 1,
-                            DatumIzmjene = new DateTime(2024, 3, 22, 13, 38, 9, 775, DateTimeKind.Local).AddTicks(2139),
+                            DatumIzmjene = new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5684),
                             KorisnikId = 1,
                             UlogaId = 1
                         },
                         new
                         {
                             KorisniciUlogeId = 2,
-                            DatumIzmjene = new DateTime(2024, 3, 22, 13, 38, 9, 775, DateTimeKind.Local).AddTicks(2183),
+                            DatumIzmjene = new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5733),
                             KorisnikId = 2,
                             UlogaId = 2
                         },
                         new
                         {
                             KorisniciUlogeId = 3,
-                            DatumIzmjene = new DateTime(2024, 3, 22, 13, 38, 9, 775, DateTimeKind.Local).AddTicks(2186),
+                            DatumIzmjene = new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5736),
                             KorisnikId = 3,
                             UlogaId = 3
                         },
                         new
                         {
                             KorisniciUlogeId = 4,
-                            DatumIzmjene = new DateTime(2024, 3, 22, 13, 38, 9, 775, DateTimeKind.Local).AddTicks(2189),
+                            DatumIzmjene = new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5739),
                             KorisnikId = 4,
                             UlogaId = 3
-                        });
-                });
-
-            modelBuilder.Entity("eBarberShop.Services.Database.Kosarica", b =>
-                {
-                    b.Property<int>("KosaricaId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KosaricaId"));
-
-                    b.Property<int>("Kolicina")
-                        .HasColumnType("int");
-
-                    b.Property<int>("KorisnikId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProizvodId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("UkupanIznos")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("KosaricaId");
-
-                    b.HasIndex("KorisnikId");
-
-                    b.HasIndex("ProizvodId");
-
-                    b.ToTable("Kosarica");
-
-                    b.HasData(
-                        new
-                        {
-                            KosaricaId = 1,
-                            Kolicina = 1,
-                            KorisnikId = 3,
-                            ProizvodId = 1,
-                            UkupanIznos = 8m
-                        },
-                        new
-                        {
-                            KosaricaId = 2,
-                            Kolicina = 2,
-                            KorisnikId = 3,
-                            ProizvodId = 1,
-                            UkupanIznos = 16m
-                        },
-                        new
-                        {
-                            KosaricaId = 3,
-                            Kolicina = 1,
-                            KorisnikId = 4,
-                            ProizvodId = 6,
-                            UkupanIznos = 6m
-                        },
-                        new
-                        {
-                            KosaricaId = 4,
-                            Kolicina = 1,
-                            KorisnikId = 4,
-                            ProizvodId = 7,
-                            UkupanIznos = 7.5m
                         });
                 });
 
@@ -404,7 +341,7 @@ namespace eBarberShop.Services.Migrations
                         {
                             NarudzbeId = 1,
                             BrojNarudzbe = "000001",
-                            DatumNarudzbe = new DateTime(2024, 3, 22, 13, 38, 9, 775, DateTimeKind.Local).AddTicks(2551),
+                            DatumNarudzbe = new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(6037),
                             KorisnikId = 3,
                             Otkazano = false,
                             Status = true,
@@ -414,7 +351,7 @@ namespace eBarberShop.Services.Migrations
                         {
                             NarudzbeId = 2,
                             BrojNarudzbe = "000002",
-                            DatumNarudzbe = new DateTime(2024, 3, 22, 13, 38, 9, 775, DateTimeKind.Local).AddTicks(2557),
+                            DatumNarudzbe = new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(6042),
                             KorisnikId = 3,
                             Otkazano = false,
                             Status = true,
@@ -424,7 +361,7 @@ namespace eBarberShop.Services.Migrations
                         {
                             NarudzbeId = 3,
                             BrojNarudzbe = "000003",
-                            DatumNarudzbe = new DateTime(2024, 3, 22, 13, 38, 9, 775, DateTimeKind.Local).AddTicks(2561),
+                            DatumNarudzbe = new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(6046),
                             KorisnikId = 4,
                             Otkazano = false,
                             Status = true,
@@ -434,7 +371,7 @@ namespace eBarberShop.Services.Migrations
                         {
                             NarudzbeId = 4,
                             BrojNarudzbe = "000004",
-                            DatumNarudzbe = new DateTime(2024, 3, 22, 13, 38, 9, 775, DateTimeKind.Local).AddTicks(2565),
+                            DatumNarudzbe = new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(6050),
                             KorisnikId = 4,
                             Otkazano = false,
                             Status = true,
@@ -533,7 +470,7 @@ namespace eBarberShop.Services.Migrations
                         new
                         {
                             NovostiId = 1,
-                            DatumObjave = new DateTime(2024, 3, 22, 13, 38, 9, 775, DateTimeKind.Local).AddTicks(2213),
+                            DatumObjave = new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5760),
                             KorisnikId = 1,
                             Naslov = "Novi trendovi u frizurama",
                             Sadrzaj = "Osvježite svoj izgled uz najnovije frizure koje su hit ove sezone! Naši stručnjaci su u toku sa najnovijim trendovima, stoga posjetite naš salon i otkrijte kako možete osvježiti svoj stil"
@@ -541,7 +478,7 @@ namespace eBarberShop.Services.Migrations
                         new
                         {
                             NovostiId = 2,
-                            DatumObjave = new DateTime(2024, 3, 22, 13, 38, 9, 775, DateTimeKind.Local).AddTicks(2217),
+                            DatumObjave = new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5764),
                             KorisnikId = 1,
                             Naslov = "Posebna ponuda za bojanje kose",
                             Sadrzaj = "Vrijeme je za promjenu boje! U narednom mjesecu nudimo posebnu ponudu na usluge bojanja kose. Bez obzira želite li se osvježiti ili potpuno transformisati, naši stručnjaci će vam pomoći postići savršen izgled"
@@ -549,7 +486,7 @@ namespace eBarberShop.Services.Migrations
                         new
                         {
                             NovostiId = 3,
-                            DatumObjave = new DateTime(2024, 3, 22, 13, 38, 9, 775, DateTimeKind.Local).AddTicks(2219),
+                            DatumObjave = new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5766),
                             KorisnikId = 1,
                             Naslov = "Savjetovanje sa stilistom",
                             Sadrzaj = "Želite li promjeniti frizuru, ali niste sigurni koji stil bi vam najbolje odgovarao? Zakažite savjetovanje sa našim stilistom koji će vam pomoći odabrati frizuru koja će najbolje istaći vaše karakteristike i stil"
@@ -586,6 +523,40 @@ namespace eBarberShop.Services.Migrations
                     b.HasIndex("UposlenikId");
 
                     b.ToTable("Ocjene");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Datum = new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5842),
+                            KorisnikId = 1,
+                            Ocjena = 5.0,
+                            UposlenikId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Datum = new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5847),
+                            KorisnikId = 2,
+                            Ocjena = 5.0,
+                            UposlenikId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Datum = new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5849),
+                            KorisnikId = 3,
+                            Ocjena = 5.0,
+                            UposlenikId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Datum = new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5852),
+                            KorisnikId = 4,
+                            Ocjena = 5.0,
+                            UposlenikId = 4
+                        });
                 });
 
             modelBuilder.Entity("eBarberShop.Services.Database.Placanje", b =>
@@ -750,7 +721,7 @@ namespace eBarberShop.Services.Migrations
                         new
                         {
                             RecenzijeId = 1,
-                            DatumObjave = new DateTime(2024, 3, 22, 13, 38, 9, 775, DateTimeKind.Local).AddTicks(2244),
+                            DatumObjave = new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5793),
                             KorisnikId = 3,
                             Ocjena = 5.0,
                             Sadrzaj = "Posjetio sam ovaj salon prvi put, i moram priznati da sam bio zadovoljan. Atmosfera je opuštajuća, a osoblje je bilo veoma prijateljsko. Frizerka je imala odlične sugestije i savjete za negu kose. Sve preporuke!"
@@ -758,7 +729,7 @@ namespace eBarberShop.Services.Migrations
                         new
                         {
                             RecenzijeId = 2,
-                            DatumObjave = new DateTime(2024, 3, 22, 13, 38, 9, 775, DateTimeKind.Local).AddTicks(2247),
+                            DatumObjave = new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5797),
                             KorisnikId = 4,
                             Ocjena = 4.0,
                             Sadrzaj = "Odličan salon, vrlo moderno uređen. Osoblje je veoma ljubazno i usluga je bila vrhunska. Moj frizer je bio veoma stručan i posvetio se svakom detalju. Jedini razlog zašto ne dajem pet zvjezdica je cijena koja je bila malo viša nego što sam očekivao, ali kvalitet je definitivno bio tu."
@@ -785,6 +756,9 @@ namespace eBarberShop.Services.Migrations
                     b.Property<int>("UposlenikId")
                         .HasColumnType("int");
 
+                    b.Property<int>("UslugaId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Vrijeme")
                         .HasColumnType("datetime2");
 
@@ -793,6 +767,8 @@ namespace eBarberShop.Services.Migrations
                     b.HasIndex("KorisnikId");
 
                     b.HasIndex("UposlenikId");
+
+                    b.HasIndex("UslugaId");
 
                     b.ToTable("Rezervacija");
 
@@ -803,6 +779,7 @@ namespace eBarberShop.Services.Migrations
                             Datum = new DateTime(2024, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             KorisnikId = 3,
                             UposlenikId = 1,
+                            UslugaId = 1,
                             Vrijeme = new DateTime(2024, 1, 5, 9, 30, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -811,6 +788,7 @@ namespace eBarberShop.Services.Migrations
                             Datum = new DateTime(2024, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             KorisnikId = 4,
                             UposlenikId = 1,
+                            UslugaId = 2,
                             Vrijeme = new DateTime(2024, 1, 5, 10, 15, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -819,6 +797,7 @@ namespace eBarberShop.Services.Migrations
                             Datum = new DateTime(2024, 1, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             KorisnikId = 3,
                             UposlenikId = 2,
+                            UslugaId = 1,
                             Vrijeme = new DateTime(2024, 1, 6, 9, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -827,56 +806,8 @@ namespace eBarberShop.Services.Migrations
                             Datum = new DateTime(2024, 1, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             KorisnikId = 4,
                             UposlenikId = 2,
+                            UslugaId = 2,
                             Vrijeme = new DateTime(2024, 1, 6, 11, 30, 0, 0, DateTimeKind.Unspecified)
-                        });
-                });
-
-            modelBuilder.Entity("eBarberShop.Services.Database.RezervacijaUsluge", b =>
-                {
-                    b.Property<int>("RezervacijaUslugeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RezervacijaUslugeId"));
-
-                    b.Property<int>("RezervacijaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UslugaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("RezervacijaUslugeId");
-
-                    b.HasIndex("RezervacijaId");
-
-                    b.HasIndex("UslugaId");
-
-                    b.ToTable("RezervacijaUsluge");
-
-                    b.HasData(
-                        new
-                        {
-                            RezervacijaUslugeId = 1,
-                            RezervacijaId = 1,
-                            UslugaId = 1
-                        },
-                        new
-                        {
-                            RezervacijaUslugeId = 2,
-                            RezervacijaId = 2,
-                            UslugaId = 2
-                        },
-                        new
-                        {
-                            RezervacijaUslugeId = 3,
-                            RezervacijaId = 3,
-                            UslugaId = 4
-                        },
-                        new
-                        {
-                            RezervacijaUslugeId = 4,
-                            RezervacijaId = 4,
-                            UslugaId = 3
                         });
                 });
 
@@ -1053,6 +984,9 @@ namespace eBarberShop.Services.Migrations
                     b.Property<string>("Opis")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("Slika")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<int>("Trajanje")
                         .HasColumnType("int");
 
@@ -1184,25 +1118,6 @@ namespace eBarberShop.Services.Migrations
                     b.Navigation("Uloga");
                 });
 
-            modelBuilder.Entity("eBarberShop.Services.Database.Kosarica", b =>
-                {
-                    b.HasOne("eBarberShop.Services.Database.Korisnici", "Korisnik")
-                        .WithMany("Kosarica")
-                        .HasForeignKey("KorisnikId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("eBarberShop.Services.Database.Proizvodi", "Proizvod")
-                        .WithMany("Kosarica")
-                        .HasForeignKey("ProizvodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Korisnik");
-
-                    b.Navigation("Proizvod");
-                });
-
             modelBuilder.Entity("eBarberShop.Services.Database.Narudzbe", b =>
                 {
                     b.HasOne("eBarberShop.Services.Database.Korisnici", "Korisnik")
@@ -1310,26 +1225,15 @@ namespace eBarberShop.Services.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Korisnik");
-
-                    b.Navigation("Uposlenik");
-                });
-
-            modelBuilder.Entity("eBarberShop.Services.Database.RezervacijaUsluge", b =>
-                {
-                    b.HasOne("eBarberShop.Services.Database.Rezervacija", "Rezervacija")
-                        .WithMany("RezervacijaUsluge")
-                        .HasForeignKey("RezervacijaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("eBarberShop.Services.Database.Usluga", "Usluga")
-                        .WithMany("RezervacijaUsluge")
+                        .WithMany("Rezervacije")
                         .HasForeignKey("UslugaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Rezervacija");
+                    b.Navigation("Korisnik");
+
+                    b.Navigation("Uposlenik");
 
                     b.Navigation("Usluga");
                 });
@@ -1367,8 +1271,6 @@ namespace eBarberShop.Services.Migrations
                 {
                     b.Navigation("KorisniciUloge");
 
-                    b.Navigation("Kosarica");
-
                     b.Navigation("Narudzbe");
 
                     b.Navigation("Novosti");
@@ -1389,14 +1291,7 @@ namespace eBarberShop.Services.Migrations
 
             modelBuilder.Entity("eBarberShop.Services.Database.Proizvodi", b =>
                 {
-                    b.Navigation("Kosarica");
-
                     b.Navigation("NarudzbeDetalji");
-                });
-
-            modelBuilder.Entity("eBarberShop.Services.Database.Rezervacija", b =>
-                {
-                    b.Navigation("RezervacijaUsluge");
                 });
 
             modelBuilder.Entity("eBarberShop.Services.Database.Slike", b =>
@@ -1418,7 +1313,7 @@ namespace eBarberShop.Services.Migrations
 
             modelBuilder.Entity("eBarberShop.Services.Database.Usluga", b =>
                 {
-                    b.Navigation("RezervacijaUsluge");
+                    b.Navigation("Rezervacije");
 
                     b.Navigation("SlikeUsluge");
                 });

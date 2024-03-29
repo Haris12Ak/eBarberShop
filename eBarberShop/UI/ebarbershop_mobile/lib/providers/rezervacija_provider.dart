@@ -18,26 +18,6 @@ class RezervacijaProvider extends BaseProvider<Rezervacija> {
     return Rezervacija.fromJson(item);
   }
 
-  Future<Rezervacija> rezervisiTermin(int uslugaId, dynamic request) async {
-    String endpointRezervisiTermin = "RezervisiTermin";
-
-    var url = "$_baseUrl$endpointRezervisiTermin/$uslugaId";
-
-    var uri = Uri.parse(url);
-    var headers = createHeaders();
-
-    var jsonRequest = jsonEncode(request);
-    var response = await http!.post(uri, headers: headers, body: jsonRequest);
-
-    if (isValidResponseCode(response)) {
-      var data = jsonDecode(response.body);
-
-      return Rezervacija.fromJson(data);
-    } else {
-      throw Exception("Unknown error");
-    }
-  }
-
   Future<SearchResult<TerminiKorisnikaInfo>> GetTermineByKorisnikId(
       int korisnikId) async {
     String endpointTerminiKorisnikaUrl = "GetTermineByKorisnikId";

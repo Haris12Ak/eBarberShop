@@ -173,6 +173,21 @@ class _TerminiInfroScreenState extends State<TerminiInfroScreen> {
             )
           ],
         ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 5.0,
+            ),
+            Text('Usluga: ${termin.nazivUsluge}'),
+            const SizedBox(
+              height: 5.0,
+            ),
+            termin.isAktivna
+                ? const Text('Status: Aktivna')
+                : const Text('Status Neaktivna')
+          ],
+        ),
         trailing: _buildRemoveFromHistory(context, termin),
       ),
     );

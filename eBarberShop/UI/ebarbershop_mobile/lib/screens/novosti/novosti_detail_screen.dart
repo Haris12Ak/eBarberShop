@@ -59,12 +59,18 @@ class _NovostiDetailScreenState extends State<NovostiDetailScreen> {
                     SizedBox(
                       height: 300,
                       width: double.infinity,
-                      child: Image(
-                        image: MemoryImage(
-                          base64Decode(novost.slika.toString()),
-                        ),
-                        fit: BoxFit.contain,
-                      ),
+                      child: novost.slika != "" && novost.slika != null
+                          ? Image(
+                              image: MemoryImage(
+                                base64Decode(novost.slika.toString()),
+                              ),
+                              fit: BoxFit.contain,
+                            )
+                          : const Image(
+                              image: AssetImage(
+                                  'assets/images/image_not_available.png'),
+                              fit: BoxFit.contain,
+                            ),
                     ),
                     const SizedBox(
                       height: 18.0,

@@ -7,9 +7,10 @@ class TerminiKorisnikaInfo {
   int rezervacijaId;
   DateTime datum;
   DateTime vrijeme;
+  String nazivUsluge;
   bool isAktivna;
 
-  TerminiKorisnikaInfo(this.rezervacijaId, this.datum, this.vrijeme, this.isAktivna);
+  TerminiKorisnikaInfo(this.rezervacijaId, this.datum, this.vrijeme,this.nazivUsluge, this.isAktivna);
 
   factory TerminiKorisnikaInfo.fromJson(Map<String, dynamic> json) => _$TerminiKorisnikaInfoFromJson(json);
 
