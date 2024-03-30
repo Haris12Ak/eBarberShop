@@ -81,5 +81,16 @@ namespace eBarberShop.Services.Servisi
                 entity.LozinkaHash = PasswordHelper.GenerateHash(salt, update.Lozinka);
             }
         }
+
+        public async override Task CheckIfUsernameExist(DbSet<Database.Korisnici> set, KorisniciInsertRequest insert)
+        {
+            var list = await set.ToListAsync();
+
+            foreach (var item in list)
+            {
+                if (item.KorisnickoIme == insert.KorisnickoIme)
+                    throw new UserException("Korisnicko ime vec postoji! Molimo da unesete drugo korisnicko ime.");
+            }
+        }
     }
 }

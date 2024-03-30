@@ -1,7 +1,6 @@
 ﻿using eBarberShop.Model.Search;
 using eBarberShop.Services.Interfejsi;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eBarberShop.Controllers

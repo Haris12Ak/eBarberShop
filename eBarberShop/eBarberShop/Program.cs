@@ -24,7 +24,6 @@ builder.Services.AddTransient<IUslugaService, UslugaService>();
 builder.Services.AddTransient<IRezervacijaService, RezervacijaService>();
 builder.Services.AddTransient<ISlikeService, SlikeService>();
 builder.Services.AddTransient<INarudzbeService, NarudzbeService>();
-builder.Services.AddTransient<IKosaricaService, KosaricaService>();
 builder.Services.AddTransient<ISlikeUslugeService, SlikeUslugeService>();
 builder.Services.AddTransient<IOcjeneService, OcjeneService>();
 builder.Services.AddScoped<IMessageProducer, MessageProducer>();

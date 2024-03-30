@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using eBarberShop.Model.Search;
+using Microsoft.EntityFrameworkCore;
 
 namespace eBarberShop.Services.Servisi
 {
@@ -13,6 +14,8 @@ namespace eBarberShop.Services.Servisi
         {
             var set = _dbContext.Set<Tdb>();
 
+            await CheckIfUsernameExist(set, insert);
+
             Tdb entity = _mapper.Map<Tdb>(insert);
 
             await set.AddAsync(entity);
@@ -23,7 +26,6 @@ namespace eBarberShop.Services.Servisi
 
             return _mapper.Map<T>(entity);
         }
-
 
         public virtual async Task<T> Update(int id, TUpdate update)
         {
@@ -67,6 +69,12 @@ namespace eBarberShop.Services.Servisi
         {
 
         }
+
+        public virtual async Task CheckIfUsernameExist(DbSet<Tdb> set, TInsert insert)
+        {
+
+        }
+
 
     }
 }

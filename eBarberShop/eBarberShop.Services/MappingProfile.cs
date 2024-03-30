@@ -54,10 +54,6 @@ namespace eBarberShop.Services
             CreateMap<Model.Requests.NarudzbeInsertRequest, Database.Narudzbe>();
             CreateMap<Model.Requests.NarudzbeUpdateRequest, Database.Narudzbe>();
 
-            CreateMap<Database.Kosarica, Model.Kosarica>();
-            CreateMap<Model.Requests.KosaricaInsertRequest, Database.Kosarica>();
-            CreateMap<Model.Requests.KosaricaUpdateRequest, Database.Kosarica>();
-
             CreateMap<Database.NarudzbeDetalji, Model.NarudzbeDetalji>();
 
             CreateMap<Database.Rezervacija, Model.Termini>();

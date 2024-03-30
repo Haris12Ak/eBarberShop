@@ -20,5 +20,12 @@ namespace eBarberShop.Controllers
         {
             return await (_service as IKorisniciService).Login(request.Username, request.Password);
         }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public override Task<Korisnici> Insert([FromBody] KorisniciInsertRequest insert)
+        {
+            return base.Insert(insert);
+        }
     }
 }
