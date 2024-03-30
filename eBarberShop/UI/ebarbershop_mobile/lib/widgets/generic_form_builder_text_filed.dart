@@ -6,11 +6,16 @@ class GenericFormBuilderTextField extends StatefulWidget {
   String name;
   String labelText;
   IconData prefixIcon;
+  String? errorText;
+  final void Function(String?)? onChanged;
   GenericFormBuilderTextField(
-      {super.key,
+      {Key? key,
       required this.name,
       required this.labelText,
-      required this.prefixIcon});
+      required this.prefixIcon,
+      this.errorText,
+      this.onChanged})
+      : super(key: key);
 
   @override
   State<GenericFormBuilderTextField> createState() =>
@@ -24,18 +29,19 @@ class _GenericFormBuilderTextFieldState
     return FormBuilderTextField(
       name: widget.name,
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.all(10.0),
-        border: const OutlineInputBorder(),
-        focusedBorder: const OutlineInputBorder(),
-        filled: true,
-        fillColor: Colors.white30,
-        labelText: widget.labelText,
-        prefixIcon: Icon(widget.prefixIcon),
-        floatingLabelStyle: TextStyle(
-            color: Colors.grey[800],
-            fontSize: 16.0,
-            fontWeight: FontWeight.w500),
-      ),
+          contentPadding: const EdgeInsets.all(10.0),
+          border: const OutlineInputBorder(),
+          focusedBorder: const OutlineInputBorder(),
+          filled: true,
+          fillColor: Colors.white30,
+          labelText: widget.labelText,
+          prefixIcon: Icon(widget.prefixIcon),
+          floatingLabelStyle: TextStyle(
+              color: Colors.grey[800],
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500),
+          errorText: widget.errorText),
+      onChanged: widget.onChanged,
     );
   }
 }
