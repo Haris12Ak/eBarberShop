@@ -1,6 +1,7 @@
 import 'package:ebarbershop_desktop/models/korisnik/korisnik.dart';
 import 'package:ebarbershop_desktop/providers/login_provider.dart';
 import 'package:ebarbershop_desktop/screens/home_screen.dart';
+import 'package:ebarbershop_desktop/screens/registracija_screen.dart';
 import 'package:ebarbershop_desktop/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -52,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Center(
         child: SizedBox(
           width: 500,
-          height: 550,
+          height: 600,
           child: Card(
             color: Colors.grey[200],
             elevation: 0.0,
@@ -102,6 +103,29 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 30.0,
                   ),
                   buildLogin(),
+                  const SizedBox(
+                    height: 30.0,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  const RegistracijaScreen()));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0.0,
+                      backgroundColor: Colors.transparent,
+                    ),
+                    child: Text(
+                      'Nemate račun? Registruj se!',
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.blue.shade900),
+                    ),
+                  )
                 ],
               ),
             ),
