@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace eBarberShop.Model
+﻿namespace eBarberShop.Model
 {
     public class NarudzbeDetalji
     {
@@ -14,5 +8,10 @@ namespace eBarberShop.Model
         public int ProizvodId { get; set; }
 
         public virtual Proizvodi Proizvod { get; set; }
+
+        public decimal? CijenaProizvoda => Proizvod?.Cijena;
+        public string? NazivProizvoda => Proizvod?.Naziv;
+        public string? SifraProizvoda => Proizvod?.Sifra;
+
     }
 }

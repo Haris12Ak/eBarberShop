@@ -1,6 +1,7 @@
 import 'package:ebarbershop_desktop/models/narudzbe/narudzbe.dart';
 import 'package:ebarbershop_desktop/models/search_result.dart';
 import 'package:ebarbershop_desktop/providers/narudzbe_provider.dart';
+import 'package:ebarbershop_desktop/screens/narudzbe/narudzbe_detalji_screen.dart';
 import 'package:ebarbershop_desktop/utils/util.dart';
 import 'package:ebarbershop_desktop/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
@@ -188,7 +189,7 @@ class _NarudzbeListScreenState extends State<NarudzbeListScreen> {
                           DataColumn(
                             label: Expanded(
                               child: Text(
-                                'Datum',
+                                'Datum/Vrijeme',
                                 style: TextStyle(
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.w700,
@@ -199,7 +200,7 @@ class _NarudzbeListScreenState extends State<NarudzbeListScreen> {
                           DataColumn(
                             label: Expanded(
                               child: Text(
-                                'Vrijeme',
+                                'Ukupan iznos',
                                 style: TextStyle(
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.w700,
@@ -222,23 +223,101 @@ class _NarudzbeListScreenState extends State<NarudzbeListScreen> {
                                       DataCell(Text(
                                           '${e.imeKorisnika} ${e.prezimeKorisnika}')),
                                       DataCell(Text(e.brojNarudzbe)),
-                                      DataCell(
-                                          Text(getDateFormat(e.datumNarudzbe))),
-                                      DataCell(
-                                          Text(getTimeFormat(e.datumNarudzbe))),
+                                      DataCell(Text(
+                                          '${getDateFormat(e.datumNarudzbe)}  |  ${getTimeFormat(e.datumNarudzbe)}')),
+                                      DataCell(Text(
+                                          '${formatNumber(e.ukupanIznos)} KM')),
                                       DataCell(
                                         Row(
                                           children: [
-                                            IconButton(
-                                                tooltip: 'Detalji/Uredi',
-                                                onPressed: () {},
-                                                icon: const Icon(Icons.edit)),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (BuildContext
+                                                                context) =>
+                                                            NarudzbeDetaljiScreen(
+                                                                narudzba: e)));
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                  elevation: 0.0,
+                                                  backgroundColor:
+                                                      Colors.transparent),
+                                              child:
+                                                  const Text('Prikaži detalje'),
+                                            ),
                                             const SizedBox(
                                               width: 10.0,
                                             ),
                                             IconButton(
                                                 tooltip: 'Obriši',
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                  try {
+                                                    // ignore: use_build_context_synchronously
+                                                    showDialog(
+                                                      barrierDismissible: false,
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          AlertDialog(
+                                                        title: const Text(
+                                                            'Potvrda'),
+                                                        content: Text(
+                                                            'Jeste li sigurni da želite ukloniti narudžbu kreiranu datuma: ${getDateFormat(e.datumNarudzbe)} !'),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed:
+                                                                () async {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+
+                                                              await _narudzbeProvider
+                                                                  .delete(e
+                                                                      .narudzbeId);
+
+                                                              fetchNarudzbe();
+                                                            },
+                                                            child: const Text(
+                                                                'Da'),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                            child: const Text(
+                                                                'Ne'),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  } on Exception catch (e) {
+                                                    // ignore: use_build_context_synchronously
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          AlertDialog(
+                                                        title:
+                                                            const Text("Error"),
+                                                        content:
+                                                            Text(e.toString()),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    context),
+                                                            child: const Text(
+                                                                "OK"),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  }
+                                                },
                                                 icon: const Icon(
                                                     Icons.delete_forever))
                                           ],

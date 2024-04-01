@@ -16,6 +16,10 @@ Narudzbe _$NarudzbeFromJson(Map<String, dynamic> json) => Narudzbe(
       json['korisnikId'] as int,
       json['imeKorisnika'] as String?,
       json['prezimeKorisnika'] as String?,
+      json['emailKorisnika'] as String?,
+      json['adersaKorisnika'] as String?,
+      json['brojTelefonaKorisnika'] as String?,
+      json['mjestoBoravkaKorisnika'] as String?,
     );
 
 Map<String, dynamic> _$NarudzbeToJson(Narudzbe instance) => <String, dynamic>{
@@ -28,4 +32,8 @@ Map<String, dynamic> _$NarudzbeToJson(Narudzbe instance) => <String, dynamic>{
       'korisnikId': instance.korisnikId,
       'imeKorisnika': instance.imeKorisnika,
       'prezimeKorisnika': instance.prezimeKorisnika,
+      'emailKorisnika': instance.emailKorisnika,
+      'adersaKorisnika': instance.adersaKorisnika,
+      'brojTelefonaKorisnika': instance.brojTelefonaKorisnika,
+      'mjestoBoravkaKorisnika': instance.mjestoBoravkaKorisnika,
     };

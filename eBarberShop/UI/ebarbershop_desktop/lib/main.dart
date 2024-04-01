@@ -1,6 +1,7 @@
 import 'package:ebarbershop_desktop/providers/grad_provider.dart';
 import 'package:ebarbershop_desktop/providers/korisnik_provider.dart';
 import 'package:ebarbershop_desktop/providers/login_provider.dart';
+import 'package:ebarbershop_desktop/providers/narudzbe_detalji_provider.dart';
 import 'package:ebarbershop_desktop/providers/narudzbe_provider.dart';
 import 'package:ebarbershop_desktop/providers/novosti_provider.dart';
 import 'package:ebarbershop_desktop/providers/proizvodi_provider.dart';
@@ -30,7 +31,8 @@ void main() {
       ChangeNotifierProvider(create: (_) => TerminiProvider()),
       ChangeNotifierProvider(create: (_) => NarudzbeProvider()),
       ChangeNotifierProvider(create: (_) => GradProvider()),
-      ChangeNotifierProvider(create: (_) => KorisnikProvider())
+      ChangeNotifierProvider(create: (_) => KorisnikProvider()),
+      ChangeNotifierProvider(create: (_) => NarudzbeDetaljiProvider()),
     ],
     child: const MyApp(),
   ));

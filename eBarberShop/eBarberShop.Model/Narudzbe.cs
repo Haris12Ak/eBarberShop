@@ -14,7 +14,10 @@
 
         public string? imeKorisnika => Korisnik?.Ime;
         public string? prezimeKorisnika => Korisnik?.Prezime;
+        public string? emailKorisnika => Korisnik?.Email;
+        public string? adersaKorisnika => Korisnik?.Adresa;
+        public string? brojTelefonaKorisnika => Korisnik?.BrojTelefona;
+        public string? mjestoBoravkaKorisnika => Korisnik.Grad?.Naziv;
 
-        //public virtual ICollection<NarudzbeDetalji> NarudzbeDetalji { get; set; } = new List<NarudzbeDetalji>();
     }
 }

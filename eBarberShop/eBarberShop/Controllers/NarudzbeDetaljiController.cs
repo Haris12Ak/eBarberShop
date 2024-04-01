@@ -12,5 +12,11 @@ namespace eBarberShop.Controllers
         public NarudzbeDetaljiController(ILogger<BaseCRUDController<NarudzbeDetalji, BaseSearch, NarudzbeDetaljiInsertRequest, NarudzbeDetaljiUpdateRequest>> logger, INarudzbeDetaljiService service) : base(logger, service)
         {
         }
+
+        [HttpGet("/GetNarudzbeDetaljiByNarudzbaId/{narudzbaId}")]
+        public async Task<List<NarudzbeDetalji>> GetNarudzbeDetalji(int narudzbaId)
+        {
+            return await (_service as INarudzbeDetaljiService).GetNarudzbeDetaljiByNarudzbaId(narudzbaId);
+        }
     }
 }

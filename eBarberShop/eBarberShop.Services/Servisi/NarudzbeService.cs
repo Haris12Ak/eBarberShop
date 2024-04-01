@@ -18,7 +18,7 @@ namespace eBarberShop.Services.Servisi
         public override async Task<Model.PagedResult<Model.Narudzbe>> Get(NarudzbeSearch? search)
         {
             var query = _dbContext.Set<Database.Narudzbe>()
-                .Include("Korisnik")
+                .Include("Korisnik.Grad")
                 .AsQueryable();
 
             PagedResult<Model.Narudzbe> result = new PagedResult<Model.Narudzbe>();

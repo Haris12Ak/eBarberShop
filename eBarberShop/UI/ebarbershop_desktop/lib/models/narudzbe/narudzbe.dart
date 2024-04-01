@@ -13,8 +13,25 @@ class Narudzbe {
   int korisnikId;
   String? imeKorisnika;
   String? prezimeKorisnika;
+  String? emailKorisnika;
+  String? adersaKorisnika;
+  String? brojTelefonaKorisnika;
+  String? mjestoBoravkaKorisnika;
 
-  Narudzbe(this.narudzbeId, this.brojNarudzbe, this.datumNarudzbe, this.ukupanIznos, this.status, this.otkazano, this.korisnikId, this.imeKorisnika, this.prezimeKorisnika);
+  Narudzbe(
+      this.narudzbeId,
+      this.brojNarudzbe,
+      this.datumNarudzbe,
+      this.ukupanIznos,
+      this.status,
+      this.otkazano,
+      this.korisnikId,
+      this.imeKorisnika,
+      this.prezimeKorisnika,
+      this.emailKorisnika,
+      this.adersaKorisnika,
+      this.brojTelefonaKorisnika,
+      this.mjestoBoravkaKorisnika);
 
   factory Narudzbe.fromJson(Map<String, dynamic> json) =>
       _$NarudzbeFromJson(json);
