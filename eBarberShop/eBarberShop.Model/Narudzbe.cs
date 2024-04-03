@@ -17,7 +17,7 @@
         public string? emailKorisnika => Korisnik?.Email;
         public string? adersaKorisnika => Korisnik?.Adresa;
         public string? brojTelefonaKorisnika => Korisnik?.BrojTelefona;
-        public string? mjestoBoravkaKorisnika => Korisnik.Grad?.Naziv;
+        public string? mjestoBoravkaKorisnika => Korisnik?.Grad?.Naziv;
 
     }
 }

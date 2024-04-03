@@ -10,6 +10,5 @@ namespace eBarberShop.Model.Search
     {
         public string? BrojNarudzbe { get; set; }
         public DateTime? DatumNarudzbe { get; set; }
-        public bool? IsNarudzbeDetaljiInclude { get; set; }
     }
 }

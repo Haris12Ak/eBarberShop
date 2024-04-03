@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ebarbershop_desktop/models/narudzbe/narudzbe.dart';
 import 'package:ebarbershop_desktop/models/narudzbeDetalji/narudzbe_detalji.dart';
 import 'package:ebarbershop_desktop/models/search_result.dart';
@@ -5,7 +7,9 @@ import 'package:ebarbershop_desktop/providers/narudzbe_detalji_provider.dart';
 import 'package:ebarbershop_desktop/utils/util.dart';
 import 'package:ebarbershop_desktop/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 // ignore: must_be_immutable
 class NarudzbeDetaljiScreen extends StatefulWidget {
@@ -41,19 +45,201 @@ class _NarudzbeDetaljiScreenState extends State<NarudzbeDetaljiScreen> {
     }
   }
 
+  Future<void> generatePDF() async {
+    final pdf = pw.Document();
+
+    pdf.addPage(
+      pw.MultiPage(build: (context) {
+        return [
+          pw.Column(
+            mainAxisAlignment: pw.MainAxisAlignment.start,
+            crossAxisAlignment: pw.CrossAxisAlignment.stretch,
+            children: [
+              pw.Text(
+                'Broj narudzbe: ${widget.narudzba.brojNarudzbe}',
+                style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                textAlign: pw.TextAlign.center,
+              ),
+              pw.SizedBox(height: 20.0),
+              pw.Text('Informacije kupca',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+              pw.Divider(height: 20.0),
+              pw.Row(
+                children: [
+                  pw.Text('Ime i prezime:'),
+                  pw.SizedBox(width: 10.0),
+                  pw.Text(
+                      '${widget.narudzba.imeKorisnika} ${widget.narudzba.prezimeKorisnika}')
+                ],
+              ),
+              pw.SizedBox(height: 5.0),
+              pw.Row(
+                children: [
+                  pw.Text('Email:'),
+                  pw.SizedBox(width: 10.0),
+                  pw.Text(widget.narudzba.emailKorisnika ?? "")
+                ],
+              ),
+              pw.SizedBox(height: 5.0),
+              pw.Row(
+                children: [
+                  pw.Text('Adresa:'),
+                  pw.SizedBox(width: 10.0),
+                  pw.Text(widget.narudzba.adersaKorisnika ?? "")
+                ],
+              ),
+              pw.SizedBox(height: 5.0),
+              pw.Row(
+                children: [
+                  pw.Text('Kontakt telefon:'),
+                  pw.SizedBox(width: 10.0),
+                  pw.Text(widget.narudzba.brojTelefonaKorisnika ?? "")
+                ],
+              ),
+              pw.SizedBox(height: 5.0),
+              pw.Row(
+                children: [
+                  pw.Text('Mjesto boravka:'),
+                  pw.SizedBox(width: 10.0),
+                  pw.Text(widget.narudzba.mjestoBoravkaKorisnika ?? "")
+                ],
+              ),
+              pw.SizedBox(height: 20.0),
+              pw.Text('Informacije narudzbe',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+              pw.Divider(height: 20.0),
+              pw.Row(
+                children: [
+                  pw.Text('Datum narudzbe:'),
+                  pw.SizedBox(width: 10.0),
+                  pw.Text(formatDate(widget.narudzba.datumNarudzbe))
+                ],
+              ),
+              pw.SizedBox(height: 5.0),
+              pw.Row(
+                children: [
+                  pw.Text('Ukupno artikala:'),
+                  pw.SizedBox(width: 10.0),
+                  pw.Text(narudzbeDetaljiResult!.count.toString())
+                ],
+              ),
+              pw.SizedBox(height: 5.0),
+              pw.Row(
+                children: [
+                  pw.Text('Ukupan iznos:'),
+                  pw.SizedBox(width: 10.0),
+                  pw.Text('${formatNumber(widget.narudzba.ukupanIznos)} KM')
+                ],
+              ),
+              pw.SizedBox(height: 20.0),
+              pw.Text('Proizvodi',
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+              pw.Divider(height: 20.0),
+              pw.Table(
+                children: [
+                  pw.TableRow(
+                    children: [
+                      pw.Container(
+                        padding: const pw.EdgeInsets.all(5.0),
+                        child: pw.Text(
+                          'Rb.',
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                        ),
+                      ),
+                      pw.Container(
+                        padding: const pw.EdgeInsets.all(5.0),
+                        child: pw.Text(
+                          'Proizvod',
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                        ),
+                      ),
+                      pw.Container(
+                        padding: const pw.EdgeInsets.all(5.0),
+                        child: pw.Text(
+                          'Sifra',
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                        ),
+                      ),
+                      pw.Container(
+                        padding: const pw.EdgeInsets.all(5.0),
+                        child: pw.Text(
+                          'Kolicina',
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                        ),
+                      ),
+                      pw.Container(
+                        padding: const pw.EdgeInsets.all(5.0),
+                        child: pw.Text(
+                          'Cijena',
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                  for (int i = 0; i < narudzbeDetaljiResult!.result.length; i++)
+                    pw.TableRow(
+                      children: [
+                        pw.Container(
+                          padding: const pw.EdgeInsets.all(5.0),
+                          child: pw.Text('${i + 1}'),
+                        ),
+                        pw.Container(
+                          padding: const pw.EdgeInsets.all(5.0),
+                          child: pw.Text(
+                              narudzbeDetaljiResult!.result[i].nazivProizvoda ??
+                                  ""),
+                        ),
+                        pw.Container(
+                          padding: const pw.EdgeInsets.all(5.0),
+                          child: pw.Text(
+                              narudzbeDetaljiResult!.result[i].sifraProizvoda ??
+                                  ""),
+                        ),
+                        pw.Container(
+                          padding: const pw.EdgeInsets.all(5.0),
+                          child: pw.Text(narudzbeDetaljiResult!
+                              .result[i].kolicina
+                              .toString()),
+                        ),
+                        pw.Container(
+                          padding: const pw.EdgeInsets.all(5.0),
+                          child: pw.Text(
+                              '${formatNumber(narudzbeDetaljiResult!.result[i].cijenaProizvoda)} KM'),
+                        ),
+                        pw.SizedBox(height: 10.0)
+                      ],
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ];
+      }),
+    );
+
+    // Save the PDF to a file
+    final output =
+        '${widget.narudzba.brojNarudzbe}_${DateTime.now().millisecondsSinceEpoch}.pdf';
+    final file = File(output);
+    await file.writeAsBytes(await pdf.save());
+    OpenFile.open(file.path);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MasterScreenWidget(
-        title: 'Detalji',
-        child: isLoading
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
+      title: 'Detalji',
+      child: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Text(
                     'Broj Narudžbe: ${widget.narudzba.brojNarudzbe}',
                     textAlign: TextAlign.center,
                     style: const TextStyle(
@@ -63,20 +249,83 @@ class _NarudzbeDetaljiScreenState extends State<NarudzbeDetaljiScreen> {
                         decorationStyle: TextDecorationStyle.solid,
                         color: Colors.black87),
                   ),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  _buildInformacijeKupca(),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  _buildInformacijeNarudzbe(),
-                  const Divider(
-                    height: 50.0,
-                  ),
-                  _buildListaProizvoda(),
-                ],
-              ));
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                _buildInformacijeKupca(),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                _buildInformacijeNarudzbe(),
+                const Divider(
+                  height: 50.0,
+                ),
+                _buildListaProizvoda(),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                _buildSaveToPdfFile(context),
+              ],
+            ),
+    );
+  }
+
+  Container _buildSaveToPdfFile(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(right: 15.0),
+      child: Align(
+        alignment: Alignment.topRight,
+        child: ElevatedButton.icon(
+          onPressed: () async {
+            bool open = await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Potvrda'),
+                  content: const Text('Da li želite otvoriti PDF file?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(true);
+                      },
+                      child: const Text('DA'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                      },
+                      child: const Text('NE'),
+                    ),
+                  ],
+                );
+              },
+            );
+
+            if (open) {
+              await generatePDF();
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            elevation: 0.0,
+            foregroundColor: Colors.black,
+            backgroundColor: Colors.grey.shade200,
+            padding: const EdgeInsets.all(18.0),
+            shape:
+                const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+          ),
+          icon: const Image(
+            image: AssetImage('assets/images/pdf-40.png'),
+            width: 30,
+            height: 30,
+          ),
+          label: const Text(
+            'Snimi u PDF file',
+            style: TextStyle(fontSize: 15),
+          ),
+        ),
+      ),
+    );
   }
 
   Stack _buildListaProizvoda() {

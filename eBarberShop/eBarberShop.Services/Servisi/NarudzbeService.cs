@@ -47,17 +47,6 @@ namespace eBarberShop.Services.Servisi
             return result;
         }
 
-
-        public override IQueryable<Database.Narudzbe> AddInclude(IQueryable<Database.Narudzbe> query, NarudzbeSearch? search)
-        {
-            if (search?.IsNarudzbeDetaljiInclude == true)
-            {
-                query = query.Include("NarudzbeDetalji.Proizvod");
-            }
-
-            return base.AddInclude(query, search);
-        }
-
         public async override Task<Narudzbe> Insert(NarudzbeInsertRequest insert)
         {
             var set = _dbContext.Set<Database.Narudzbe>();
@@ -88,6 +77,53 @@ namespace eBarberShop.Services.Servisi
             return _mapper.Map<Model.Narudzbe>(entity);
         }
 
+        public async Task<IzvjestajNarudzbe> GetIzvjestajNarudzbe(IzvjestajNarudzbeSearch? search)
+        {
+            var query = _dbContext.Set<Database.Narudzbe>().Include("Korisnik").AsQueryable();
 
+
+            if (search?.DatumOd.HasValue == true && search.DatumDo.HasValue == true)
+            {
+                if (search.DatumOd.Value.Date >= search.DatumDo.Value.Date)
+                    throw new UserException("Datum OD mora biti manji od datuma DO");
+
+                query = query.Where(x => x.DatumNarudzbe.Date >= search.DatumOd.Value.Date && x.DatumNarudzbe.Date <= search.DatumDo.Value.Date);
+            }
+
+            var listOfOrders = await query.ToListAsync();
+
+            var groupOrders = listOfOrders
+                .GroupBy(group => group.DatumNarudzbe.Date)
+                .Select(y => new NarudzbaIfno()
+                {
+                    DatumNarudzbe = y.Key,
+                    Narudzbe = y.Select(narudzba => new Model.ListOfNarudzbe()
+                    {
+                        BrojNarudzbe = narudzba.BrojNarudzbe,
+                        Naplata = narudzba.UkupanIznos,
+                        KorisnikId = narudzba.KorisnikId,
+                        ImeKorisnika = narudzba.Korisnik?.Ime,
+                        PrezimeKorisnika = narudzba.Korisnik?.Prezime
+                    }).ToList(),
+                    UkupanIznos = y.Sum(sum => sum.UkupanIznos)
+                })
+                .OrderBy(z => z.DatumNarudzbe.Date)
+                .ToList();
+
+            decimal total = 0;
+
+            foreach (var item in listOfOrders)
+            {
+                total += item.UkupanIznos;
+            }
+
+            var createReport = new IzvjestajNarudzbe()
+            {
+                Ukupno = total,
+                NarudzbaInfo = groupOrders,
+            };
+
+            return createReport;
+        }
     }
 }

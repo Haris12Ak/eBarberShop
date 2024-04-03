@@ -28,6 +28,16 @@ String formatDate(dynamic) {
   return f.format(dynamic);
 }
 
+String formatDate1(dynamic) {
+  var f = DateFormat('MMMM d y');
+
+  if (dynamic == null) {
+    return "";
+  }
+
+  return f.format(dynamic);
+}
+
 String getDateFormat(dynamic) {
   var f = DateFormat('yyyy/MM/dd');
 
@@ -38,7 +48,7 @@ String getDateFormat(dynamic) {
   return f.format(dynamic);
 }
 
-String getTimeFormat(dynamic){
+String getTimeFormat(dynamic) {
   var f = DateFormat('HH:mm');
 
   if (dynamic == null) {
