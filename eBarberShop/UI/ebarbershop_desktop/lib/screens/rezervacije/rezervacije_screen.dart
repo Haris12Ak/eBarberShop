@@ -1,10 +1,13 @@
+import 'package:ebarbershop_desktop/models/rezervacije/rezervacija.dart';
 import 'package:ebarbershop_desktop/models/search_result.dart';
 import 'package:ebarbershop_desktop/models/usluga/usluga.dart';
+import 'package:ebarbershop_desktop/providers/rezervacija_provider.dart';
 import 'package:ebarbershop_desktop/providers/usluga_provider.dart';
-import 'package:ebarbershop_desktop/screens/rezervacije/rezervacije_usluge_screen.dart';
 import 'package:ebarbershop_desktop/utils/util.dart';
 import 'package:ebarbershop_desktop/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class RezervacijeScreen extends StatefulWidget {
@@ -15,160 +18,398 @@ class RezervacijeScreen extends StatefulWidget {
 }
 
 class _RezervacijeScreenState extends State<RezervacijeScreen> {
+  late RezervacijaProvider _rezervacijaProvider;
   late UslugaProvider _uslugaProvider;
-  late SearchResult<Usluga>? uslugaSearchResult;
+  SearchResult<Rezervacija>? rezervacijeResult;
+  SearchResult<Usluga>? uslugeResult;
+
   bool isLoading = true;
+
+  final _formKey = GlobalKey<FormBuilderState>();
+
+  final TextEditingController _imePrezimeKlijenta = TextEditingController();
+  DateTime? _selectedDate;
+
+  String? selectedValue;
+  String? selectedNazivUsluge;
 
   @override
   void initState() {
     super.initState();
 
+    _rezervacijaProvider = context.read<RezervacijaProvider>();
     _uslugaProvider = context.read<UslugaProvider>();
 
+    fetchRezervacije();
     fetchUsluge();
   }
 
+  Future fetchRezervacije() async {
+    rezervacijeResult = await _rezervacijaProvider
+        .get(filter: {'IsKorisnikIncluded': true, 'IsUslugaIncluded': true});
+
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   Future fetchUsluge() async {
-    uslugaSearchResult = await _uslugaProvider.get();
+    uslugeResult = await _uslugaProvider.get();
+
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  bool isAktivna(String datum) {
+    var dateTime = DateTime.parse(datum);
+    return dateTime.isBefore(DateTime.now());
+  }
+
+  Future<void> filter() async {
+    var data = await _rezervacijaProvider.get(filter: {
+      'Datum': _selectedDate,
+      'ImePrezimeKorisnika': _imePrezimeKlijenta.text,
+      'NazivUsluge': selectedNazivUsluge,
+      'IsKorisnikIncluded': true,
+      'IsUslugaIncluded': true
+    });
 
     setState(() {
-      isLoading = false;
+      rezervacijeResult = data;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
-        title: 'Usluge',
-        selectedOption: 'Rezervacije',
-        child: isLoading
-            ? Container()
-            : Column(
+      title: 'Rezervacije',
+      selectedOption: 'Rezervacije',
+      child: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : FormBuilder(
+              key: _formKey,
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.list,
-                            size: 35,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _imePrezimeKlijenta,
+                          decoration: const InputDecoration(
+                              labelText: "Ime i prezime klijenta",
+                              contentPadding:
+                                  EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                              border: OutlineInputBorder()),
+                        ),
+                      ),
+                      const SizedBox(width: 30.0),
+                      SizedBox(
+                        width: 400,
+                        child: FormBuilderDateTimePicker(
+                          name: 'date',
+                          initialValue: _selectedDate,
+                          decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.fromLTRB(
+                                  10.0, 5.0, 10.0, 5.0),
+                              prefixIcon: const Icon(Icons.date_range),
+                              labelText: 'Odaberite datum',
+                              floatingLabelStyle: const TextStyle(
+                                color: Colors.black54,
+                                fontSize: 17.0,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(0.0),
+                              ),
+                              suffixIcon: IconButton(
+                                  onPressed: () async {
+                                    _formKey.currentState!.fields['date']
+                                        ?.didChange(null);
+
+                                    await filter();
+                                  },
+                                  icon: const Icon(Icons.clear))),
+                          inputType: InputType.date,
+                          format: DateFormat("yyyy-MM-dd"),
+                          onChanged: (DateTime? newDate) async {
+                            setState(
+                              () {
+                                _selectedDate = newDate;
+                              },
+                            );
+                            await filter();
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 30.0),
+                      SizedBox(
+                        width: 400,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black54)),
+                          child: DropdownButton(
+                            value: selectedValue,
+                            items: [
+                              const DropdownMenuItem(
+                                value: null,
+                                child: Text('Usluge (All)'),
+                              ),
+                              ...uslugeResult?.result
+                                      .map(
+                                        (item) => DropdownMenuItem(
+                                          value: item.uslugaId.toString(),
+                                          child: Text(item.naziv),
+                                        ),
+                                      )
+                                      .toList() ??
+                                  [],
+                            ],
+                            onChanged: (item) async {
+                              setState(() {
+                                selectedValue = item as String?;
+                              });
+
+                              if (item == null) {
+                                setState(() {
+                                  selectedNazivUsluge = "";
+                                });
+
+                                await filter();
+                              } else {
+                                final selectedUsluga = uslugeResult?.result
+                                    .firstWhere((usluga) =>
+                                        usluga.uslugaId.toString() == item);
+
+                                setState(() {
+                                  selectedNazivUsluge = selectedUsluga?.naziv;
+                                });
+
+                                await filter();
+                              }
+                            },
+                            isExpanded: true,
+                            padding:
+                                const EdgeInsets.only(left: 10.0, right: 10.0),
+                            dropdownColor: Colors.grey.shade300,
+                            focusColor: Colors.grey.shade300,
+                            iconSize: 28,
+                            elevation: 0,
+                            style: const TextStyle(
+                              color: Colors.black54,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            hint: const Text('Vrste proizvoda'),
+                            icon: const Icon(Icons.filter_list),
                           ),
-                          const SizedBox(
-                            width: 10.0,
+                        ),
+                      ),
+                      const SizedBox(width: 50.0),
+                      SizedBox(
+                        width: 150,
+                        child: ElevatedButton.icon(
+                          onPressed: () async {
+                            await filter();
+                          },
+                          icon: const Icon(Icons.search),
+                          label: const Text(
+                            'Pretraga',
+                            style: TextStyle(fontSize: 16.0),
                           ),
-                          Text(
-                            'Odaberite uslugu',
-                            style: TextStyle(
-                                fontSize: 22.0,
-                                fontWeight: FontWeight.w700,
-                                fontStyle: FontStyle.italic,
-                                color: Colors.grey[800],
-                                letterSpacing: 2.0),
+                          style: ElevatedButton.styleFrom(
+                            elevation: 8.0,
+                            shape: const BeveledRectangleBorder(
+                                borderRadius: BorderRadius.zero),
+                            backgroundColor: Colors.blueGrey,
+                            foregroundColor: Colors.white,
+                            minimumSize: const Size(100, 50),
                           ),
-                        ],
-                      )),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 20.0,
+                      ),
+                      SizedBox(
+                        width: 150,
+                        child: ElevatedButton.icon(
+                          onPressed: () async {
+                            setState(() {
+                              _imePrezimeKlijenta.text = "";
+                              selectedNazivUsluge = "";
+                              selectedValue = null;
+                            });
+
+                            _formKey.currentState!.fields['date']
+                                ?.didChange(null);
+
+                            await filter();
+                          },
+                          icon: const Icon(Icons.refresh),
+                          label: const Text(
+                            'Reset',
+                            style: TextStyle(fontSize: 16.0),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            elevation: 8.0,
+                            shape: const BeveledRectangleBorder(
+                                borderRadius: BorderRadius.zero),
+                            backgroundColor: Colors.blueGrey[300],
+                            foregroundColor: Colors.white,
+                            minimumSize: const Size(100, 50),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(
-                    height: 25.0,
+                    height: 40.0,
                   ),
                   Expanded(
-                    child: ListView.separated(
-                      itemCount: uslugaSearchResult!.result.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        Usluga usluga = uslugaSearchResult!.result[index];
-                        return Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20.0),
-                            gradient: const LinearGradient(colors: [
-                              Color.fromRGBO(177, 177, 177, 0.692),
-                              Color.fromRGBO(206, 206, 206, 0.151)
-                            ]),
-                          ),
-                          height: 150,
-                          padding: const EdgeInsets.all(15.0),
-                          margin: const EdgeInsets.fromLTRB(50.0, 0, 50.0, 0),
-                          //color: Colors.grey[350],
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  const Opacity(
-                                    opacity: 0.6,
-                                    child: Image(
-                                      image: AssetImage(
-                                          'assets/images/image1.jpg'),
-                                      width: 120,
-                                      height: 120,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 30.0,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        usluga.naziv,
-                                        style: TextStyle(
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.grey[800],
-                                          letterSpacing: 2.0,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10.0,
-                                      ),
-                                      Text(
-                                        'Trajanje: ${usluga.trajanje.toString()} min',
-                                        style: const TextStyle(
-                                            fontSize: 17.0,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                      const SizedBox(
-                                        height: 10.0,
-                                      ),
-                                      Text(
-                                        'Cijena: ${formatNumber(usluga.cijena)} KM',
-                                        style: const TextStyle(
-                                            fontSize: 17.0,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            RezervacijeUslugeScreen(
-                                              usluga: usluga,
-                                            )),
-                                  );
-                                },
-                                tooltip: 'Prikaži',
-                                icon: Icon(
-                                  Icons.checklist_rtl,
-                                  color: Colors.grey[800],
-                                  size: 35.0,
+                    child: SingleChildScrollView(
+                      child: DataTable(
+                          dataTextStyle: const TextStyle(fontSize: 16.0),
+                          decoration:
+                              const BoxDecoration(color: Colors.white70),
+                          columns: const <DataColumn>[
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Klijent',
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black54),
                                 ),
                               ),
-                            ],
-                          ),
-                        );
-                      },
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const Divider(
-                        height: 50,
-                      ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Usluga',
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black54),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Datum',
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black54),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Vrijeme',
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black54),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Status',
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black54),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Text(
+                                'Akcije',
+                                style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black54),
+                              ),
+                            ),
+                          ],
+                          rows: rezervacijeResult?.result
+                                  .map((Rezervacija e) =>
+                                      DataRow(cells: <DataCell>[
+                                        DataCell(Text(
+                                            '${e.klijentIme} ${e.klijentPrezime}')),
+                                        DataCell(Text(e.nazivUsluge ?? "")),
+                                        DataCell(Text(getDateFormat(e.datum))),
+                                        DataCell(
+                                            Text(getTimeFormat(e.vrijeme))),
+                                        DataCell(Container(
+                                          child: isAktivna(e.vrijeme.toString())
+                                              ? Text(
+                                                  'Neaktivno',
+                                                  style: TextStyle(
+                                                      color: Colors.red[900],
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                )
+                                              : Text(
+                                                  'Aktivno',
+                                                  style: TextStyle(
+                                                      color: Colors.blue[900],
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                        )),
+                                        DataCell(
+                                          Row(
+                                            children: [
+                                              IconButton(
+                                                  tooltip: 'Detalji/Uredi',
+                                                  onPressed: () {},
+                                                  icon: const Icon(Icons.edit)),
+                                              const SizedBox(
+                                                width: 10.0,
+                                              ),
+                                              IconButton(
+                                                tooltip: 'Obriši',
+                                                onPressed: () {},
+                                                icon: const Icon(
+                                                    Icons.delete_forever),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ]))
+                                  .toList() ??
+                              []),
                     ),
                   ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                    child: Text(
+                      'Ukupno podataka: ${rezervacijeResult?.count}',
+                      style: const TextStyle(
+                          color: Colors.black54,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 1.0,
+                          fontSize: 15.0),
+                    ),
+                  )
                 ],
-              ));
+              ),
+            ),
+    );
   }
 }

@@ -9,10 +9,13 @@ class RezervacijaInsert {
   bool? status;
   int korisnikId;
   int uposlenikId;
+  int uslugaId;
 
-  RezervacijaInsert(this.datum, this.vrijeme, this.status, this.korisnikId, this.uposlenikId);
+  RezervacijaInsert(
+      this.datum, this.vrijeme, this.status, this.korisnikId, this.uposlenikId, this.uslugaId);
 
-  factory RezervacijaInsert.fromJson(Map<String, dynamic> json) => _$RezervacijaInsertFromJson(json);
+  factory RezervacijaInsert.fromJson(Map<String, dynamic> json) =>
+      _$RezervacijaInsertFromJson(json);
 
   Map<String, dynamic> toJson() => _$RezervacijaInsertToJson(this);
 }

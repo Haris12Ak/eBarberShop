@@ -15,14 +15,8 @@ namespace eBarberShop.Services.Servisi
             _korisniciService = korisniciService;
         }
 
-        public override async Task<Model.PagedResult<Model.Narudzbe>> Get(NarudzbeSearch? search)
+        public override IQueryable<Database.Narudzbe> AddFilter(IQueryable<Database.Narudzbe> query, NarudzbeSearch? search)
         {
-            var query = _dbContext.Set<Database.Narudzbe>()
-                .Include("Korisnik.Grad")
-                .AsQueryable();
-
-            PagedResult<Model.Narudzbe> result = new PagedResult<Model.Narudzbe>();
-
             if (!string.IsNullOrWhiteSpace(search?.BrojNarudzbe))
             {
                 query = query.Where(x => x.BrojNarudzbe.Contains(search.BrojNarudzbe));
@@ -33,18 +27,16 @@ namespace eBarberShop.Services.Servisi
                 query = query.Where(x => x.DatumNarudzbe.Date == search.DatumNarudzbe.Value.Date);
             }
 
-            result.Count = await query.CountAsync();
+            return base.AddFilter(query, search);
+        }
 
-            if (search?.PageSize.HasValue == true && search?.Page.HasValue == true)
+        public override IQueryable<Database.Narudzbe> AddInclude(IQueryable<Database.Narudzbe> query, NarudzbeSearch? search)
+        {
+            if (search?.isKorisnikIncluded == true)
             {
-                query = query.Take(search.PageSize.Value).Skip(search.Page.Value * search.PageSize.Value);
+                query = query.Include("Korisnik.Grad");
             }
-
-            var list = await query.ToListAsync();
-
-            result.Result = _mapper.Map<List<Model.Narudzbe>>(list);
-
-            return result;
+            return base.AddInclude(query, search);
         }
 
         public async override Task<Narudzbe> Insert(NarudzbeInsertRequest insert)

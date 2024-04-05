@@ -13,6 +13,7 @@ RezervacijaInsert _$RezervacijaInsertFromJson(Map<String, dynamic> json) =>
       json['status'] as bool?,
       json['korisnikId'] as int,
       json['uposlenikId'] as int,
+      json['uslugaId'] as int,
     );
 
 Map<String, dynamic> _$RezervacijaInsertToJson(RezervacijaInsert instance) =>
@@ -22,4 +23,5 @@ Map<String, dynamic> _$RezervacijaInsertToJson(RezervacijaInsert instance) =>
       'status': instance.status,
       'korisnikId': instance.korisnikId,
       'uposlenikId': instance.uposlenikId,
+      'uslugaId': instance.uslugaId,
     };

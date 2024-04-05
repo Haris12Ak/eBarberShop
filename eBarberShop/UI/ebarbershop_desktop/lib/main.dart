@@ -6,7 +6,6 @@ import 'package:ebarbershop_desktop/providers/narudzbe_provider.dart';
 import 'package:ebarbershop_desktop/providers/novosti_provider.dart';
 import 'package:ebarbershop_desktop/providers/proizvodi_provider.dart';
 import 'package:ebarbershop_desktop/providers/rezervacija_provider.dart';
-import 'package:ebarbershop_desktop/providers/rezervacija_usluge_provider.dart';
 import 'package:ebarbershop_desktop/providers/slike_provider.dart';
 import 'package:ebarbershop_desktop/providers/termini_provider.dart';
 import 'package:ebarbershop_desktop/providers/uposlenik_provider.dart';
@@ -26,7 +25,6 @@ void main() {
       ChangeNotifierProvider(create: (_) => NovostiProvider()),
       ChangeNotifierProvider(create: (_) => SlikeProvider()),
       ChangeNotifierProvider(create: (_) => UslugaProvider()),
-      ChangeNotifierProvider(create: (_) => RezervacijaUslugeProvider()),
       ChangeNotifierProvider(create: (_) => RezervacijaProvider()),
       ChangeNotifierProvider(create: (_) => TerminiProvider()),
       ChangeNotifierProvider(create: (_) => NarudzbeProvider()),

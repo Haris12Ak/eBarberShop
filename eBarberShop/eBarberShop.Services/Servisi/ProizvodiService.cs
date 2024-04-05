@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using eBarberShop.Model;
 using eBarberShop.Model.Search;
 using eBarberShop.Services.Interfejsi;
 using Microsoft.EntityFrameworkCore;
@@ -12,14 +11,8 @@ namespace eBarberShop.Services.Servisi
         {
         }
 
-        public override async Task<PagedResult<Proizvodi>> Get(ProizvodiSearch? search)
+        public override IQueryable<Database.Proizvodi> AddFilter(IQueryable<Database.Proizvodi> query, ProizvodiSearch? search)
         {
-            var query = _dbContext.Set<Database.Proizvodi>()
-                .Include("VrstaProizvoda")
-                .AsQueryable();
-
-            PagedResult<Model.Proizvodi> result = new PagedResult<Model.Proizvodi>();
-
             if (!string.IsNullOrWhiteSpace(search?.Naziv))
             {
                 query = query.Where(x => x.Naziv.ToLower().StartsWith(search.Naziv.ToLower()));
@@ -35,18 +28,17 @@ namespace eBarberShop.Services.Servisi
                 query = query.Where(x => x.VrstaProizvoda.Naziv.ToLower().StartsWith(search.VrstaProizvoda.ToLower()));
             }
 
-            result.Count = await query.CountAsync();
+            return base.AddFilter(query, search);
+        }
 
-            if (search?.PageSize.HasValue == true && search?.Page.HasValue == true)
+        public override IQueryable<Database.Proizvodi> AddInclude(IQueryable<Database.Proizvodi> query, ProizvodiSearch? search)
+        {
+            if (search?.IsVrsteProizvodaIncluded == true)
             {
-                query = query.Take(search.PageSize.Value).Skip(search.Page.Value * search.PageSize.Value);
+                query = query.Include("VrstaProizvoda");
+
             }
-
-            var list = await query.ToListAsync();
-
-            result.Result = _mapper.Map<List<Model.Proizvodi>>(list);
-
-            return result;
+            return base.AddInclude(query, search);
         }
     }
 }

@@ -20,6 +20,7 @@ class NarudzbeListScreen extends StatefulWidget {
 class _NarudzbeListScreenState extends State<NarudzbeListScreen> {
   late NarudzbeProvider _narudzbeProvider;
   SearchResult<Narudzbe>? narudzbeResult;
+
   bool isLoading = true;
 
   final _formKey = GlobalKey<FormBuilderState>();
@@ -40,7 +41,8 @@ class _NarudzbeListScreenState extends State<NarudzbeListScreen> {
   }
 
   Future fetchNarudzbe() async {
-    narudzbeResult = await _narudzbeProvider.get();
+    narudzbeResult =
+        await _narudzbeProvider.get(filter: {'isKorisnikIncluded': true});
 
     if (mounted) {
       setState(() {
@@ -300,7 +302,8 @@ class _NarudzbeListScreenState extends State<NarudzbeListScreen> {
           onPressed: () async {
             var data = await _narudzbeProvider.get(filter: {
               'datumNarudzbe': _selectedDate,
-              'brojNarudzbe': _brojNarudzbeController.text
+              'brojNarudzbe': _brojNarudzbeController.text,
+              'isKorisnikIncluded': true
             });
 
             setState(() {
@@ -332,7 +335,8 @@ class _NarudzbeListScreenState extends State<NarudzbeListScreen> {
 
             _formKey.currentState!.fields['date']?.didChange(null);
 
-            var data = await _narudzbeProvider.get();
+            var data = await _narudzbeProvider
+                .get(filter: {'isKorisnikIncluded': true});
 
             setState(() {
               narudzbeResult = data;

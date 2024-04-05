@@ -34,7 +34,8 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
   }
 
   Future fetctNovosti() async {
-    novostiSearchResult = await _novostiProvider.get();
+    novostiSearchResult =
+        await _novostiProvider.get(filter: {'IsKorisnikInclude': true});
 
     setState(() {
       isLoading = false;
@@ -150,6 +151,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
             var data = await _novostiProvider.get(filter: {
               'naslov': _naslovSearchController.text,
               'datumObjave': _selectedDate,
+              'IsKorisnikInclude': true
             });
 
             setState(() {
@@ -181,7 +183,8 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
               _selectedDate = null;
             });
 
-            var data = await _novostiProvider.get();
+            var data =
+                await _novostiProvider.get(filter: {'IsKorisnikInclude': true});
 
             setState(() {
               novostiSearchResult = data;

@@ -47,7 +47,8 @@ class _ProizvodiScreenState extends State<ProizvodiScreen> {
   }
 
   Future fetchProizvode() async {
-    proizvodiReslut = await _proizvodiProvider.get();
+    proizvodiReslut = await _proizvodiProvider
+        .get(filter: {'IsVrsteProizvodaIncluded': true});
     vrsteProizvodiReslut = await _vrsteProizvodaProvider.get();
 
     if (mounted) {

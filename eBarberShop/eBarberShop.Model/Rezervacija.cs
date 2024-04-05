@@ -16,5 +16,8 @@
 
         public string? UposlenikIme => Uposlenik?.Ime;
         public string? UposlenikPrezime => Uposlenik?.Prezime;
+        public string? KlijentIme => Korisnik?.Ime;
+        public string? KlijentPrezime => Korisnik?.Prezime;
+        public string? NazivUsluge => Usluga?.Naziv;
     }
 }

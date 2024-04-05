@@ -22,12 +22,8 @@ namespace eBarberShop.Services.Servisi
             _uslugaService = uslugaService;
         }
 
-        public override async Task<Model.PagedResult<Model.Rezervacija>> Get(RezervacijaSearch? search)
+        public override IQueryable<Database.Rezervacija> AddFilter(IQueryable<Database.Rezervacija> query, RezervacijaSearch? search)
         {
-            var query = _dbContext.Set<Database.Rezervacija>().Include(x => x.Uposlenik).AsQueryable();
-
-            PagedResult<Model.Rezervacija> result = new PagedResult<Model.Rezervacija>();
-
             if (search?.Datum.HasValue == true)
             {
                 query = query.Where(x => x.Datum.Date == search.Datum.Value.Date);
@@ -40,23 +36,39 @@ namespace eBarberShop.Services.Servisi
                 );
             }
 
+            if (!string.IsNullOrWhiteSpace(search?.ImePrezimeKorisnika))
+            {
+                query = query.Where(x => (x.Korisnik.Ime.ToLower() + " " + x.Korisnik.Prezime.ToLower()).StartsWith(search.ImePrezimeKorisnika.ToLower())
+                || (x.Korisnik.Prezime.ToLower() + " " + x.Korisnik.Ime.ToLower()).StartsWith(search.ImePrezimeKorisnika.ToLower())
+                );
+            }
+
+            if (!string.IsNullOrWhiteSpace(search?.NazivUsluge))
+            {
+                query = query.Where(x => x.Usluga.Naziv.ToLower().StartsWith(search.NazivUsluge.ToLower()));
+            }
+
+            return base.AddFilter(query, search);
+        }
+
+        public override IQueryable<Database.Rezervacija> AddInclude(IQueryable<Database.Rezervacija> query, RezervacijaSearch? search)
+        {
+            if (search?.IsKorisnikIncluded == true)
+            {
+                query = query.Include("Korisnik");
+            }
+
+            if (search?.IsUposlenikIncluded == true)
+            {
+                query = query.Include("Uposlenik");
+            }
+
             if (search?.IsUslugaIncluded == true)
             {
                 query = query.Include("Usluga");
             }
 
-            result.Count = await query.CountAsync();
-
-            if (search?.PageSize.HasValue == true && search?.Page.HasValue == true)
-            {
-                query = query.Take(search.PageSize.Value).Skip(search.Page.Value * search.PageSize.Value);
-            }
-
-            var list = await query.OrderBy(x => x.Datum).OrderBy(y => y.Vrijeme).ToListAsync();
-
-            result.Result = _mapper.Map<List<Model.Rezervacija>>(list);
-
-            return result;
+            return base.AddInclude(query, search);
         }
 
         public async Task<List<Termini>> GetTermine(TerminiSearch? search)

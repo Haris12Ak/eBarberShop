@@ -31,7 +31,8 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
   }
 
   Future fetchProizvodi() async {
-    proizvodiSearchResult = await _proizvodiProvider.get();
+    proizvodiSearchResult = await _proizvodiProvider
+        .get(filter: {'IsVrsteProizvodaIncluded': true});
 
     setState(() {
       isLoading = false;
@@ -312,7 +313,8 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
           onPressed: () async {
             var data = await _proizvodiProvider.get(filter: {
               'naziv': _nazivSearchController.text,
-              'sifra': _sifraSearchController.text
+              'sifra': _sifraSearchController.text,
+              'IsVrsteProizvodaIncluded': true
             });
 
             setState(() {
@@ -341,7 +343,8 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
             _nazivSearchController.text = "";
             _sifraSearchController.text = "";
 
-            var data = await _proizvodiProvider.get();
+            var data = await _proizvodiProvider
+                .get(filter: {'IsVrsteProizvodaIncluded': true});
 
             setState(() {
               proizvodiSearchResult = data;

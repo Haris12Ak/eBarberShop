@@ -35,7 +35,8 @@ class _RezervacijeTerminiScreenState extends State<RezervacijeTerminiScreen> {
   }
 
   Future fetchTermine() async {
-    terminiResult = await _rezervacijaProvider.get();
+    terminiResult =
+        await _rezervacijaProvider.get(filter: {'IsUposlenikIncluded': true});
 
     setState(() {
       isLoading = false;
@@ -131,7 +132,8 @@ class _RezervacijeTerminiScreenState extends State<RezervacijeTerminiScreen> {
                       onPressed: () async {
                         var data = await _rezervacijaProvider.get(filter: {
                           'datum': _selectedDate,
-                          'imePrezimeUposlenika': _imePrezimeController.text
+                          'imePrezimeUposlenika': _imePrezimeController.text,
+                          'IsUposlenikIncluded': true
                         });
 
                         setState(() {
@@ -162,7 +164,8 @@ class _RezervacijeTerminiScreenState extends State<RezervacijeTerminiScreen> {
                           _selectedDate = null;
                         });
 
-                        var data = await _rezervacijaProvider.get();
+                        var data = await _rezervacijaProvider
+                            .get(filter: {'IsUposlenikIncluded': true});
 
                         setState(() {
                           terminiResult = data;
