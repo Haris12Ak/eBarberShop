@@ -40,13 +40,26 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
     });
   }
 
+  Future<void> filter() async {
+    var data = await _uposlenikProvider.get(filter: {
+      'ime': _imeSearchController.text,
+      'prezime': _prezimeSearchController.text
+    });
+
+    setState(() {
+      uposlenikSearchResult = data;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
       title: 'Uposlenici',
       selectedOption: 'Uposlenici',
       child: isLoading
-          ? Container()
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -78,9 +91,12 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(
+                  height: 25.0,
+                ),
                 _buildSearch(),
                 const SizedBox(
-                  height: 40.0,
+                  height: 20.0,
                 ),
                 _buildUposleniciList(),
                 Container(
@@ -109,7 +125,7 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
               DataColumn(
                 label: Expanded(
                   child: Text(
-                    'Uposlenik ID',
+                    'ID',
                     style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.w700,
@@ -219,6 +235,7 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
                                       try {
                                         // ignore: use_build_context_synchronously
                                         showDialog(
+                                          barrierDismissible: false,
                                           context: context,
                                           builder: (BuildContext context) =>
                                               AlertDialog(
@@ -228,10 +245,10 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
                                             actions: [
                                               TextButton(
                                                 onPressed: () async {
+                                                  Navigator.of(context).pop();
+
                                                   await _uposlenikProvider
                                                       .delete(e.uposlenikId);
-
-                                                  Navigator.of(context).pop();
 
                                                   fetchUposlenici();
                                                 },
@@ -249,6 +266,7 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
                                       } on Exception catch (e) {
                                         // ignore: use_build_context_synchronously
                                         showDialog(
+                                          barrierDismissible: false,
                                           context: context,
                                           builder: (BuildContext context) =>
                                               AlertDialog(
@@ -278,82 +296,77 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
 
   Row _buildSearch() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        SizedBox(
-          width: 500,
+        Expanded(
+          flex: 3,
           child: TextField(
             controller: _imeSearchController,
             decoration: const InputDecoration(
-              labelText: "Ime",
+                labelText: "Ime",
+                contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                border: OutlineInputBorder()),
+          ),
+        ),
+        const SizedBox(width: 30.0),
+        Expanded(
+          flex: 3,
+          child: TextField(
+            controller: _prezimeSearchController,
+            decoration: const InputDecoration(
+                labelText: "Prezime",
+                contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                border: OutlineInputBorder()),
+          ),
+        ),
+        const SizedBox(width: 50.0),
+        Expanded(
+          flex: 1,
+          child: ElevatedButton.icon(
+            onPressed: () async {
+              await filter();
+            },
+            icon: const Icon(Icons.search),
+            label: const Text(
+              'Pretraga',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            style: ElevatedButton.styleFrom(
+              elevation: 8.0,
+              shape:
+                  const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+              backgroundColor: Colors.blueGrey,
+              foregroundColor: Colors.white,
+              minimumSize: const Size(100, 50),
             ),
           ),
         ),
         const SizedBox(
           width: 20.0,
         ),
-        SizedBox(
-          width: 500,
-          child: TextField(
-            controller: _prezimeSearchController,
-            decoration: const InputDecoration(labelText: "Prezime"),
-          ),
-        ),
-        const SizedBox(
-          width: 20.0,
-        ),
-        ElevatedButton.icon(
-          onPressed: () async {
-            var data = await _uposlenikProvider.get(filter: {
-              'ime': _imeSearchController.text,
-              'prezime': _prezimeSearchController.text
-            });
+        Expanded(
+          flex: 1,
+          child: ElevatedButton.icon(
+            onPressed: () async {
+              _imeSearchController.text = "";
+              _prezimeSearchController.text = "";
 
-            setState(() {
-              uposlenikSearchResult = data;
-            });
-          },
-          icon: const Icon(Icons.search),
-          label: const Text(
-            'Pretraga',
-            style: TextStyle(fontSize: 16.0),
-          ),
-          style: ElevatedButton.styleFrom(
-            elevation: 8.0,
-            shape:
-                const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
-            backgroundColor: Colors.blueGrey,
-            foregroundColor: Colors.white,
-            minimumSize: const Size(100, 50),
-          ),
-        ),
-        const SizedBox(
-          width: 20.0,
-        ),
-        ElevatedButton.icon(
-          onPressed: () async {
-            _imeSearchController.text = "";
-            _prezimeSearchController.text = "";
-
-            var data = await _uposlenikProvider.get();
-
-            setState(() {
-              uposlenikSearchResult = data;
-            });
-          },
-          icon: const Icon(Icons.refresh),
-          label: const Text(
-            'Reset',
-            style: TextStyle(fontSize: 16.0),
-          ),
-          style: ElevatedButton.styleFrom(
-            elevation: 8.0,
-            shape:
-                const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
-            backgroundColor: Colors.blueGrey[300],
-            foregroundColor: Colors.white,
-            minimumSize: const Size(100, 50),
+              await filter();
+            },
+            icon: const Icon(Icons.refresh),
+            label: const Text(
+              'Reset',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            style: ElevatedButton.styleFrom(
+              elevation: 8.0,
+              shape:
+                  const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+              backgroundColor: Colors.blueGrey[300],
+              foregroundColor: Colors.white,
+              minimumSize: const Size(100, 50),
+            ),
           ),
         ),
       ],

@@ -19,7 +19,7 @@ namespace eBarberShop.Services.Servisi
         {
             if (!string.IsNullOrWhiteSpace(search?.BrojNarudzbe))
             {
-                query = query.Where(x => x.BrojNarudzbe.Contains(search.BrojNarudzbe));
+                query = query.Where(x => x.BrojNarudzbe.ToLower().Contains(search.BrojNarudzbe.ToLower()));
             }
 
             if (search?.DatumNarudzbe.HasValue == true)

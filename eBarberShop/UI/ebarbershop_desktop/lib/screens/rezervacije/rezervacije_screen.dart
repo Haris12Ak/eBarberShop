@@ -100,151 +100,10 @@ class _RezervacijeScreenState extends State<RezervacijeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  _buildIzvjestaj(context),
+                  const SizedBox(height: 25.0),
                   _buildSearch(),
                   const SizedBox(height: 20.0),
-                  Stack(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(25.0),
-                        margin: const EdgeInsets.only(top: 15.0),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black38, width: 2.0),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Kreiraj izvještaj za odabrani datum do danas (opcionalno)',
-                              style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black54),
-                            ),
-                            const SizedBox(
-                              height: 20.0,
-                            ),
-                            SizedBox(
-                              width: 500,
-                              child: FormBuilderDateTimePicker(
-                                name: 'datumIzvjestaj',
-                                initialValue: datumIzvjestaj,
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.fromLTRB(
-                                      10.0, 5.0, 10.0, 5.0),
-                                  prefixIcon: const Icon(Icons.date_range),
-                                  labelText: 'Odaberite datum',
-                                  floatingLabelStyle: const TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: 17.0,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(0.0),
-                                  ),
-                                  suffixIcon: IconButton(
-                                    onPressed: () {
-                                      _formKey.currentState!
-                                          .fields['datumIzvjestaj']
-                                          ?.didChange(null);
-                                    },
-                                    icon: const Icon(Icons.clear),
-                                  ),
-                                ),
-                                inputType: InputType.date,
-                                format: DateFormat("yyyy-MM-dd"),
-                                onChanged: (DateTime? newDate) {
-                                  setState(() {
-                                    datumIzvjestaj = newDate;
-                                  });
-                                },
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  if (datumIzvjestaj == null) {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                RezervacijeIzvjestajScreen(
-                                                  datum: datumIzvjestaj,
-                                                ))).then((value) => _formKey
-                                        .currentState!.fields['datumIzvjestaj']
-                                        ?.didChange(null));
-                                  } else if (datumIzvjestaj!
-                                      .isAfter(DateTime.now())) {
-                                    showDialog(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text(
-                                                'Greška prilikom kreiranja izvještaja!'),
-                                            content: const Text(
-                                                'Odabrani datum mora biti manji od trenutnog datuma, tj. današnjeg datuma! \nMolimo unesite ispravan datum.'),
-                                            actions: [
-                                              TextButton(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: const Text('OK')),
-                                            ],
-                                          );
-                                        });
-                                  } else {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                RezervacijeIzvjestajScreen(
-                                                  datum: datumIzvjestaj,
-                                                ))).then((value) => _formKey
-                                        .currentState!.fields['datumIzvjestaj']
-                                        ?.didChange(null));
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  elevation: 0.0,
-                                  foregroundColor: Colors.white,
-                                  backgroundColor: Colors.grey.shade500,
-                                  padding: const EdgeInsets.all(18.0),
-                                  shape: const BeveledRectangleBorder(
-                                      borderRadius: BorderRadius.zero),
-                                ),
-                                child: const Text(
-                                  'Izvještaj',
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Positioned(
-                        top: -2.0,
-                        left: 15.0,
-                        child: Container(
-                          padding:
-                              const EdgeInsets.only(left: 10.0, right: 10.0),
-                          color: Colors.grey.shade100,
-                          child: const Text(
-                            'Izvještaj',
-                            style: TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.black54),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 25.0,
-                  ),
                   Expanded(
                     child: SingleChildScrollView(
                       child: DataTable(
@@ -427,6 +286,145 @@ class _RezervacijeScreenState extends State<RezervacijeScreen> {
                 ],
               ),
             ),
+    );
+  }
+
+  Stack _buildIzvjestaj(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(25.0),
+          margin: const EdgeInsets.only(top: 15.0),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black38, width: 2.0),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Kreiraj izvještaj za odabrani datum do danas (opcionalno)',
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black54),
+              ),
+              const SizedBox(
+                height: 20.0,
+              ),
+              SizedBox(
+                width: 500,
+                child: FormBuilderDateTimePicker(
+                  name: 'datumIzvjestaj',
+                  initialValue: datumIzvjestaj,
+                  decoration: InputDecoration(
+                    contentPadding:
+                        const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                    prefixIcon: const Icon(Icons.date_range),
+                    labelText: 'Odaberite datum',
+                    floatingLabelStyle: const TextStyle(
+                      color: Colors.black54,
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(0.0),
+                    ),
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        _formKey.currentState!.fields['datumIzvjestaj']
+                            ?.didChange(null);
+                      },
+                      icon: const Icon(Icons.clear),
+                    ),
+                  ),
+                  inputType: InputType.date,
+                  format: DateFormat("yyyy-MM-dd"),
+                  onChanged: (DateTime? newDate) {
+                    setState(() {
+                      datumIzvjestaj = newDate;
+                    });
+                  },
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (datumIzvjestaj == null) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  RezervacijeIzvjestajScreen(
+                                    datum: datumIzvjestaj,
+                                  ))).then((value) => _formKey
+                          .currentState!.fields['datumIzvjestaj']
+                          ?.didChange(null));
+                    } else if (datumIzvjestaj!.isAfter(DateTime.now())) {
+                      showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text(
+                                  'Greška prilikom kreiranja izvještaja!'),
+                              content: const Text(
+                                  'Odabrani datum mora biti manji od trenutnog datuma, tj. današnjeg datuma! \nMolimo unesite ispravan datum.'),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('OK')),
+                              ],
+                            );
+                          });
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  RezervacijeIzvjestajScreen(
+                                    datum: datumIzvjestaj,
+                                  ))).then((value) => _formKey
+                          .currentState!.fields['datumIzvjestaj']
+                          ?.didChange(null));
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0.0,
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.grey.shade500,
+                    padding: const EdgeInsets.all(18.0),
+                    shape: const BeveledRectangleBorder(
+                        borderRadius: BorderRadius.zero),
+                  ),
+                  child: const Text(
+                    'Izvještaj',
+                    style:
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          top: -2.0,
+          left: 15.0,
+          child: Container(
+            padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+            color: Colors.grey.shade100,
+            child: const Text(
+              'Izvještaj',
+              style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black54),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

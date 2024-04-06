@@ -51,6 +51,18 @@ class _NarudzbeListScreenState extends State<NarudzbeListScreen> {
     }
   }
 
+  Future<void> filter() async {
+    var data = await _narudzbeProvider.get(filter: {
+      'datumNarudzbe': _selectedDate,
+      'brojNarudzbe': _brojNarudzbeController.text,
+      'isKorisnikIncluded': true
+    });
+
+    setState(() {
+      narudzbeResult = data;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
@@ -65,14 +77,10 @@ class _NarudzbeListScreenState extends State<NarudzbeListScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _buildSearch(),
-                  const SizedBox(
-                    height: 40.0,
-                  ),
                   _buildIzvjestaj(context),
-                  const SizedBox(
-                    height: 40.0,
-                  ),
+                  const SizedBox(height: 25.0),
+                  _buildSearch(),
+                  const SizedBox(height: 20.0),
                   Expanded(
                     child: SingleChildScrollView(
                       child: DataTable(
@@ -252,20 +260,21 @@ class _NarudzbeListScreenState extends State<NarudzbeListScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        SizedBox(
-          width: 500,
+        Expanded(
+          flex: 3,
           child: TextField(
             controller: _brojNarudzbeController,
             decoration: const InputDecoration(
-              labelText: "Broj narudžbe",
-            ),
+                labelText: "Broj narudžbe",
+                contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                border: OutlineInputBorder()),
           ),
         ),
         const SizedBox(
-          width: 20.0,
+          width: 30.0,
         ),
-        SizedBox(
-          width: 300,
+        Expanded(
+          flex: 2,
           child: FormBuilderDateTimePicker(
             name: 'date',
             initialValue: _selectedDate,
@@ -282,78 +291,73 @@ class _NarudzbeListScreenState extends State<NarudzbeListScreen> {
                   borderRadius: BorderRadius.circular(0.0),
                 ),
                 suffixIcon: IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       _formKey.currentState!.fields['date']?.didChange(null);
+                      await filter();
                     },
                     icon: const Icon(Icons.clear))),
             inputType: InputType.date,
             format: DateFormat("yyyy-MM-dd"),
-            onChanged: (DateTime? newDate) {
+            onChanged: (DateTime? newDate) async {
               setState(() {
                 _selectedDate = newDate;
               });
+              await filter();
             },
           ),
         ),
         const SizedBox(
-          width: 20.0,
+          width: 50.0,
         ),
-        ElevatedButton.icon(
-          onPressed: () async {
-            var data = await _narudzbeProvider.get(filter: {
-              'datumNarudzbe': _selectedDate,
-              'brojNarudzbe': _brojNarudzbeController.text,
-              'isKorisnikIncluded': true
-            });
-
-            setState(() {
-              narudzbeResult = data;
-            });
-          },
-          icon: const Icon(Icons.search),
-          label: const Text(
-            'Pretraga',
-            style: TextStyle(fontSize: 16.0),
-          ),
-          style: ElevatedButton.styleFrom(
-            elevation: 8.0,
-            shape:
-                const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
-            backgroundColor: Colors.blueGrey,
-            foregroundColor: Colors.white,
-            minimumSize: const Size(100, 50),
+        Expanded(
+          flex: 1,
+          child: ElevatedButton.icon(
+            onPressed: () async {
+              await filter();
+            },
+            icon: const Icon(Icons.search),
+            label: const Text(
+              'Pretraga',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            style: ElevatedButton.styleFrom(
+              elevation: 8.0,
+              shape:
+                  const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+              backgroundColor: Colors.blueGrey,
+              foregroundColor: Colors.white,
+              minimumSize: const Size(100, 50),
+            ),
           ),
         ),
         const SizedBox(
           width: 20.0,
         ),
-        ElevatedButton.icon(
-          onPressed: () async {
-            setState(() {
-              _brojNarudzbeController.text = "";
-            });
+        Expanded(
+          flex: 1,
+          child: ElevatedButton.icon(
+            onPressed: () async {
+              setState(() {
+                _brojNarudzbeController.text = "";
+              });
 
-            _formKey.currentState!.fields['date']?.didChange(null);
+              _formKey.currentState!.fields['date']?.didChange(null);
 
-            var data = await _narudzbeProvider
-                .get(filter: {'isKorisnikIncluded': true});
-
-            setState(() {
-              narudzbeResult = data;
-            });
-          },
-          icon: const Icon(Icons.refresh),
-          label: const Text(
-            'Reset',
-            style: TextStyle(fontSize: 16.0),
-          ),
-          style: ElevatedButton.styleFrom(
-            elevation: 8.0,
-            shape:
-                const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
-            backgroundColor: Colors.blueGrey[300],
-            foregroundColor: Colors.white,
-            minimumSize: const Size(100, 50),
+              await filter();
+            },
+            icon: const Icon(Icons.refresh),
+            label: const Text(
+              'Reset',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            style: ElevatedButton.styleFrom(
+              elevation: 8.0,
+              shape:
+                  const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+              backgroundColor: Colors.blueGrey[300],
+              foregroundColor: Colors.white,
+              minimumSize: const Size(100, 50),
+            ),
           ),
         ),
       ],

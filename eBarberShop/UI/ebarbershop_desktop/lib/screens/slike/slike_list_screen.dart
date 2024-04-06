@@ -22,6 +22,8 @@ class _SlikeListScreenState extends State<SlikeListScreen> {
   bool isLoading = true;
   DateTime? _selectedDate;
 
+  final _formKey = GlobalKey<FormBuilderState>();
+
   @override
   void initState() {
     super.initState();
@@ -37,60 +39,78 @@ class _SlikeListScreenState extends State<SlikeListScreen> {
     });
   }
 
+  Future<void> filter() async {
+    var data = await _slikeProvider.get(filter: {
+      'DatumObjave': _selectedDate,
+    });
+
+    setState(() {
+      slikeSearchResult = data;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
       title: 'Slike',
       selectedOption: 'Slike',
       child: isLoading
-          ? Container()
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.of(context)
-                          .push(
-                        MaterialPageRoute(
-                          builder: (context) => SlikeAddEditScreen(),
-                        ),
-                      )
-                          .then((_) {
-                        fetchSlike();
-                      });
-                    },
-                    icon: const Icon(Icons.add),
-                    label: const Text(
-                      'Dodaj sliku',
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      elevation: 8.0,
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.black,
-                      minimumSize: const Size(100, 50),
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : FormBuilder(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .push(
+                          MaterialPageRoute(
+                            builder: (context) => SlikeAddEditScreen(),
+                          ),
+                        )
+                            .then((_) {
+                          fetchSlike();
+                        });
+                      },
+                      icon: const Icon(Icons.add),
+                      label: const Text(
+                        'Dodaj sliku',
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        elevation: 8.0,
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                        minimumSize: const Size(100, 50),
+                      ),
                     ),
                   ),
-                ),
-                _buildSearch(),
-                const SizedBox(
-                  height: 40.0,
-                ),
-                _buildForm(context),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
-                  child: Text(
-                    'Ukupno podataka: ${slikeSearchResult?.count}',
-                    style: const TextStyle(
-                        color: Colors.black54,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 1.0,
-                        fontSize: 15.0),
+                  const SizedBox(
+                    height: 25.0,
                   ),
-                ),
-              ],
+                  _buildSearch(),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  _buildForm(context),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                    child: Text(
+                      'Ukupno podataka: ${slikeSearchResult?.count}',
+                      style: const TextStyle(
+                          color: Colors.black54,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 1.0,
+                          fontSize: 15.0),
+                    ),
+                  ),
+                ],
+              ),
             ),
     );
   }
@@ -100,8 +120,8 @@ class _SlikeListScreenState extends State<SlikeListScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        SizedBox(
-          width: 300,
+        Expanded(
+          flex: 5,
           child: FormBuilderDateTimePicker(
             name: 'date',
             initialValue: _selectedDate,
@@ -116,69 +136,77 @@ class _SlikeListScreenState extends State<SlikeListScreen> {
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(0.0),
-                )),
+                ),
+                suffixIcon: IconButton(
+                    onPressed: () async {
+                      _formKey.currentState!.fields['date']?.didChange(null);
+
+                      await filter();
+                    },
+                    icon: const Icon(Icons.clear))),
             inputType: InputType.date,
             format: DateFormat("yyyy-MM-dd"),
-            onChanged: (DateTime? newDate) {
-              setState(() {
-                _selectedDate = newDate;
-              });
+            onChanged: (DateTime? newDate) async {
+              setState(
+                () {
+                  _selectedDate = newDate;
+                },
+              );
+              await filter();
             },
           ),
         ),
         const SizedBox(
-          width: 20.0,
+          width: 50.0,
         ),
-        ElevatedButton.icon(
-          onPressed: () async {
-            var data = await _slikeProvider
-                .get(filter: {'datumObjave': _selectedDate});
-
-            setState(() {
-              slikeSearchResult = data;
-            });
-          },
-          icon: const Icon(Icons.search),
-          label: const Text(
-            'Pretraga',
-            style: TextStyle(fontSize: 16.0),
-          ),
-          style: ElevatedButton.styleFrom(
-            elevation: 8.0,
-            shape:
-                const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
-            backgroundColor: Colors.blueGrey,
-            foregroundColor: Colors.white,
-            minimumSize: const Size(100, 50),
+        Expanded(
+          flex: 1,
+          child: ElevatedButton.icon(
+            onPressed: () async {
+              await filter();
+            },
+            icon: const Icon(Icons.search),
+            label: const Text(
+              'Pretraga',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            style: ElevatedButton.styleFrom(
+              elevation: 8.0,
+              shape:
+                  const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+              backgroundColor: Colors.blueGrey,
+              foregroundColor: Colors.white,
+              minimumSize: const Size(100, 50),
+            ),
           ),
         ),
         const SizedBox(
           width: 20.0,
         ),
-        ElevatedButton.icon(
-          onPressed: () async {
-            setState(() {
-              _selectedDate = null;
-            });
+        Expanded(
+          flex: 1,
+          child: ElevatedButton.icon(
+            onPressed: () async {
+              setState(() {
+                _selectedDate = null;
+              });
+              _formKey.currentState!.fields['date']?.didChange(null);
 
-            var data = await _slikeProvider.get();
-
-            setState(() {
-              slikeSearchResult = data;
-            });
-          },
-          icon: const Icon(Icons.refresh),
-          label: const Text(
-            'Reset',
-            style: TextStyle(fontSize: 16.0),
-          ),
-          style: ElevatedButton.styleFrom(
-            elevation: 8.0,
-            shape:
-                const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
-            backgroundColor: Colors.blueGrey[300],
-            foregroundColor: Colors.white,
-            minimumSize: const Size(100, 50),
+              await filter();
+            },
+            icon: const Icon(Icons.refresh),
+            label: const Text(
+              'Reset',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            style: ElevatedButton.styleFrom(
+              elevation: 8.0,
+              shape:
+                  const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+              backgroundColor: Colors.blueGrey[300],
+              foregroundColor: Colors.white,
+              minimumSize: const Size(100, 50),
+            ),
           ),
         ),
       ],
@@ -197,7 +225,7 @@ class _SlikeListScreenState extends State<SlikeListScreen> {
               DataColumn(
                 label: Expanded(
                   child: Text(
-                    'Slika ID',
+                    'ID',
                     style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.w700,
@@ -301,6 +329,7 @@ class _SlikeListScreenState extends State<SlikeListScreen> {
           try {
             // ignore: use_build_context_synchronously
             showDialog(
+              barrierDismissible: false,
               context: context,
               builder: (BuildContext context) => AlertDialog(
                 title: const Text('Potvrda'),
@@ -311,6 +340,7 @@ class _SlikeListScreenState extends State<SlikeListScreen> {
                     onPressed: () async {
                       await _slikeProvider.delete(e.slikeId);
 
+                      // ignore: use_build_context_synchronously
                       Navigator.of(context).pop();
 
                       fetchSlike();
@@ -329,6 +359,7 @@ class _SlikeListScreenState extends State<SlikeListScreen> {
           } on Exception catch (e) {
             // ignore: use_build_context_synchronously
             showDialog(
+              barrierDismissible: false,
               context: context,
               builder: (BuildContext context) => AlertDialog(
                 title: const Text("Error"),

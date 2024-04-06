@@ -20,6 +20,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
   late NovostiProvider _novostiProvider;
   late SearchResult<Novosti>? novostiSearchResult;
   bool isLoading = true;
+  final _formKey = GlobalKey<FormBuilderState>();
 
   final TextEditingController _naslovSearchController = TextEditingController();
   DateTime? _selectedDate;
@@ -42,60 +43,76 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
     });
   }
 
+  Future<void> filter() async {
+    var data = await _novostiProvider.get(filter: {
+      'naslov': _naslovSearchController.text,
+      'datumObjave': _selectedDate,
+      'IsKorisnikInclude': true
+    });
+
+    setState(() {
+      novostiSearchResult = data;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
       title: 'Novosti',
       selectedOption: 'Novosti',
       child: isLoading
-          ? Container()
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.of(context)
-                          .push(
-                        MaterialPageRoute(
-                          builder: (context) => NovostiEditScreen(),
-                        ),
-                      )
-                          .then((_) {
-                        fetctNovosti();
-                      });
-                    },
-                    icon: const Icon(Icons.add),
-                    label: const Text(
-                      'Dodaj novost',
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      elevation: 8.0,
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.black,
-                      minimumSize: const Size(100, 50),
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : FormBuilder(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .push(
+                          MaterialPageRoute(
+                            builder: (context) => NovostiEditScreen(),
+                          ),
+                        )
+                            .then((_) {
+                          fetctNovosti();
+                        });
+                      },
+                      icon: const Icon(Icons.add),
+                      label: const Text(
+                        'Dodaj novost',
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        elevation: 8.0,
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                        minimumSize: const Size(100, 50),
+                      ),
                     ),
                   ),
-                ),
-                _buildSearch(),
-                const SizedBox(
-                  height: 40.0,
-                ),
-                _buildNovostiList(),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
-                  child: Text(
-                    'Ukupno podataka: ${novostiSearchResult?.count}',
-                    style: const TextStyle(
-                        color: Colors.black54,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 1.0,
-                        fontSize: 15.0),
-                  ),
-                )
-              ],
+                  const SizedBox(height: 25.0),
+                  _buildSearch(),
+                  const SizedBox(height: 20.0),
+                  _buildNovostiList(),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                    child: Text(
+                      'Ukupno podataka: ${novostiSearchResult?.count}',
+                      style: const TextStyle(
+                          color: Colors.black54,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 1.0,
+                          fontSize: 15.0),
+                    ),
+                  )
+                ],
+              ),
             ),
     );
   }
@@ -105,103 +122,108 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        SizedBox(
-          width: 500,
+        Expanded(
+          flex: 3,
           child: TextField(
             controller: _naslovSearchController,
             decoration: const InputDecoration(
-              labelText: "Naslov",
+                labelText: "Naslov",
+                contentPadding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+                border: OutlineInputBorder()),
+          ),
+        ),
+        const SizedBox(
+          width: 30.0,
+        ),
+        Expanded(
+          flex: 2,
+          child: FormBuilderDateTimePicker(
+            name: 'date',
+            initialValue: _selectedDate,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+              prefixIcon: const Icon(Icons.date_range),
+              labelText: 'Odaberite datum',
+              floatingLabelStyle: const TextStyle(
+                color: Colors.black54,
+                fontSize: 17.0,
+                fontWeight: FontWeight.w600,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(0.0),
+              ),
+              suffixIcon: IconButton(
+                onPressed: () async {
+                  _formKey.currentState!.fields['date']?.didChange(null);
+
+                  await filter();
+                },
+                icon: const Icon(Icons.clear),
+              ),
+            ),
+            inputType: InputType.date,
+            format: DateFormat("yyyy-MM-dd"),
+            onChanged: (DateTime? newDate) async {
+              setState(() {
+                _selectedDate = newDate;
+              });
+              await filter();
+            },
+          ),
+        ),
+        const SizedBox(
+          width: 50.0,
+        ),
+        Expanded(
+          flex: 1,
+          child: ElevatedButton.icon(
+            onPressed: () async {
+              await filter();
+            },
+            icon: const Icon(Icons.search),
+            label: const Text(
+              'Pretraga',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            style: ElevatedButton.styleFrom(
+              elevation: 8.0,
+              shape:
+                  const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+              backgroundColor: Colors.blueGrey,
+              foregroundColor: Colors.white,
+              minimumSize: const Size(100, 50),
             ),
           ),
         ),
         const SizedBox(
           width: 20.0,
         ),
-        SizedBox(
-          width: 300,
-          child: FormBuilderDateTimePicker(
-            name: 'date',
-            initialValue: _selectedDate,
-            decoration: InputDecoration(
-                contentPadding: const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-                prefixIcon: const Icon(Icons.date_range),
-                labelText: 'Odaberite datum',
-                floatingLabelStyle: const TextStyle(
-                  color: Colors.black54,
-                  fontSize: 17.0,
-                  fontWeight: FontWeight.w600,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(0.0),
-                )),
-            inputType: InputType.date,
-            format: DateFormat("yyyy-MM-dd"),
-            onChanged: (DateTime? newDate) {
+        Expanded(
+          flex: 1,
+          child: ElevatedButton.icon(
+            onPressed: () async {
               setState(() {
-                _selectedDate = newDate;
+                _naslovSearchController.text = "";
+                _selectedDate = null;
               });
+
+              _formKey.currentState!.fields['date']?.didChange(null);
+
+              await filter();
             },
-          ),
-        ),
-        const SizedBox(
-          width: 20.0,
-        ),
-        ElevatedButton.icon(
-          onPressed: () async {
-            var data = await _novostiProvider.get(filter: {
-              'naslov': _naslovSearchController.text,
-              'datumObjave': _selectedDate,
-              'IsKorisnikInclude': true
-            });
-
-            setState(() {
-              novostiSearchResult = data;
-            });
-          },
-          icon: const Icon(Icons.search),
-          label: const Text(
-            'Pretraga',
-            style: TextStyle(fontSize: 16.0),
-          ),
-          style: ElevatedButton.styleFrom(
-            elevation: 8.0,
-            shape:
-                const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
-            backgroundColor: Colors.blueGrey,
-            foregroundColor: Colors.white,
-            minimumSize: const Size(100, 50),
-          ),
-        ),
-        const SizedBox(
-          width: 20.0,
-        ),
-        ElevatedButton.icon(
-          onPressed: () async {
-            _naslovSearchController.text = "";
-
-            setState(() {
-              _selectedDate = null;
-            });
-
-            var data =
-                await _novostiProvider.get(filter: {'IsKorisnikInclude': true});
-
-            setState(() {
-              novostiSearchResult = data;
-            });
-          },
-          icon: const Icon(Icons.refresh),
-          label: const Text(
-            'Reset',
-            style: TextStyle(fontSize: 16.0),
-          ),
-          style: ElevatedButton.styleFrom(
-            elevation: 8.0,
-            shape:
-                const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
-            backgroundColor: Colors.blueGrey[300],
-            foregroundColor: Colors.white,
-            minimumSize: const Size(100, 50),
+            icon: const Icon(Icons.refresh),
+            label: const Text(
+              'Reset',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            style: ElevatedButton.styleFrom(
+              elevation: 8.0,
+              shape:
+                  const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+              backgroundColor: Colors.blueGrey[300],
+              foregroundColor: Colors.white,
+              minimumSize: const Size(100, 50),
+            ),
           ),
         ),
       ],
@@ -218,7 +240,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
               DataColumn(
                 label: Expanded(
                   child: Text(
-                    'Novost ID',
+                    'ID',
                     style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.w700,
@@ -334,6 +356,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
           try {
             // ignore: use_build_context_synchronously
             showDialog(
+              barrierDismissible: false,
               context: context,
               builder: (BuildContext context) => AlertDialog(
                 title: const Text('Potvrda'),
@@ -344,6 +367,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
                     onPressed: () async {
                       await _novostiProvider.delete(e.novostiId);
 
+                      // ignore: use_build_context_synchronously
                       Navigator.of(context).pop();
 
                       fetctNovosti();
