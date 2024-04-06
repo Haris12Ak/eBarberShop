@@ -85,7 +85,7 @@ namespace eBarberShop.Services.Servisi
             return _mapper.Map<List<Model.Termini>>(data);
         }
 
-        public async override Task<Rezervacija> Insert(RezervacijaInsertRequest insert)
+        public async override Task<Model.Rezervacija> Insert(RezervacijaInsertRequest insert)
         {
             var korisnik = await _korisniciService.GetById(insert.KorisnikId);
 
@@ -172,6 +172,70 @@ namespace eBarberShop.Services.Servisi
                 .ToListAsync();
 
             return entity;
+        }
+
+        public async Task<IzvjestajRezervacije> GetIzvjestajRezervacije(IzvjestajRezervacijeSearch? search)
+        {
+            var query = _dbContext.Set<Database.Rezervacija>()
+                .Include("Usluga")
+                .Include("Uposlenik")
+                .AsQueryable();
+
+            DateTime today = DateTime.Today;
+
+            DateTime prethodniDan = today.AddDays(-1);
+            DateTime prethodnaSemica = today.AddDays(-7);
+            DateTime predhodniMjesec = today.AddMonths(-1);
+
+            IzvjestajRezervacije izvjestaj = new IzvjestajRezervacije();
+
+            izvjestaj.ZaradaPrethodnogDana = await query.Where(x => x.Datum.Date == prethodniDan.Date).SumAsync(y => y.Usluga.Cijena);
+            izvjestaj.ZaradaPrethodneSemice = await query.Where(x => x.Datum.Date >= prethodnaSemica.Date && x.Datum.Date <= today.Date).SumAsync(y => y.Usluga.Cijena);
+            izvjestaj.ZaradaPrethodnogMjeseca = await query.Where(x => x.Datum.Date >= predhodniMjesec && x.Datum.Date <= today.Date).SumAsync(y => y.Usluga.Cijena);
+
+            izvjestaj.BrojRezervacijaPrethodnogDana = await query.Where(x => x.Datum.Date == prethodniDan).CountAsync();
+            izvjestaj.BrojRezervacijaPrethodneSedmice = await query.Where(x => x.Datum.Date >= prethodnaSemica.Date && x.Datum.Date <= today.Date).CountAsync();
+            izvjestaj.BrojRezervacijaPrethodnogMjeseca = await query.Where(x => x.Datum.Date >= predhodniMjesec && x.Datum.Date <= today.Date).CountAsync();
+
+            if (search?.Datum.HasValue == true)
+            {
+                if (search.Datum.Value.Date > DateTime.Now.Date)
+                    throw new UserException("Datum mora biti manji od današnjeg datuma! Unseite ispravan datum.");
+
+                query = query.Where(x => x.Datum.Date <= DateTime.Now.Date && x.Datum.Date >= search.Datum.Value.Date);
+            }
+
+            var usluga = await query
+                .GroupBy(u => u.Usluga)
+                .OrderByDescending(g => g.Count())
+                .Select(g => g.Key)
+                .FirstOrDefaultAsync();
+
+            var uposlenik = await query
+            .GroupBy(r => r.Uposlenik)
+            .OrderByDescending(g => g.Count())
+            .Select(g => g.Key)
+            .FirstOrDefaultAsync();
+
+            var list = await query.ToListAsync();
+
+            izvjestaj.UkupnoRezervacija = list.Count;
+            izvjestaj.UkupnoAktivnihRezervacija = await query.Where(x => x.Datum > DateTime.Now && x.Vrijeme > DateTime.Now).CountAsync();
+            izvjestaj.UkupnoNeaktivnihRezervacija = await query.Where(x => x.Datum < DateTime.Now && x.Vrijeme < DateTime.Now).CountAsync();
+            izvjestaj.BrojUsluga = await _dbContext.Usluga.CountAsync();
+            izvjestaj.UposlenikSaNajviseRezervacija = uposlenik != null ? uposlenik.Ime + " " + uposlenik.Prezime : "Nije pronaden uposlenik sa najvise rezervacija!";
+            izvjestaj.UslugaSaNajviseRezervacija = usluga != null ? usluga.Naziv : "Nije pronadena usluga sa najvise rezervacija!";
+
+            decimal ukupnaZarada = 0;
+
+            foreach (var item in list)
+            {
+                ukupnaZarada += item.Usluga.Cijena;
+            }
+
+            izvjestaj.UkupnaZarada = ukupnaZarada;
+
+            return izvjestaj;
         }
     }
 }

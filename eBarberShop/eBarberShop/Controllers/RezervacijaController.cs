@@ -24,5 +24,11 @@ namespace eBarberShop.Controllers
         {
             return await (_service as IRezervacijaService).GetTermineByKorisnikId(korisnikId);
         }
+
+        [HttpGet("/IzvjestajRezervacije")]
+        public async Task<IzvjestajRezervacije> GetIzvjestajRezervacije([FromQuery] IzvjestajRezervacijeSearch? search)
+        {
+            return await (_service as IRezervacijaService).GetIzvjestajRezervacije(search);
+        }
     }
 }

@@ -8,5 +8,6 @@ namespace eBarberShop.Services.Interfejsi
     {
         Task<List<Model.Termini>> GetTermine(TerminiSearch? search);
         Task<List<Model.TerminiKorisnikaInfo>> GetTermineByKorisnikId(int korisnikId);
+        Task<Model.IzvjestajRezervacije> GetIzvjestajRezervacije(IzvjestajRezervacijeSearch? search);
     }
 }
