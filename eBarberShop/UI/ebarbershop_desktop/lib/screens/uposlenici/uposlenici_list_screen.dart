@@ -204,8 +204,8 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
                           DataCell(Text(e.ime)),
                           DataCell(Text(e.prezime)),
                           DataCell(Text(e.kontaktTelefon)),
-                          DataCell(Text(e.email.toString())),
-                          DataCell(Text(e.adresa.toString())),
+                          DataCell(Text(e.email ?? "")),
+                          DataCell(Text(e.adresa ?? "")),
                           DataCell(
                             Row(
                               children: [

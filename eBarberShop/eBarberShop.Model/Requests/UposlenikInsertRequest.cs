@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace eBarberShop.Model.Requests
 {
     public class UposlenikInsertRequest
     {
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Obavezno polje")]
         public string Ime { get; set; }
+
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Obavezno polje")]
         public string Prezime { get; set; }
+
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Obavezno polje")]
         public string KontaktTelefon { get; set; }
+
         public string? Email { get; set; }
         public string? Adresa { get; set; }
     }

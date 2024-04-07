@@ -32,7 +32,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         color: Colors.white,
         width: double.infinity,
         margin: const EdgeInsets.fromLTRB(150.0, 15.0, 150.0, 15.0),
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
           child: widget.child,
         ),

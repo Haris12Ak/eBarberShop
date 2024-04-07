@@ -364,13 +364,13 @@ class _ProizvodiEditScreenState extends State<ProizvodiEditScreen> {
               child: ElevatedButton.icon(
                 onPressed: () async {
                   _formKey.currentState?.saveAndValidate();
-
+        
                   var request = Map.from(_formKey.currentState!.value);
-
+        
                   if (_base64Image != null && _base64Image != "") {
                     request['slika'] = _base64Image;
                   }
-
+        
                   try {
                     if (widget.proizvod != null) {
                       _buildEditProizvod(context, request);

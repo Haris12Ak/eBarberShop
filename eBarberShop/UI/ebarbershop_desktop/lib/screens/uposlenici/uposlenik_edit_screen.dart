@@ -1,4 +1,5 @@
 import 'package:ebarbershop_desktop/models/uposlenik/uposlenik.dart';
+import 'package:ebarbershop_desktop/models/validator.dart';
 import 'package:ebarbershop_desktop/providers/uposlenik_provider.dart';
 import 'package:ebarbershop_desktop/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,8 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   Map<String, dynamic> _initialValue = {};
   late UposlenikProvider _uposlenikProvider;
+
+  bool isImeValid = true;
 
   @override
   void initState() {
@@ -42,207 +45,259 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
       child: FormBuilder(
         key: _formKey,
         initialValue: _initialValue,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Expanded(
-                  flex: 1,
-                  child: Text(
-                    'Ime:',
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
+        child: Container(
+          padding: const EdgeInsets.all(50.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Expanded(
+                    flex: 1,
+                    child: Text(
+                      'Ime:',
+                      style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black54),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 30.0),
-                Expanded(
-                  flex: 2,
-                  child: FormBuilderTextField(
-                    name: 'ime',
-                    decoration: InputDecoration(
+                  const SizedBox(width: 30.0),
+                  Expanded(
+                    flex: 3,
+                    child: FormBuilderTextField(
+                      name: 'ime',
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: InputDecoration(
                         contentPadding:
                             const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(0.0),
                         ),
-                        hintText: 'Ime'),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30.0),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Expanded(
-                  flex: 1,
-                  child: Text(
-                    'Prezime:',
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
-                  ),
-                ),
-                const SizedBox(width: 30.0),
-                Expanded(
-                  flex: 2,
-                  child: FormBuilderTextField(
-                    name: 'prezime',
-                    decoration: InputDecoration(
-                        contentPadding:
-                            const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(0.0),
-                        ),
-                        hintText: 'Prezime'),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30.0),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Expanded(
-                  flex: 1,
-                  child: Text(
-                    'Kontakt telefon:',
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
-                  ),
-                ),
-                const SizedBox(width: 30.0),
-                Expanded(
-                  flex: 2,
-                  child: FormBuilderTextField(
-                    name: 'kontaktTelefon',
-                    decoration: InputDecoration(
-                        contentPadding:
-                            const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(0.0),
-                        ),
-                        hintText: 'Kontakt telefon'),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30.0),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Expanded(
-                  flex: 1,
-                  child: Text(
-                    'Email:',
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
-                  ),
-                ),
-                const SizedBox(width: 30.0),
-                Expanded(
-                  flex: 2,
-                  child: FormBuilderTextField(
-                    name: 'email',
-                    decoration: InputDecoration(
-                        contentPadding:
-                            const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(0.0),
-                        ),
-                        hintText: 'Email'),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30.0),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Expanded(
-                  flex: 1,
-                  child: Text(
-                    'Adresa:',
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
-                  ),
-                ),
-                const SizedBox(width: 30.0),
-                Expanded(
-                  flex: 2,
-                  child: FormBuilderTextField(
-                    name: 'adresa',
-                    decoration: InputDecoration(
-                        contentPadding:
-                            const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(0.0),
-                        ),
-                        hintText: 'Adresa'),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30.0),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: ElevatedButton.icon(
-                onPressed: () async {
-                  _formKey.currentState?.saveAndValidate();
-
-                  var request = Map.from(_formKey.currentState!.value);
-
-                  try {
-                    if (widget.uposlenik != null) {
-                      _buildEditUposlenika(context, request);
-                    } else {
-                      _buildAddUposlenik(context, request);
-                    }
-                  } on Exception catch (e) {
-                    // ignore: use_build_context_synchronously
-                    showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: const Text("Error"),
-                        content: Text(e.toString()),
-                        actions: [
-                          TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text("OK"))
-                        ],
+                        hintText: 'Ime',
                       ),
-                    );
-                  }
-                },
-                icon: const Icon(Icons.save_alt),
-                label: const Text(
-                  'Spremi',
-                  style: TextStyle(fontSize: 16.0),
-                ),
-                style: ElevatedButton.styleFrom(
-                  elevation: 8.0,
-                  shape: const BeveledRectangleBorder(
-                      borderRadius: BorderRadius.zero),
-                  backgroundColor: Colors.blueGrey,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(100, 50),
-                ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Obavezno polje';
+                        }
+                        if (!Validators.validirajIme(value)) {
+                          return 'Unseite ispravno podatke za ime';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
               ),
-            )
-          ],
+              const SizedBox(height: 30.0),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Expanded(
+                    flex: 1,
+                    child: Text(
+                      'Prezime:',
+                      style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black54),
+                    ),
+                  ),
+                  const SizedBox(width: 30.0),
+                  Expanded(
+                    flex: 3,
+                    child: FormBuilderTextField(
+                      name: 'prezime',
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(0.0),
+                          ),
+                          hintText: 'Prezime'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Obavezno polje';
+                        }
+                        if (!Validators.validirajPrezime(value)) {
+                          return 'Unseite ispravno podatke za prezime';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30.0),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Expanded(
+                    flex: 1,
+                    child: Text(
+                      'Kontakt telefon:',
+                      style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black54),
+                    ),
+                  ),
+                  const SizedBox(width: 30.0),
+                  Expanded(
+                    flex: 3,
+                    child: FormBuilderTextField(
+                      name: 'kontaktTelefon',
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(0.0),
+                          ),
+                          hintText: 'Kontakt telefon'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Obavezno polje';
+                        }
+                        if (!Validators.validirajBrojTelefona(value)) {
+                          return 'Unesite ispravan format broja telefona.\nExample: (06XXXXX)';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30.0),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Expanded(
+                    flex: 1,
+                    child: Text(
+                      'Email:',
+                      style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black54),
+                    ),
+                  ),
+                  const SizedBox(width: 30.0),
+                  Expanded(
+                    flex: 3,
+                    child: FormBuilderTextField(
+                      name: 'email',
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(0.0),
+                          ),
+                          hintText: 'Email (opcionalno)'),
+                      validator: (value) {
+                        if (value != null && value.isNotEmpty) {
+                          if (!Validators.validirajEmail(value)) {
+                            return 'Unesite ispravno email';
+                          }
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30.0),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Expanded(
+                    flex: 1,
+                    child: Text(
+                      'Adresa:',
+                      style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black54),
+                    ),
+                  ),
+                  const SizedBox(width: 30.0),
+                  Expanded(
+                    flex: 3,
+                    child: FormBuilderTextField(
+                      name: 'adresa',
+                      decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(0.0),
+                          ),
+                          hintText: 'Adresa (opcionalno)'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30.0),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: ElevatedButton.icon(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState?.saveAndValidate();
+          
+                      var request = Map.from(_formKey.currentState!.value);
+          
+                      try {
+                        if (widget.uposlenik != null) {
+                          _buildEditUposlenika(context, request);
+                        } else {
+                          _buildAddUposlenik(context, request);
+                        }
+                      } on Exception catch (e) {
+                        // ignore: use_build_context_synchronously
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text("Error"),
+                            content: Text(e.toString()),
+                            actions: [
+                              TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text("OK"))
+                            ],
+                          ),
+                        );
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          showCloseIcon: true,
+                          content: Text("Unesite ispravno podatke !."),
+                        ),
+                      );
+                    }
+                  },
+                  icon: const Icon(Icons.save_alt),
+                  label: const Text(
+                    'Spremi',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    elevation: 8.0,
+                    shape: const BeveledRectangleBorder(
+                        borderRadius: BorderRadius.zero),
+                    backgroundColor: Colors.blueGrey,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(100, 50),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
