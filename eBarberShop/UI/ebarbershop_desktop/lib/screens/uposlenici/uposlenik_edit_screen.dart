@@ -245,9 +245,8 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
                 alignment: Alignment.bottomRight,
                 child: ElevatedButton.icon(
                   onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState?.saveAndValidate();
-          
+                    if (_formKey.currentState!.saveAndValidate()) {
+
                       var request = Map.from(_formKey.currentState!.value);
           
                       try {
