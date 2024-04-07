@@ -70,156 +70,22 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
       child: FormBuilder(
         key: _formKey,
         initialValue: _initialValue,
-        child: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Expanded(
-                  flex: 1,
-                  child: Text(
-                    'Naslov:',
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
-                  ),
-                ),
-                const SizedBox(width: 30.0),
-                Expanded(
-                  flex: 2,
-                  child: FormBuilderTextField(
-                    name: 'naslov',
-                    decoration: InputDecoration(
-                        contentPadding:
-                            const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(0.0),
-                        ),
-                        hintText: 'Naslov'),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30.0),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Expanded(
-                  flex: 1,
-                  child: Text(
-                    'Sadržaj:',
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
-                  ),
-                ),
-                const SizedBox(width: 30.0),
-                Expanded(
-                  flex: 2,
-                  child: FormBuilderTextField(
-                    name: 'sadrzaj',
-                    minLines: 6,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.all(10.0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(0.0),
-                        ),
-                        hintText: 'Sadržaj'),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30.0),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Expanded(
-                  flex: 1,
-                  child: Text(
-                    'Slika:',
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black54),
-                  ),
-                ),
-                const SizedBox(width: 30.0),
-                Expanded(
-                  flex: 2,
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Container(
-                      width: 350,
-                      height: 400,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black, width: 1.0)),
-                      child: _initialValue['slika'] != "" &&
-                              _initialValue['slika'] != null
-                          ? imageFromBase64String(_initialValue['slika'])
-                          : const Align(
-                              alignment: Alignment.center,
-                              child: Text('The image does not exist',
-                                  textAlign: TextAlign.center)),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10.0),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Expanded(
-                  flex: 1,
-                  child: Text(''),
-                ),
-                const SizedBox(width: 30.0),
-                Expanded(
-                  flex: 2,
-                  child: FormBuilderField(
-                    name: 'slika',
-                    builder: ((filed) {
-                      return InputDecorator(
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.all(10.0),
-                          focusColor: Colors.blue,
-                          hoverColor: Colors.grey[200],
-                          fillColor: Colors.white,
-                          filled: true,
-                          errorText: filed.errorText,
-                        ),
-                        child: ListTile(
-                          leading: const Icon(Icons.photo),
-                          title: Text(selectedImageName ?? "Select Image"),
-                          trailing: const Icon(Icons.file_upload),
-                          onTap: getImage,
-                        ),
-                      );
-                    }),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30.0),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Text(
+        child: Container(
+          padding: const EdgeInsets.all(50.0),
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
                     widget.novost != null ? 'Datum objave:' : "",
                     style: const TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.w500,
                         color: Colors.black54),
                   ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Text(
+                  const SizedBox(width: 20.0),
+                  Text(
                     widget.novost != null &&
                             _initialValue['datumObjave'] != null &&
                             _initialValue['datumObjave'] != ""
@@ -230,64 +96,222 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
                         fontWeight: FontWeight.w500,
                         color: Colors.black54),
                   ),
+                ],
+              ),
+              if (widget.novost != null)
+                const Divider(
+                  height: 60.0,
                 ),
-              ],
-            ),
-            const SizedBox(height: 30.0),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: ElevatedButton.icon(
-                onPressed: () async {
-                  _formKey.currentState?.saveAndValidate();
-
-                  var request = Map.from(_formKey.currentState!.value);
-
-                  if (_base64Image != null && _base64Image != "") {
-                    request['slika'] = _base64Image;
-                  }
-
-                  request['datumObjave'] = DateTime.now().toIso8601String();
-                  request['korisnikId'] = Authorization.korisnikId.toString();
-
-                  try {
-                    if (widget.novost != null) {
-                      _buildEditNovost(context, request);
-                    } else {
-                      _buldAddNovost(context, request);
-                    }
-                  } on Exception catch (e) {
-                    // ignore: use_build_context_synchronously
-                    showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: const Text("Error"),
-                        content: Text(e.toString()),
-                        actions: [
-                          TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text("OK"))
-                        ],
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Expanded(
+                    flex: 1,
+                    child: Text(
+                      'Naslov:',
+                      style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black54),
+                    ),
+                  ),
+                  const SizedBox(width: 30.0),
+                  Expanded(
+                    flex: 3,
+                    child: FormBuilderTextField(
+                      name: 'naslov',
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: InputDecoration(
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(0.0),
+                          ),
+                          hintText: 'Naslov'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Obavezno polje';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30.0),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Expanded(
+                    flex: 1,
+                    child: Text(
+                      'Sadržaj:',
+                      style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black54),
+                    ),
+                  ),
+                  const SizedBox(width: 30.0),
+                  Expanded(
+                    flex: 3,
+                    child: FormBuilderTextField(
+                      name: 'sadrzaj',
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      minLines: 6,
+                      maxLines: null,
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(10.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(0.0),
+                          ),
+                          hintText: 'Sadržaj'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Obavezno polje';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30.0),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Expanded(
+                    flex: 1,
+                    child: Text(
+                      'Slika:',
+                      style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black54),
+                    ),
+                  ),
+                  const SizedBox(width: 30.0),
+                  Expanded(
+                    flex: 3,
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Container(
+                        width: 350,
+                        height: 400,
+                        decoration: BoxDecoration(
+                            border:
+                                Border.all(color: Colors.black, width: 1.0)),
+                        child: _initialValue['slika'] != "" &&
+                                _initialValue['slika'] != null
+                            ? imageFromBase64String(_initialValue['slika'])
+                            : const Align(
+                                alignment: Alignment.center,
+                                child: Text('The image does not exist',
+                                    textAlign: TextAlign.center)),
                       ),
-                    );
-                  }
-                },
-                icon: const Icon(Icons.save_alt),
-                label: const Text(
-                  'Spremi',
-                  style: TextStyle(fontSize: 16.0),
-                ),
-                style: ElevatedButton.styleFrom(
-                  elevation: 8.0,
-                  shape: const BeveledRectangleBorder(
-                      borderRadius: BorderRadius.zero),
-                  backgroundColor: Colors.blueGrey,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(100, 50),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10.0),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Expanded(
+                    flex: 1,
+                    child: Text(''),
+                  ),
+                  const SizedBox(width: 30.0),
+                  Expanded(
+                    flex: 3,
+                    child: FormBuilderField(
+                      name: 'slika',
+                      builder: ((filed) {
+                        return InputDecorator(
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.all(10.0),
+                            focusColor: Colors.blue,
+                            hoverColor: Colors.grey[200],
+                            fillColor: Colors.white,
+                            filled: true,
+                            errorText: filed.errorText,
+                          ),
+                          child: ListTile(
+                            leading: const Icon(Icons.photo),
+                            title: Text(selectedImageName ?? "Select Image"),
+                            trailing: const Icon(Icons.file_upload),
+                            onTap: getImage,
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30.0),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: ElevatedButton.icon(
+                  onPressed: () async {
+                    if (_formKey.currentState!.saveAndValidate()) {
+                      var request = Map.from(_formKey.currentState!.value);
+
+                      if (_base64Image != null && _base64Image != "") {
+                        request['slika'] = _base64Image;
+                      }
+
+                      request['datumObjave'] = DateTime.now().toIso8601String();
+                      request['korisnikId'] =
+                          Authorization.korisnikId.toString();
+
+                      try {
+                        if (widget.novost != null) {
+                          _buildEditNovost(context, request);
+                        } else {
+                          _buldAddNovost(context, request);
+                        }
+                      } on Exception catch (e) {
+                        // ignore: use_build_context_synchronously
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text("Error"),
+                            content: Text(e.toString()),
+                            actions: [
+                              TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text("OK"))
+                            ],
+                          ),
+                        );
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          showCloseIcon: true,
+                          content: Text("Unesite ispravno podatke !."),
+                        ),
+                      );
+                    }
+                  },
+                  icon: const Icon(Icons.save_alt),
+                  label: const Text(
+                    'Spremi',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    elevation: 8.0,
+                    shape: const BeveledRectangleBorder(
+                        borderRadius: BorderRadius.zero),
+                    backgroundColor: Colors.blueGrey,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(100, 50),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

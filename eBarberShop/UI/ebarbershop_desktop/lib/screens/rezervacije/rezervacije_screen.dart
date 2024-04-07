@@ -180,7 +180,7 @@ class _RezervacijeScreenState extends State<RezervacijeScreen> {
                                   .map((Rezervacija e) =>
                                       DataRow(cells: <DataCell>[
                                         DataCell(Text(
-                                            '${e.klijentIme} ${e.klijentPrezime}')),
+                                            '${e.klijentIme ?? ""} ${e.klijentPrezime ?? ""}')),
                                         DataCell(Text(e.nazivUsluge ?? "")),
                                         DataCell(Text(getDateFormat(e.datum))),
                                         DataCell(

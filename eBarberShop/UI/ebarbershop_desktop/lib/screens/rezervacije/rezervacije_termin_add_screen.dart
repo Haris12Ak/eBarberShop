@@ -196,186 +196,212 @@ class _RezervacijeTerminAddScreenState
                                   showDragHandle: true,
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return Container(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Datum:',
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                color: Colors.grey[700],
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          Text(
-                                            getDateFormat(selectedDate),
-                                            style: const TextStyle(
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                          const SizedBox(
-                                            height: 15.0,
-                                          ),
-                                          Text(
-                                            'Vrijeme:',
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                color: Colors.grey[700],
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          Text(
-                                            getTimeFormat(time),
-                                            style: const TextStyle(
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                          const SizedBox(
-                                            height: 15.0,
-                                          ),
-                                          Text(
-                                            'Odaberite uposlenika:',
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                color: Colors.grey[700],
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          const SizedBox(
-                                            height: 8.0,
-                                          ),
-                                          DropdownButtonFormField<String>(
-                                            value: selectedUposlenikId,
-                                            onChanged: (newValue) {
-                                              setState(() {
-                                                selectedUposlenikId = newValue!;
-                                                odabraniUposlenik =
-                                                    int.tryParse(
-                                                        selectedUposlenikId!);
-                                              });
-                                            },
-                                            decoration: const InputDecoration(
-                                              prefixIcon: Icon(Icons.person),
-                                              border: OutlineInputBorder(),
-                                            ),
-                                            items: _uposlenici
-                                                .map<DropdownMenuItem<String>>(
-                                              (Uposlenik uposlenik) {
-                                                return DropdownMenuItem<String>(
-                                                  value: uposlenik.uposlenikId
-                                                      .toString(),
-                                                  child: Text(
-                                                      '${uposlenik.ime} ${uposlenik.prezime}'),
-                                                );
-                                              },
-                                            ).toList(),
-                                          ),
-                                          const SizedBox(
-                                            height: 50.0,
-                                          ),
-                                          Align(
-                                            alignment: Alignment.topRight,
-                                            child: ElevatedButton.icon(
-                                              onPressed: () async {
-                                                var rezervacijeProvider =
-                                                    Provider.of<
-                                                            RezervacijaProvider>(
-                                                        context,
-                                                        listen: false);
+                                    return StatefulBuilder(
+                                      builder: (BuildContext context,
+                                          StateSetter setState) {
+                                        return Container(
+                                          padding: const EdgeInsets.all(20.0),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Datum:',
+                                                style: TextStyle(
+                                                    fontSize: 18.0,
+                                                    color: Colors.grey[700],
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              Text(
+                                                getDateFormat(selectedDate),
+                                                style: const TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                              const SizedBox(
+                                                height: 15.0,
+                                              ),
+                                              Text(
+                                                'Vrijeme:',
+                                                style: TextStyle(
+                                                    fontSize: 18.0,
+                                                    color: Colors.grey[700],
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              Text(
+                                                getTimeFormat(time),
+                                                style: const TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                              const SizedBox(
+                                                height: 15.0,
+                                              ),
+                                              Text(
+                                                'Odaberite uposlenika:',
+                                                style: TextStyle(
+                                                    fontSize: 18.0,
+                                                    color: Colors.grey[700],
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              const SizedBox(
+                                                height: 8.0,
+                                              ),
+                                              DropdownButtonFormField<String>(
+                                                value: selectedUposlenikId,
+                                                onChanged: (newValue) {
+                                                  setState(() {
+                                                    selectedUposlenikId =
+                                                        newValue!;
+                                                    odabraniUposlenik =
+                                                        int.tryParse(
+                                                            selectedUposlenikId!);
+                                                  });
+                                                },
+                                                decoration:
+                                                    const InputDecoration(
+                                                  prefixIcon:
+                                                      Icon(Icons.person),
+                                                  border: OutlineInputBorder(),
+                                                ),
+                                                items: _uposlenici.map<
+                                                    DropdownMenuItem<String>>(
+                                                  (Uposlenik uposlenik) {
+                                                    return DropdownMenuItem<
+                                                        String>(
+                                                      value: uposlenik
+                                                          .uposlenikId
+                                                          .toString(),
+                                                      child: Text(
+                                                          '${uposlenik.ime} ${uposlenik.prezime}'),
+                                                    );
+                                                  },
+                                                ).toList(),
+                                              ),
+                                              const SizedBox(
+                                                height: 50.0,
+                                              ),
+                                              Align(
+                                                alignment: Alignment.topRight,
+                                                child: ElevatedButton.icon(
+                                                  onPressed: selectedUposlenikId !=
+                                                              null &&
+                                                          selectedUposlenikId !=
+                                                              ""
+                                                      ? () async {
+                                                          var rezervacijeProvider =
+                                                              Provider.of<
+                                                                      RezervacijaProvider>(
+                                                                  context,
+                                                                  listen:
+                                                                      false);
 
-                                                RezervacijaInsert request =
-                                                    RezervacijaInsert(
-                                                        selectedDate,
-                                                        time,
-                                                        true,
-                                                        Authorization
-                                                            .korisnikId!,
-                                                        odabraniUposlenik!,
-                                                        uslugaId);
+                                                          RezervacijaInsert
+                                                              request =
+                                                              RezervacijaInsert(
+                                                                  selectedDate,
+                                                                  time,
+                                                                  true,
+                                                                  Authorization
+                                                                      .korisnikId!,
+                                                                  odabraniUposlenik!,
+                                                                  uslugaId);
 
-                                                try {
-                                                  await rezervacijeProvider
-                                                      .insert(request);
+                                                          try {
+                                                            await rezervacijeProvider
+                                                                .insert(
+                                                                    request);
 
-                                                  // ignore: use_build_context_synchronously
-                                                  showDialog(
-                                                      barrierDismissible: false,
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                              context) =>
-                                                          AlertDialog(
-                                                            title: const Text(
-                                                                'Poruka'),
-                                                            content: Text(
-                                                                'Termin ${getDateFormat(selectedDate)} ${getTimeFormat(time)} uspješno označen zauzetim.'),
-                                                            actions: [
-                                                              TextButton(
-                                                                onPressed:
-                                                                    () async {
-                                                                  await _loadTermine();
-                                                                  // ignore: use_build_context_synchronously
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                  // ignore: use_build_context_synchronously
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                },
-                                                                child:
+                                                            // ignore: use_build_context_synchronously
+                                                            showDialog(
+                                                                barrierDismissible:
+                                                                    false,
+                                                                context:
+                                                                    context,
+                                                                builder: (BuildContext
+                                                                        context) =>
+                                                                    AlertDialog(
+                                                                      title: const Text(
+                                                                          'Poruka'),
+                                                                      content: Text(
+                                                                          'Termin ${getDateFormat(selectedDate)} ${getTimeFormat(time)} uspješno označen zauzetim.'),
+                                                                      actions: [
+                                                                        TextButton(
+                                                                          onPressed:
+                                                                              () async {
+                                                                            await _loadTermine();
+                                                                            // ignore: use_build_context_synchronously
+                                                                            Navigator.of(context).pop();
+                                                                            // ignore: use_build_context_synchronously
+                                                                            Navigator.of(context).pop();
+                                                                          },
+                                                                          child:
+                                                                              const Text('OK'),
+                                                                        ),
+                                                                      ],
+                                                                    ));
+                                                          } on Exception catch (e) {
+                                                            // ignore: use_build_context_synchronously
+                                                            showDialog(
+                                                              barrierDismissible:
+                                                                  false,
+                                                              context: context,
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  AlertDialog(
+                                                                title:
                                                                     const Text(
-                                                                        'OK'),
+                                                                        "Error"),
+                                                                content: Text(e
+                                                                    .toString()),
+                                                                actions: [
+                                                                  TextButton(
+                                                                      onPressed: () =>
+                                                                          Navigator.pop(
+                                                                              context),
+                                                                      child: const Text(
+                                                                          "OK"))
+                                                                ],
                                                               ),
-                                                            ],
-                                                          ));
-                                                } on Exception catch (e) {
-                                                  // ignore: use_build_context_synchronously
-                                                  showDialog(
-                                                    barrierDismissible: false,
-                                                    context: context,
-                                                    builder: (BuildContext
-                                                            context) =>
-                                                        AlertDialog(
-                                                      title:
-                                                          const Text("Error"),
-                                                      content:
-                                                          Text(e.toString()),
-                                                      actions: [
-                                                        TextButton(
-                                                            onPressed: () =>
-                                                                Navigator.pop(
-                                                                    context),
-                                                            child: const Text(
-                                                                "OK"))
-                                                      ],
-                                                    ),
-                                                  );
-                                                }
-                                              },
-                                              icon: const Icon(Icons.save_alt),
-                                              label: const Text(
-                                                'Spremi',
-                                                style:
-                                                    TextStyle(fontSize: 16.0),
-                                              ),
-                                              style: ElevatedButton.styleFrom(
-                                                elevation: 8.0,
-                                                shape:
-                                                    const BeveledRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.zero),
-                                                backgroundColor:
-                                                    Colors.blueGrey,
-                                                foregroundColor: Colors.white,
-                                                minimumSize:
-                                                    const Size(100, 50),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                                            );
+                                                          }
+                                                        }
+                                                      : null,
+                                                  icon: const Icon(
+                                                      Icons.save_alt),
+                                                  label: const Text(
+                                                    'Spremi',
+                                                    style: TextStyle(
+                                                        fontSize: 16.0),
+                                                  ),
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    elevation: 8.0,
+                                                    shape:
+                                                        const BeveledRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .zero),
+                                                    backgroundColor:
+                                                        Colors.blueGrey,
+                                                    foregroundColor:
+                                                        Colors.white,
+                                                    minimumSize:
+                                                        const Size(100, 50),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        );
+                                      },
                                     );
                                   },
                                 );

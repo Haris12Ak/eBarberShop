@@ -217,7 +217,7 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
                           DataCell(Text(e.naziv)),
                           DataCell(Text(e.vrstaProizvodaNaziv ?? "")),
                           DataCell(Text(e.sifra)),
-                          DataCell(Text(e.cijena.toStringAsFixed(2))),
+                          DataCell(Text('${formatNumber(e.cijena)} KM')),
                           DataCell(e.slika != ""
                               ? SizedBox(
                                   width: 40,

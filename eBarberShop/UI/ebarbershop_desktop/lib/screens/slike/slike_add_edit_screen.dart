@@ -178,6 +178,7 @@ class _SlikeAddEditScreenState extends State<SlikeAddEditScreen> {
                     flex: 3,
                     child: FormBuilderField(
                       name: 'slika',
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       builder: ((filed) {
                         return InputDecorator(
                           decoration: InputDecoration(

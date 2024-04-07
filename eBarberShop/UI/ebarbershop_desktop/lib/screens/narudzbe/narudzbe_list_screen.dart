@@ -146,7 +146,7 @@ class _NarudzbeListScreenState extends State<NarudzbeListScreen> {
                                   .map((Narudzbe e) =>
                                       DataRow(cells: <DataCell>[
                                         DataCell(Text(
-                                            '${e.imeKorisnika} ${e.prezimeKorisnika}')),
+                                            '${e.imeKorisnika ?? ""} ${e.prezimeKorisnika ?? ""}')),
                                         DataCell(Text(e.brojNarudzbe)),
                                         DataCell(Text(
                                             '${getDateFormat(e.datumNarudzbe)}  |  ${getTimeFormat(e.datumNarudzbe)}')),
