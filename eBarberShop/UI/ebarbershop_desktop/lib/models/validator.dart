@@ -6,6 +6,7 @@ class Validators {
   static final RegExp korisnickoIme = RegExp(r'^[a-zA-Z0-9]+$');
   static final RegExp imePrezime = RegExp(r'^[a-zA-Z]+(\s[a-zA-Z]+)*$');
   static final RegExp cijena = RegExp(r'^\d+(\.\d{1,2})?$');
+  static final RegExp samoBrojevi = RegExp(r'^[0-9]+$');
 
   static bool validirajIme(String value) {
     return samoSlova.hasMatch(value) && value.isNotEmpty;
@@ -41,5 +42,9 @@ class Validators {
 
   static bool validirajCijenu(String value) {
     return cijena.hasMatch(value) && value.isNotEmpty;
+  }
+
+  static bool unosSamoBrojevi(String value) {
+    return samoBrojevi.hasMatch(value) && value.isNotEmpty;
   }
 }

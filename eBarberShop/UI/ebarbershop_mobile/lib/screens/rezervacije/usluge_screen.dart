@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ebarbershop_mobile/models/search_result.dart';
 import 'package:ebarbershop_mobile/models/uposlenik/uposlenik.dart';
 import 'package:ebarbershop_mobile/models/usluga/usluga.dart';
@@ -177,20 +179,34 @@ class _UslugeScreenState extends State<UslugeScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(100.0),
-              child: const Opacity(
-                opacity: 0.8,
-                child: Image(
-                  image: AssetImage(
-                    'assets/images/image1.jpg',
+            usluga.slika != null && usluga.slika != ""
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(100.0),
+                    child: Opacity(
+                      opacity: 0.8,
+                      child: Image(
+                        image:
+                            MemoryImage(base64Decode(usluga.slika.toString())),
+                        fit: BoxFit.cover,
+                        width: 100,
+                        height: 100,
+                      ),
+                    ),
+                  )
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(100.0),
+                    child: const Opacity(
+                      opacity: 0.8,
+                      child: Image(
+                        image: AssetImage(
+                          'assets/images/image1.jpg',
+                        ),
+                        fit: BoxFit.cover,
+                        width: 100,
+                        height: 100,
+                      ),
+                    ),
                   ),
-                  fit: BoxFit.cover,
-                  width: 100,
-                  height: 100,
-                ),
-              ),
-            ),
             const SizedBox(
               height: 8.0,
             ),

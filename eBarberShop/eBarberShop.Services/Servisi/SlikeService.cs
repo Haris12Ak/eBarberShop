@@ -11,14 +11,14 @@ namespace eBarberShop.Services.Servisi
         {
         }
 
-        public override IQueryable<Slike> AddInclude(IQueryable<Slike> query, SlikeSearch? search)
+        public override IQueryable<Slike> AddFilter(IQueryable<Slike> query, SlikeSearch? search)
         {
             if (search?.DatumObjave.HasValue == true)
             {
                 query = query.Where(x => x.DatumPostavljanja.Date == search.DatumObjave.Value.Date);
             }
 
-            return base.AddInclude(query, search);
+            return base.AddFilter(query, search);
         }
     }
 }

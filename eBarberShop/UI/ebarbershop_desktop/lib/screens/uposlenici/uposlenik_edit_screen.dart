@@ -46,7 +46,7 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
         key: _formKey,
         initialValue: _initialValue,
         child: Container(
-          padding: const EdgeInsets.all(50.0),
+           padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 50.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.start,

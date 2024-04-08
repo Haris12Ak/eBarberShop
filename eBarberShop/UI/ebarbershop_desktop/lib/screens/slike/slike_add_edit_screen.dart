@@ -67,7 +67,7 @@ class _SlikeAddEditScreenState extends State<SlikeAddEditScreen> {
         key: _formKey,
         initialValue: _initialValue,
         child: Container(
-          padding: const EdgeInsets.all(50.0),
+           padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 50.0),
           child: Column(
             children: [
               Row(

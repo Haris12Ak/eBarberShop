@@ -6,6 +6,7 @@ import 'package:ebarbershop_desktop/screens/rezervacije/rezervacije_screen.dart'
 import 'package:ebarbershop_desktop/screens/rezervacije/rezervacije_termini_screen.dart';
 import 'package:ebarbershop_desktop/screens/slike/slike_list_screen.dart';
 import 'package:ebarbershop_desktop/screens/uposlenici/uposlenici_list_screen.dart';
+import 'package:ebarbershop_desktop/screens/usluge/usluge_screen.dart';
 import 'package:ebarbershop_desktop/utils/util.dart';
 import 'package:ebarbershop_desktop/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
@@ -186,6 +187,22 @@ class DrawerWidget extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                     builder: (context) => const RezervacijeTerminiScreen()),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text(
+              'Usluge',
+              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500),
+            ),
+            leading: const Icon(Icons.miscellaneous_services),
+            selectedColor: Colors.blue[800],
+            selectedTileColor: Colors.grey[350],
+            selected: widget.selectedOption == 'Usluge',
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => const UslugeScreen()),
               );
             },
           ),

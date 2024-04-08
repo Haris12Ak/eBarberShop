@@ -12,7 +12,7 @@ Usluga _$UslugaFromJson(Map<String, dynamic> json) => Usluga(
       json['opis'] as String?,
       (json['cijena'] as num).toDouble(),
       json['trajanje'] as int,
-    );
+    )..slika = json['slika'] as String?;
 
 Map<String, dynamic> _$UslugaToJson(Usluga instance) => <String, dynamic>{
       'uslugaId': instance.uslugaId,
@@ -20,4 +20,5 @@ Map<String, dynamic> _$UslugaToJson(Usluga instance) => <String, dynamic>{
       'opis': instance.opis,
       'cijena': instance.cijena,
       'trajanje': instance.trajanje,
+      'slika': instance.slika,
     };

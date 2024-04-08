@@ -9,8 +9,9 @@ class Usluga {
   String? opis;
   double cijena;
   int trajanje;
+  String? slika;
 
-  Usluga(this.uslugaId, this.naziv, this.opis, this.cijena, this.trajanje);
+  Usluga(this.uslugaId, this.naziv, this.opis, this.cijena, this.trajanje, this.slika);
 
   factory Usluga.fromJson(Map<String, dynamic> json) =>
       _$UslugaFromJson(json);

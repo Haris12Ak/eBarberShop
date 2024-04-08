@@ -7,6 +7,7 @@
         public string? Opis { get; set; }
         public decimal Cijena { get; set; }
         public int? Trajanje { get; set; }
+        public byte[]? Slika { get; set; }
 
         public virtual ICollection<SlikeUsluge> SlikeUsluge { get; set; } = new List<SlikeUsluge>();
     }
