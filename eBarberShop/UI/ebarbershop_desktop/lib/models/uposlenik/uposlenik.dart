@@ -10,12 +10,13 @@ class Uposlenik {
   String kontaktTelefon;
   String? email;
   String? adresa;
+  double? prosjecnaOcjena;
 
-  Uposlenik(this.uposlenikId, this.ime, this.prezime, this.kontaktTelefon, this.email, this.adresa);
+  Uposlenik(this.uposlenikId, this.ime, this.prezime, this.kontaktTelefon,
+      this.email, this.adresa, this.prosjecnaOcjena);
 
   factory Uposlenik.fromJson(Map<String, dynamic> json) =>
       _$UposlenikFromJson(json);
 
   Map<String, dynamic> toJson() => _$UposlenikToJson(this);
-
 }

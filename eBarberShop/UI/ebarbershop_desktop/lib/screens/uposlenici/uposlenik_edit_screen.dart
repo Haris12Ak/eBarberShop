@@ -1,6 +1,7 @@
 import 'package:ebarbershop_desktop/models/uposlenik/uposlenik.dart';
 import 'package:ebarbershop_desktop/models/validator.dart';
 import 'package:ebarbershop_desktop/providers/uposlenik_provider.dart';
+import 'package:ebarbershop_desktop/utils/util.dart';
 import 'package:ebarbershop_desktop/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -46,7 +47,7 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
         key: _formKey,
         initialValue: _initialValue,
         child: Container(
-           padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 50.0),
+          padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 50.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -241,14 +242,51 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
                 ],
               ),
               const SizedBox(height: 30.0),
+              if (widget.uposlenik != null)
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Expanded(
+                      flex: 1,
+                      child: Text(
+                        'Prosječna ocjena:',
+                        style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black54),
+                      ),
+                    ),
+                    const SizedBox(width: 30.0),
+                    Expanded(
+                      flex: 3,
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                            size: 28.0,
+                          ),
+                          const SizedBox(width: 10.0),
+                          Text(
+                            formatNumber(widget.uposlenik!.prosjecnaOcjena),
+                            style: const TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black54),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              const SizedBox(height: 30.0),
               Align(
                 alignment: Alignment.bottomRight,
                 child: ElevatedButton.icon(
                   onPressed: () async {
                     if (_formKey.currentState!.saveAndValidate()) {
-
                       var request = Map.from(_formKey.currentState!.value);
-          
+
                       try {
                         if (widget.uposlenik != null) {
                           _buildEditUposlenika(context, request);

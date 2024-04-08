@@ -114,12 +114,22 @@ class _UslugeScreenState extends State<UslugeScreen> {
                     filterData(value);
                   },
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: filteredUslugaData.length,
-                    itemBuilder: _buildListaUsluga,
-                  ),
-                ),
+                uslugeResult!.result.isEmpty
+                    ? const Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 100.0),
+                          child: Text(
+                            'Nema usluga!',
+                            style: TextStyle(fontSize: 18.0),
+                          ),
+                        ),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                          itemCount: filteredUslugaData.length,
+                          itemBuilder: _buildListaUsluga,
+                        ),
+                      ),
               ],
             ),
     );
@@ -137,7 +147,6 @@ class _UslugeScreenState extends State<UslugeScreen> {
               Colors.black26,
               Colors.white12,
               Colors.white12,
-
               Colors.black26,
             ],
           ),

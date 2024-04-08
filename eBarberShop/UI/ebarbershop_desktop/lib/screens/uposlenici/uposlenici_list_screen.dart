@@ -2,6 +2,7 @@ import 'package:ebarbershop_desktop/models/search_result.dart';
 import 'package:ebarbershop_desktop/models/uposlenik/uposlenik.dart';
 import 'package:ebarbershop_desktop/providers/uposlenik_provider.dart';
 import 'package:ebarbershop_desktop/screens/uposlenici/uposlenik_edit_screen.dart';
+import 'package:ebarbershop_desktop/utils/util.dart';
 import 'package:ebarbershop_desktop/widgets/master_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -189,6 +190,26 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
                 ),
               ),
               DataColumn(
+                label: Expanded(
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      SizedBox(width: 10.0),
+                      Text(
+                        'Ocjena',
+                        style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black54),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              DataColumn(
                 label: Text(
                   'Akcije',
                   style: TextStyle(
@@ -206,6 +227,7 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
                           DataCell(Text(e.kontaktTelefon)),
                           DataCell(Text(e.email ?? "")),
                           DataCell(Text(e.adresa ?? "")),
+                          DataCell(Text(formatNumber(e.prosjecnaOcjena))),
                           DataCell(
                             Row(
                               children: [

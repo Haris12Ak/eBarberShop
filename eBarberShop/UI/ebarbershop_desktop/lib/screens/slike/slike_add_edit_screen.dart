@@ -67,7 +67,7 @@ class _SlikeAddEditScreenState extends State<SlikeAddEditScreen> {
         key: _formKey,
         initialValue: _initialValue,
         child: Container(
-           padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 50.0),
+          padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 50.0),
           child: Column(
             children: [
               Row(
@@ -155,7 +155,14 @@ class _SlikeAddEditScreenState extends State<SlikeAddEditScreen> {
                                 Border.all(color: Colors.black, width: 1.0)),
                         child: _initialValue['slika'] != "" &&
                                 _initialValue['slika'] != null
-                            ? imageFromBase64String(_initialValue['slika'])
+                            ? Image(
+                                image: MemoryImage(
+                                  base64Decode(
+                                    _initialValue['slika'],
+                                  ),
+                                ),
+                                fit: BoxFit.contain,
+                              )
                             : const Align(
                                 alignment: Alignment.center,
                                 child: Text('The image does not exist',
