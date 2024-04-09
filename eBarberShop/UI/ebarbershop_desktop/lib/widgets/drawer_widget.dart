@@ -65,7 +65,7 @@ class DrawerWidget extends StatelessWidget {
           ),
           ListTile(
             title: const Text(
-              'Pocetna',
+              'Početna',
               style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500),
             ),
             selectedColor: Colors.blue[800],
@@ -85,7 +85,7 @@ class DrawerWidget extends StatelessWidget {
             ),
             selectedColor: Colors.blue[800],
             selectedTileColor: Colors.grey[350],
-            leading: const Icon(Icons.person),
+            leading: const Icon(Icons.people_outline_outlined),
             selected: widget.selectedOption == 'Uposlenici',
             onTap: () {
               Navigator.of(context).push(
