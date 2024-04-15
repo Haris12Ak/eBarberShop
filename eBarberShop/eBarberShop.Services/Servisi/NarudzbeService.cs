@@ -10,9 +10,11 @@ namespace eBarberShop.Services.Servisi
     public class NarudzbeService : BaseCRUDService<Model.Narudzbe, Database.Narudzbe, Model.Search.NarudzbeSearch, Model.Requests.NarudzbeInsertRequest, Model.Requests.NarudzbeUpdateRequest>, INarudzbeService
     {
         private readonly IKorisniciService _korisniciService;
-        public NarudzbeService(ApplicationDbContext dbContext, IMapper mapper, IKorisniciService korisniciService) : base(dbContext, mapper)
+        private readonly IProizvodiService _proizvodiService;
+        public NarudzbeService(ApplicationDbContext dbContext, IMapper mapper, IKorisniciService korisniciService, IProizvodiService proizvodiService) : base(dbContext, mapper)
         {
             _korisniciService = korisniciService;
+            _proizvodiService = proizvodiService;
         }
 
         public override IQueryable<Database.Narudzbe> AddFilter(IQueryable<Database.Narudzbe> query, NarudzbeSearch? search)
@@ -71,7 +73,10 @@ namespace eBarberShop.Services.Servisi
 
         public async Task<IzvjestajNarudzbe> GetIzvjestajNarudzbe(IzvjestajNarudzbeSearch? search)
         {
-            var query = _dbContext.Set<Database.Narudzbe>().Include("Korisnik").AsQueryable();
+            var query = _dbContext.Set<Database.Narudzbe>()
+                .Include("Korisnik")
+                .Include("NarudzbeDetalji")
+                .AsQueryable();
 
 
             if (search?.DatumOd.HasValue == true && search.DatumDo.HasValue == true)
@@ -109,9 +114,31 @@ namespace eBarberShop.Services.Servisi
                 total += item.UkupanIznos;
             }
 
+            var productQuantitySold = new Dictionary<int, int>();
+
+            foreach (var order in listOfOrders)
+            {
+                foreach (var orderDetail in order.NarudzbeDetalji)
+                {
+                    if (productQuantitySold.ContainsKey(orderDetail.ProizvodId))
+                    {
+                        productQuantitySold[orderDetail.ProizvodId] += orderDetail.Kolicina;
+                    }
+                    else
+                    {
+                        productQuantitySold.Add(orderDetail.ProizvodId, orderDetail.Kolicina);
+                    }
+                }
+            }
+
+            int bestSellingProductId = productQuantitySold.OrderByDescending(x => x.Value).FirstOrDefault().Key;
+
+            var bestSellingProduct = await _proizvodiService.GetById(bestSellingProductId);
+
             var createReport = new IzvjestajNarudzbe()
             {
                 Ukupno = total,
+                NajviseProdavaniProizvod = bestSellingProduct != null ? bestSellingProduct.Naziv : "Proizvod nije pronaden!",
                 NarudzbaInfo = groupOrders,
             };
 

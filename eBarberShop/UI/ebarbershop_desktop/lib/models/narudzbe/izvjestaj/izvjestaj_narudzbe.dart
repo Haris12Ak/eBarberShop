@@ -7,9 +7,10 @@ part 'izvjestaj_narudzbe.g.dart';
 @JsonSerializable()
 class IzvjestajNarudzbe {
   double ukupno;
+  String najviseProdavaniProizvod;
   List<NarudzbaIfno> narudzbaInfo = [];
 
-  IzvjestajNarudzbe(this.ukupno, this.narudzbaInfo);
+  IzvjestajNarudzbe(this.ukupno, this.najviseProdavaniProizvod, this.narudzbaInfo);
 
   factory IzvjestajNarudzbe.fromJson(Map<String, dynamic> json) =>
       _$IzvjestajNarudzbeFromJson(json);

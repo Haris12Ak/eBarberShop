@@ -72,7 +72,16 @@ class _NarudzbeIzvjestajScreenState extends State<NarudzbeIzvjestajScreen> {
                       ? '${formatDate1(widget.datumOd)} - ${formatDate1(widget.datumDo)}'
                       : 'Pregled izvjestaja za sve narudzbe',
                   textAlign: pw.TextAlign.center),
-              pw.SizedBox(height: 30.0),
+              pw.SizedBox(height: 20.0),
+              pw.RichText(
+                text: pw.TextSpan(children: [
+                  const pw.TextSpan(text: 'Najvise prodavan proizvod: '),
+                  pw.TextSpan(
+                      text: izvjestajResult!.najviseProdavaniProizvod,
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                ]),
+              ),
+              pw.SizedBox(height: 15.0),
               pw.Container(
                 margin: const pw.EdgeInsets.only(left: 70.0),
                 child: pw.Row(
@@ -301,7 +310,32 @@ class _NarudzbeIzvjestajScreenState extends State<NarudzbeIzvjestajScreen> {
                   ),
                 ),
                 const SizedBox(
-                  height: 50.0,
+                  height: 10.0,
+                ),
+                Container(
+                  color: Colors.grey[100],
+                  padding: const EdgeInsets.all(10.0),
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        const TextSpan(
+                            text: 'Najviše prodavan proizvod: ',
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400)),
+                        TextSpan(
+                            text: izvjestajResult!.najviseProdavaniProizvod,
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.grey.shade700,
+                                fontWeight: FontWeight.w500)),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20.0,
                 ),
                 Container(
                   margin: const EdgeInsets.only(left: 110.0, right: 110.0),

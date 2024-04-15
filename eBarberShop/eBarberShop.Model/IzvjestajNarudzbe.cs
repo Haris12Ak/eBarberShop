@@ -3,6 +3,7 @@
     public class IzvjestajNarudzbe
     {
         public decimal Ukupno { get; set; }
+        public string NajviseProdavaniProizvod { get; set; }
         public List<NarudzbaIfno> NarudzbaInfo { get; set; } = new List<NarudzbaIfno> { };
     }
 
