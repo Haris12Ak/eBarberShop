@@ -1,6 +1,7 @@
-import 'package:ebarbershop_desktop/models/rezervacije/rezervacija.dart';
 import 'package:ebarbershop_desktop/models/search_result.dart';
+import 'package:ebarbershop_desktop/models/termini/termini_uposlenika.dart';
 import 'package:ebarbershop_desktop/providers/rezervacija_provider.dart';
+import 'package:ebarbershop_desktop/screens/rezervacije/prikazi_termine_uposlenika.dart';
 import 'package:ebarbershop_desktop/screens/rezervacije/rezervacije_termin_add_screen.dart';
 import 'package:ebarbershop_desktop/utils/util.dart';
 import 'package:ebarbershop_desktop/widgets/master_screen.dart';
@@ -19,7 +20,8 @@ class RezervacijeTerminiScreen extends StatefulWidget {
 
 class _RezervacijeTerminiScreenState extends State<RezervacijeTerminiScreen> {
   late RezervacijaProvider _rezervacijaProvider;
-  SearchResult<Rezervacija>? terminiResult;
+  SearchResult<TerminiUposlenika>? terminiUposlenikaResult;
+
   DateTime? _selectedDate;
   final TextEditingController _imePrezimeController = TextEditingController();
   final _formKey = GlobalKey<FormBuilderState>();
@@ -36,8 +38,7 @@ class _RezervacijeTerminiScreenState extends State<RezervacijeTerminiScreen> {
   }
 
   Future fetchTermine() async {
-    terminiResult =
-        await _rezervacijaProvider.get(filter: {'IsUposlenikIncluded': true});
+    terminiUposlenikaResult = await _rezervacijaProvider.GetTermineUposlenika();
 
     setState(() {
       isLoading = false;
@@ -45,19 +46,24 @@ class _RezervacijeTerminiScreenState extends State<RezervacijeTerminiScreen> {
   }
 
   bool isAktivna(String datum) {
-    var dateTime = DateTime.parse(datum);
-    return dateTime.isBefore(DateTime.now());
+    var inputDate = DateTime.parse(datum);
+    var today = DateTime.now();
+
+    var inputDateOnly =
+        DateTime(inputDate.year, inputDate.month, inputDate.day);
+    var todayOnly = DateTime(today.year, today.month, today.day);
+
+    return inputDateOnly.isBefore(todayOnly);
   }
 
   Future<void> filter() async {
-    var data = await _rezervacijaProvider.get(filter: {
-      'datum': _selectedDate,
-      'imePrezimeUposlenika': _imePrezimeController.text,
-      'IsUposlenikIncluded': true
+    var data = await _rezervacijaProvider.GetTermineUposlenika(filter: {
+      'Datum': _selectedDate,
+      'ImePrezimeUposlenika': _imePrezimeController.text,
     });
 
     setState(() {
-      terminiResult = data;
+      terminiUposlenikaResult = data;
     });
   }
 
@@ -247,7 +253,7 @@ class _RezervacijeTerminiScreenState extends State<RezervacijeTerminiScreen> {
                             DataColumn(
                               label: Expanded(
                                 child: Text(
-                                  'Vrijeme',
+                                  'Ukupno termina',
                                   style: TextStyle(
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.w700,
@@ -266,7 +272,7 @@ class _RezervacijeTerminiScreenState extends State<RezervacijeTerminiScreen> {
                             ),
                             DataColumn(
                               label: Text(
-                                'Akcije',
+                                '',
                                 style: TextStyle(
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.w700,
@@ -274,16 +280,16 @@ class _RezervacijeTerminiScreenState extends State<RezervacijeTerminiScreen> {
                               ),
                             ),
                           ],
-                          rows: terminiResult?.result
-                                  .map((Rezervacija e) =>
+                          rows: terminiUposlenikaResult?.result
+                                  .map((TerminiUposlenika e) =>
                                       DataRow(cells: <DataCell>[
                                         DataCell(Text(
-                                            '${e.uposlenikIme} ${e.uposlenikPrezime}')),
+                                            '${e.imeUposlenika} ${e.prezimeUposlenika}')),
                                         DataCell(Text(getDateFormat(e.datum))),
                                         DataCell(
-                                            Text(getTimeFormat(e.vrijeme))),
+                                            Text(e.brojTermina.toString())),
                                         DataCell(Container(
-                                          child: isAktivna(e.vrijeme.toString())
+                                          child: isAktivna(e.datum.toString())
                                               ? Text(
                                                   'Neaktivno',
                                                   style: TextStyle(
@@ -301,69 +307,21 @@ class _RezervacijeTerminiScreenState extends State<RezervacijeTerminiScreen> {
                                         )),
                                         DataCell(
                                           IconButton(
-                                            tooltip: 'Obriši',
+                                            tooltip: 'Prikaži termine',
                                             onPressed: () {
-                                              try {
-                                                // ignore: use_build_context_synchronously
-                                                showDialog(
-                                                  barrierDismissible: false,
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          AlertDialog(
-                                                    title:
-                                                        const Text('Potvrda'),
-                                                    content: Text(
-                                                        'Jeste li sigurni da želite ukloniti termin datuma: ${getDateFormat(e.datum)} ${getTimeFormat(e.vrijeme)} !'),
-                                                    actions: [
-                                                      TextButton(
-                                                        onPressed: () async {
-                                                          await _rezervacijaProvider
-                                                              .delete(e
-                                                                  .rezervacijaId);
-
-                                                          // ignore: use_build_context_synchronously
-                                                          Navigator.of(context)
-                                                              .pop();
-
-                                                          fetchTermine();
-                                                        },
-                                                        child: const Text('Da'),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                        child: const Text('Ne'),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
-                                              } on Exception catch (e) {
-                                                // ignore: use_build_context_synchronously
-                                                showDialog(
-                                                  barrierDismissible: false,
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          AlertDialog(
-                                                    title: const Text("Error"),
-                                                    content: Text(e.toString()),
-                                                    actions: [
-                                                      TextButton(
-                                                        onPressed: () =>
-                                                            Navigator.pop(
-                                                                context),
-                                                        child: const Text("OK"),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
-                                              }
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          PrikaziTermineUposlenika(
+                                                            imePrezimeUposlenika:
+                                                                '${e.imeUposlenika} ${e.prezimeUposlenika}',
+                                                            datum: e.datum,
+                                                          ))).then(
+                                                  (value) => fetchTermine());
                                             },
-                                            icon: const Icon(
-                                                Icons.delete_forever),
+                                            icon: const Icon(Icons.access_time),
                                           ),
                                         )
                                       ]))
@@ -374,7 +332,7 @@ class _RezervacijeTerminiScreenState extends State<RezervacijeTerminiScreen> {
                   Container(
                     padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
                     child: Text(
-                      'Ukupno podataka: ${terminiResult?.count}',
+                      'Ukupno podataka: ${terminiUposlenikaResult?.count}',
                       style: const TextStyle(
                           color: Colors.black54,
                           fontWeight: FontWeight.w600,

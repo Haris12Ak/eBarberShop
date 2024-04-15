@@ -76,6 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
 
+    terminiZaDanas.sort((a, b) => a.vrijeme.compareTo(b.vrijeme));
+
     if (mounted) {
       setState(() {
         filtriraniPodaci = terminiZaDanas;
@@ -186,63 +188,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: Colors.grey.shade100,
                           ),
                           child: DropdownButton(
-                            value: selectedUsluga,
-                            items: [
-                              const DropdownMenuItem(
-                                value: null,
-                                child: Text('Usluge (All)'),
-                              ),
-                              ...usluge?.result
-                                      .map(
-                                        (item) => DropdownMenuItem(
-                                          value: item.uslugaId.toString(),
-                                          child: Text(item.naziv),
-                                        ),
-                                      )
-                                      .toList() ??
-                                  [],
-                            ],
-                            onChanged: (item) {
-                              setState(() {
-                                selectedUsluga = item as String?;
-                              });
-
-                              if (item == null) {
-                                setState(() {
-                                  selectedNazivUsluge = "";
-                                });
-
-                                getFilteredData(selectedNazivUsluge!,
-                                    selectedImePrezimeUposlenika!);
-                              } else {
-                                final selectedUsluga = usluge?.result
-                                    .firstWhere((usluga) =>
-                                        usluga.uslugaId.toString() == item);
-
-                                setState(() {
-                                  selectedNazivUsluge = selectedUsluga!.naziv;
-                                });
-
-                                getFilteredData(selectedNazivUsluge!,
-                                    selectedImePrezimeUposlenika!);
-                              }
-                            },
-                            isExpanded: true,
-                            padding:
-                                const EdgeInsets.only(left: 10.0, right: 10.0),
-                            dropdownColor: Colors.grey.shade200,
-                            focusColor: Colors.grey.shade200,
-                            icon: const Icon(Icons.filter_list),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 20.0),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade100,
-                          ),
-                          child: DropdownButton(
                             value: selectedUposlenik,
                             items: [
                               const DropdownMenuItem(
@@ -281,6 +226,63 @@ class _HomeScreenState extends State<HomeScreen> {
                                 setState(() {
                                   selectedImePrezimeUposlenika =
                                       '${selectedUposlenik?.ime} ${selectedUposlenik?.prezime}';
+                                });
+
+                                getFilteredData(selectedNazivUsluge!,
+                                    selectedImePrezimeUposlenika!);
+                              }
+                            },
+                            isExpanded: true,
+                            padding:
+                                const EdgeInsets.only(left: 10.0, right: 10.0),
+                            dropdownColor: Colors.grey.shade200,
+                            focusColor: Colors.grey.shade200,
+                            icon: const Icon(Icons.filter_list),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 20.0),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade100,
+                          ),
+                          child: DropdownButton(
+                            value: selectedUsluga,
+                            items: [
+                              const DropdownMenuItem(
+                                value: null,
+                                child: Text('Usluge (All)'),
+                              ),
+                              ...usluge?.result
+                                      .map(
+                                        (item) => DropdownMenuItem(
+                                          value: item.uslugaId.toString(),
+                                          child: Text(item.naziv),
+                                        ),
+                                      )
+                                      .toList() ??
+                                  [],
+                            ],
+                            onChanged: (item) {
+                              setState(() {
+                                selectedUsluga = item as String?;
+                              });
+
+                              if (item == null) {
+                                setState(() {
+                                  selectedNazivUsluge = "";
+                                });
+
+                                getFilteredData(selectedNazivUsluge!,
+                                    selectedImePrezimeUposlenika!);
+                              } else {
+                                final selectedUsluga = usluge?.result
+                                    .firstWhere((usluga) =>
+                                        usluga.uslugaId.toString() == item);
+
+                                setState(() {
+                                  selectedNazivUsluge = selectedUsluga!.naziv;
                                 });
 
                                 getFilteredData(selectedNazivUsluge!,

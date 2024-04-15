@@ -237,5 +237,38 @@ namespace eBarberShop.Services.Servisi
 
             return izvjestaj;
         }
+
+        public async Task<List<TerminiUposlenika>> GetTermineUposlenika(TerminiUposlenikaSearch? search)
+        {
+            var query = _dbContext.Set<Database.Rezervacija>().Include("Uposlenik").AsQueryable();
+
+            if (search?.Datum.HasValue == true)
+            {
+                query = query.Where(x => x.Datum.Date == search.Datum.Value.Date);
+            }
+
+            if (!string.IsNullOrWhiteSpace(search?.ImePrezimeUposlenika))
+            {
+                query = query.Where(x => (x.Uposlenik.Ime + " " + x.Uposlenik.Prezime).ToLower().StartsWith(search.ImePrezimeUposlenika.ToLower())
+                || (x.Uposlenik.Prezime + " " + x.Uposlenik.Ime).ToLower().StartsWith(search.ImePrezimeUposlenika.ToLower()));
+            }
+
+            var listOfAppointments = await query.ToListAsync();
+
+            var groupByEmployeeAndDate = listOfAppointments.GroupBy(
+            r => new { r.Uposlenik, r.Datum.Date },
+            (key, group) => new TerminiUposlenika
+            {
+                UposlenikId = key.Uposlenik.UposlenikId,
+                ImeUposlenika = key.Uposlenik.Ime,
+                PrezimeUposlenika = key.Uposlenik.Prezime,
+                Datum = key.Date,
+                BrojTermina = group.Count()
+            })
+              .OrderBy(x => x.Datum.Date)
+              .ToList();
+
+            return groupByEmployeeAndDate;
+        }
     }
 }
