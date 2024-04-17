@@ -23,7 +23,7 @@ class _UposlenikInfoScreenState extends State<UposlenikInfoScreen> {
   bool isLoading = true;
 
   final TextEditingController _opis = TextEditingController();
-  double _raiting = 0.0;
+  double _raiting = 1.0;
 
   double prosjecnaOcjenaUposlenika(List<Ocjene> ocjene) {
     if (ocjene.isEmpty) {

@@ -83,6 +83,7 @@ class _RecenzijeEditScreenState extends State<RecenzijeEditScreen> {
                 const SizedBox(height: 15.0),
                 FormBuilderTextField(
                   name: 'sadrzaj',
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   minLines: 15,
                   maxLines: null,
                   decoration: const InputDecoration(
@@ -90,58 +91,73 @@ class _RecenzijeEditScreenState extends State<RecenzijeEditScreen> {
                       fillColor: Colors.white,
                       hintText: 'Napišite svoju recenziju...',
                       border: OutlineInputBorder()),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Obavezno polje';
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 15.0),
                 ElevatedButton.icon(
                     onPressed: () async {
-                      _formKey.currentState?.saveAndValidate();
+                      if (_formKey.currentState!.saveAndValidate()) {
+                        
+                        var request = Map.from(_formKey.currentState!.value);
 
-                      var request = Map.from(_formKey.currentState!.value);
+                        request['datumObjave'] =
+                            DateTime.now().toIso8601String();
+                        request['korisnikId'] =
+                            Authorization.korisnikId!.toString();
 
-                      request['datumObjave'] = DateTime.now().toIso8601String();
-                      request['korisnikId'] =
-                          Authorization.korisnikId!.toString();
+                        if (_rating != 0.0) {
+                          request['ocjena'] = _rating;
+                        } else {
+                          request['ocjena'] = _initialValue['ocjena'];
+                        }
 
-                      if (_rating != 0.0) {
-                        request['ocjena'] = _rating;
-                      } else {
-                        request['ocjena'] = _initialValue['ocjena'];
-                      }
+                        try {
+                          await _recenzijeProvider.update(
+                              widget.recenzija.recenzijeId, request);
 
-                      try {
-                        await _recenzijeProvider.update(
-                            widget.recenzija.recenzijeId, request);
-
-                        // ignore: use_build_context_synchronously
-                        showDialog(
-                            barrierDismissible: false,
+                          // ignore: use_build_context_synchronously
+                          showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                    title: const Text('Poruka'),
+                                    content: const Text(
+                                        'Recenzija uspješno editovana !.'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () async {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ));
+                        } on Exception catch (e) {
+                          // ignore: use_build_context_synchronously
+                          showDialog(
                             context: context,
                             builder: (BuildContext context) => AlertDialog(
-                                  title: const Text('Poruka'),
-                                  content: const Text(
-                                      'Recenzija uspješno editovana !.'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () async {
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('OK'),
-                                    ),
-                                  ],
-                                ));
-                      } on Exception catch (e) {
-                        // ignore: use_build_context_synchronously
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text("Error"),
-                            content: Text(e.toString()),
-                            actions: [
-                              TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text("OK"))
-                            ],
+                              title: const Text("Error"),
+                              content: Text(e.toString()),
+                              actions: [
+                                TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text("OK"))
+                              ],
+                            ),
+                          );
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            showCloseIcon: true,
+                            content: Text("Unesite ispravno podatke !."),
                           ),
                         );
                       }

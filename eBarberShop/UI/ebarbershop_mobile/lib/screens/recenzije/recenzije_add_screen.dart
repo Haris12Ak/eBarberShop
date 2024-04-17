@@ -15,7 +15,9 @@ class RecenzijeAddScreen extends StatefulWidget {
 
 class _RecenzijeAddScreenState extends State<RecenzijeAddScreen> {
   final TextEditingController _sadrzaj = TextEditingController();
-  double _raiting = 0.0;
+  double _raiting = 1.0;
+
+  bool isSadrzajValid = true;
 
   @override
   Widget build(BuildContext context) {
@@ -64,60 +66,77 @@ class _RecenzijeAddScreenState extends State<RecenzijeAddScreen> {
                   controller: _sadrzaj,
                   minLines: 15,
                   maxLines: null,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
                       hintText: 'Napišite svoju recenziju...',
-                      border: OutlineInputBorder()),
+                      border: const OutlineInputBorder(),
+                      errorText: isSadrzajValid ? null : "Obavezno polje !"),
+                  onChanged: (value) {
+                    if (value.isEmpty) {
+                      setState(() {
+                        isSadrzajValid = false;
+                      });
+                    } else {
+                      setState(() {
+                        isSadrzajValid = true;
+                      });
+                    }
+                  },
                 ),
                 const SizedBox(height: 15.0),
                 ElevatedButton.icon(
-                    onPressed: () async {
-                      var recenzijeProvider = Provider.of<RecenzijeProvider>(
-                          context,
-                          listen: false);
+                    onPressed:
+                        isSadrzajValid && _sadrzaj.text != "" && _raiting >= 1
+                            ? () async {
+                                var recenzijeProvider =
+                                    Provider.of<RecenzijeProvider>(context,
+                                        listen: false);
 
-                      var dateTime = DateTime.now();
+                                var dateTime = DateTime.now();
 
-                      RecenzijeInsertRequest request = RecenzijeInsertRequest(
-                        _sadrzaj.text,
-                        _raiting,
-                        dateTime,
-                        Authorization.korisnikId!,
-                      );
+                                RecenzijeInsertRequest request =
+                                    RecenzijeInsertRequest(
+                                  _sadrzaj.text,
+                                  _raiting,
+                                  dateTime,
+                                  Authorization.korisnikId!,
+                                );
 
-                      try {
-                        await recenzijeProvider.insert(request);
+                                try {
+                                  await recenzijeProvider.insert(request);
 
-                        // ignore: use_build_context_synchronously
-                        showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                                  title: const Text('Poruka'),
-                                  content:
-                                      const Text('Recenzija uspješno dodana!.'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () async {
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('OK'),
+                                  // ignore: use_build_context_synchronously
+                                  showDialog(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                            title: const Text('Poruka'),
+                                            content: const Text(
+                                                'Recenzija uspješno dodana!.'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () async {
+                                                  Navigator.of(context).pop();
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text('OK'),
+                                              ),
+                                            ],
+                                          ));
+                                } catch (e) {
+                                  // ignore: use_build_context_synchronously
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      showCloseIcon: true,
+                                      content: Text(
+                                          "Moguće je dodati recenziju samo jednom."),
                                     ),
-                                  ],
-                                ));
-                      } catch (e) {
-                        // ignore: use_build_context_synchronously
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            showCloseIcon: true,
-                            content:
-                                Text("Moguće je dodati recenziju samo jednom."),
-                          ),
-                        );
-                      }
-                    },
+                                  );
+                                }
+                              }
+                            : null,
                     style: ElevatedButton.styleFrom(
                       elevation: 1.0,
                       backgroundColor: Colors.blue.withOpacity(.5),
