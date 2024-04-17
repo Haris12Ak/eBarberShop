@@ -27,7 +27,8 @@ builder.Services.AddTransient<INarudzbeService, NarudzbeService>();
 builder.Services.AddTransient<ISlikeUslugeService, SlikeUslugeService>();
 builder.Services.AddTransient<IOcjeneService, OcjeneService>();
 builder.Services.AddScoped<IMessageProducer, MessageProducer>();
-builder.Services.AddScoped<INarudzbeDetaljiService, NarudzbeDetaljiService>();
+builder.Services.AddTransient<INarudzbeDetaljiService, NarudzbeDetaljiService>();
+builder.Services.AddTransient<IRecommendService, RecommendService>();
 
 builder.Services.AddControllers(x =>
 {

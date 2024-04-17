@@ -92,20 +92,20 @@ class _UslugeScreenState extends State<UslugeScreen> {
               const SizedBox(
                 height: 2.0,
               ),
-              SizedBox(
-                height: 200,
-                child: uslugeResult!.result.isEmpty
-                    ? Center(
-                        child: Text(
-                          'Nema dostupnih usluga !',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 17.0,
-                              color: Colors.grey[600],
-                              fontWeight: FontWeight.w600),
-                        ),
-                      )
-                    : GridView.builder(
+              uslugeResult!.result.isEmpty
+                  ? Center(
+                      child: Text(
+                        'Nema dostupnih usluga !',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 17.0,
+                            color: Colors.grey[600],
+                            fontWeight: FontWeight.w600),
+                      ),
+                    )
+                  : SizedBox(
+                      height: 200,
+                      child: GridView.builder(
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 1,
@@ -115,7 +115,7 @@ class _UslugeScreenState extends State<UslugeScreen> {
                         itemCount: uslugeResult!.result.length,
                         itemBuilder: _buildItemListaUsluga,
                       ),
-              ),
+                    ),
               const SizedBox(
                 height: 15,
               ),

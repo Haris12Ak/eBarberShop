@@ -49,6 +49,7 @@ class _ProizvodiScreenState extends State<ProizvodiScreen> {
   Future fetchProizvode() async {
     proizvodiReslut = await _proizvodiProvider
         .get(filter: {'IsVrsteProizvodaIncluded': true});
+
     vrsteProizvodiReslut = await _vrsteProizvodaProvider.get();
 
     if (mounted) {
@@ -56,6 +57,23 @@ class _ProizvodiScreenState extends State<ProizvodiScreen> {
         isLoading = false;
       });
     }
+  }
+
+  Future<void> filter() async {
+    setState(() {
+      isFilterDataLoading = true;
+    });
+
+    var data = await _proizvodiProvider.get(filter: {
+      "naziv": _nazivProizvodaController.text,
+      "vrstaProizvoda": selectedProductName,
+      'IsVrsteProizvodaIncluded': true
+    });
+
+    setState(() {
+      proizvodiReslut = data;
+      isFilterDataLoading = false;
+    });
   }
 
   @override
@@ -143,10 +161,6 @@ class _ProizvodiScreenState extends State<ProizvodiScreen> {
                   filled: true,
                   fillColor: Colors.white30,
                   hintText: 'Naziv proizvoda',
-                  prefixIcon: Icon(
-                    Icons.search,
-                    size: 28.0,
-                  ),
                 ),
                 onChanged: (value) {
                   setState(() {
@@ -196,6 +210,8 @@ class _ProizvodiScreenState extends State<ProizvodiScreen> {
                             setState(() {
                               selectedProductName = "";
                             });
+
+                            await filter();
                           } else {
                             final selectedProduct = vrsteProizvodiReslut?.result
                                 .firstWhere((product) =>
@@ -205,11 +221,12 @@ class _ProizvodiScreenState extends State<ProizvodiScreen> {
                             setState(() {
                               selectedProductName = selectedProduct?.naziv;
                             });
+
+                            await filter();
                           }
                         },
                         isExpanded: true,
                         iconSize: 28,
-                        elevation: 0,
                         style: const TextStyle(
                             color: Colors.black54,
                             fontSize: 16,
@@ -224,27 +241,16 @@ class _ProizvodiScreenState extends State<ProizvodiScreen> {
                   ),
                   ElevatedButton.icon(
                       onPressed: () async {
-                        setState(() {
-                          isFilterDataLoading = true;
-                        });
-
-                        var data = await _proizvodiProvider.get(filter: {
-                          "naziv": _nazivProizvodaController.text,
-                          "vrstaProizvoda": selectedProductName
-                        });
-
-                        setState(() {
-                          proizvodiReslut = data;
-                          isFilterDataLoading = false;
-                        });
+                        await filter();
                       },
                       style: ElevatedButton.styleFrom(
-                          elevation: 0.0,
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.black87,
-                          side: const BorderSide(
-                            color: Colors.black54,
-                          )),
+                        elevation: 0.0,
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.grey.shade700,
+                        side: BorderSide(
+                          color: Colors.grey.shade300,
+                        ),
+                      ),
                       icon: const Icon(
                         Icons.search,
                         size: 25,
@@ -258,14 +264,14 @@ class _ProizvodiScreenState extends State<ProizvodiScreen> {
               const SizedBox(height: 10.0),
               isFilterDataLoading
                   ? Container(
-                      margin: const EdgeInsets.only(top: 200),
+                      padding: const EdgeInsets.only(top: 120),
                       child: const Center(
                         child: CircularProgressIndicator(),
                       ),
                     )
                   : proizvodiReslut!.result.isEmpty
                       ? Container(
-                          margin: const EdgeInsets.only(top: 200),
+                          padding: const EdgeInsets.only(top: 120),
                           child: const Center(
                             child: Text(
                               'Nema rezultata pretrage !',
@@ -283,7 +289,7 @@ class _ProizvodiScreenState extends State<ProizvodiScreen> {
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               childAspectRatio: 1,
-                              mainAxisExtent: 260,
+                              mainAxisExtent: 235,
                             ),
                             itemCount: proizvodiReslut!.result.length,
                             itemBuilder: _buildListaProizvoda,
@@ -349,6 +355,16 @@ class _ProizvodiScreenState extends State<ProizvodiScreen> {
               height: 8.0,
             ),
             Text(
+              proizvod.vrstaProizvodaNaziv ?? "",
+              style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey[700]),
+            ),
+            const SizedBox(
+              height: 8.0,
+            ),
+            Text(
               proizvod.naziv,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -362,58 +378,10 @@ class _ProizvodiScreenState extends State<ProizvodiScreen> {
             Text(
               '${formatNumber(proizvod.cijena)} KM',
               style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 16,
                   fontWeight: FontWeight.w500,
                   color: Colors.grey[700]),
             ),
-            const SizedBox(
-              height: 8.0,
-            ),
-            ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                    elevation: 1.0, backgroundColor: Colors.blue[50]),
-                onPressed: () {
-                  try {
-                    _cartProvider.addToCart(proizvod);
-                    _cartProvider.addTotalPrice(proizvod.cijena);
-
-                    setState(() {
-                      _cartProvider.getCounter();
-                    });
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        showCloseIcon: false,
-                        backgroundColor: Colors.blue[800],
-                        duration: Durations.long1,
-                        content: const Text("Proizvod dodan u košaricu."),
-                      ),
-                    );
-                  } catch (e) {
-                    // ignore: use_build_context_synchronously
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Colors.red[800],
-                        showCloseIcon: false,
-                        duration: Durations.long1,
-                        content:
-                            const Text("Proizvod je več dodan u košaricu."),
-                      ),
-                    );
-                  }
-                },
-                icon: Icon(
-                  Icons.add_shopping_cart,
-                  color: Colors.grey[900],
-                ),
-                label: Text(
-                  'Dodaj',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.grey[800],
-                      fontWeight: FontWeight.w600),
-                ))
           ],
         ),
       ),

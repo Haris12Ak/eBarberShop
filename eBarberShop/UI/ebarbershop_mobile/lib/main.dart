@@ -8,6 +8,7 @@ import 'package:ebarbershop_mobile/providers/novosti_provider.dart';
 import 'package:ebarbershop_mobile/providers/ocjene_provider.dart';
 import 'package:ebarbershop_mobile/providers/proizvodi_provider.dart';
 import 'package:ebarbershop_mobile/providers/recenzije_provider.dart';
+import 'package:ebarbershop_mobile/providers/recommend_provider.dart';
 import 'package:ebarbershop_mobile/providers/rezervacija_provider.dart';
 import 'package:ebarbershop_mobile/providers/slike_provider.dart';
 import 'package:ebarbershop_mobile/providers/slike_usluge_provider.dart';
@@ -38,7 +39,8 @@ void main() {
       ChangeNotifierProvider(create: (_) => CartProvider()),
       ChangeNotifierProvider(create: (_) => NarudzbeProvider()),
       ChangeNotifierProvider(create: (_) => NarudzbeDetaljiProvider()),
-      ChangeNotifierProvider(create: (_) => VrsteProizvodaProvider())
+      ChangeNotifierProvider(create: (_) => VrsteProizvodaProvider()),
+      ChangeNotifierProvider(create: (_) => RecommendProvider())
     ],
     child: const MyApp(),
   ));

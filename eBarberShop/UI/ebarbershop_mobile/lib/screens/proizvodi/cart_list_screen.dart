@@ -67,7 +67,7 @@ class _CartListScreenState extends State<CartListScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Ukupno proizvoda:', style: _customStyle),
+                          Text('Ukupno artikla:', style: _customStyle),
                           Text(
                             ' ${_cartProvider.cart.items.length}',
                             style: _customStyle,
@@ -91,76 +91,81 @@ class _CartListScreenState extends State<CartListScreen> {
                   ),
                 ),
                 ElevatedButton.icon(
-                    onPressed: () async {
-                      try {
-                        double ukupanIznos = _cartProvider.totalPrice;
+                  onPressed: () async {
+                    try {
+                      double ukupanIznos = _cartProvider.totalPrice;
 
-                        NarudzbeInsertRequest request = NarudzbeInsertRequest(
-                            DateTime.now(),
-                            ukupanIznos,
-                            true,
-                            false,
-                            Authorization.korisnikId!);
+                      NarudzbeInsertRequest request = NarudzbeInsertRequest(
+                          DateTime.now(),
+                          ukupanIznos,
+                          true,
+                          false,
+                          Authorization.korisnikId!);
 
-                        Narudzbe orderData =
-                            await _narudzbeProvider.insert(request);
+                      Narudzbe orderData =
+                          await _narudzbeProvider.insert(request);
 
-                        for (var item in _cartProvider.cart.items) {
-                          NarudzbeDetaljiInsertRequest narudzbeDetaljiRequest =
-                              NarudzbeDetaljiInsertRequest(
-                                  item.count,
-                                  orderData.narudzbeId,
-                                  item.proizvod.proizvodiId);
+                      for (var item in _cartProvider.cart.items) {
+                        NarudzbeDetaljiInsertRequest narudzbeDetaljiRequest =
+                            NarudzbeDetaljiInsertRequest(
+                                item.count,
+                                orderData.narudzbeId,
+                                item.proizvod.proizvodiId);
 
-                          await _narudzbeDetaljiProvider
-                              .insert(narudzbeDetaljiRequest);
-                        }
-
-                        _cartProvider.totalPrice = 0.0;
-                        _cartProvider.cart.items.clear();
-
-                        // ignore: use_build_context_synchronously
-                        showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text("Poruka"),
-                            content: const Text("Narudzba Uspješno dodana"),
-                            actions: [
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text("OK"))
-                            ],
-                          ),
-                        );
-                      } on Exception catch (e) {
-                        // ignore: use_build_context_synchronously
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text("Error"),
-                            content: Text(e.toString()),
-                            actions: [
-                              TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text("OK"))
-                            ],
-                          ),
-                        );
+                        await _narudzbeDetaljiProvider
+                            .insert(narudzbeDetaljiRequest);
                       }
-                    },
-                    style: ElevatedButton.styleFrom(
-                        elevation: 0.0,
-                        backgroundColor: Colors.blueAccent,
-                        foregroundColor: Colors.white),
-                    icon: const Icon(Icons.shop),
-                    label: const Text(
-                      'Naruči',
-                      style: TextStyle(fontSize: 16),
-                    ))
+
+                      _cartProvider.totalPrice = 0.0;
+                      _cartProvider.cart.items.clear();
+
+                      // ignore: use_build_context_synchronously
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text("Poruka"),
+                          content: const Text("Narudzba uspješno dodana"),
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  while (Navigator.canPop(context)) {
+                                    Navigator.pop(context);
+                                  }
+                                },
+                                child: const Text("OK"))
+                          ],
+                        ),
+                      );
+                    } on Exception catch (e) {
+                      // ignore: use_build_context_synchronously
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text("Error"),
+                          content: Text(e.toString()),
+                          actions: [
+                            TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text("OK"))
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    elevation: 5.0,
+                    backgroundColor: Colors.blueAccent,
+                    foregroundColor: Colors.white,
+                    shape: const BeveledRectangleBorder(
+                        borderRadius: BorderRadius.zero),
+                  ),
+                  icon: const Icon(Icons.shop),
+                  label: const Text(
+                    'Naruči',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
               ],
             ),
     );
@@ -178,14 +183,59 @@ class _CartListScreenState extends State<CartListScreen> {
         ),
       ),
       child: ListTile(
-        title: Text(item.proizvod.naziv),
+        title:
+            Text(item.proizvod.naziv, style: const TextStyle(fontSize: 17.0)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text('${formatNumber(item.proizvod.cijena)} KM'),
-            Text(item.count.toString()),
-            const SizedBox(height: 8.0),
+            Text(
+              item.proizvod.vrstaProizvodaNaziv ?? "",
+              style: const TextStyle(fontSize: 16.0),
+            ),
+            const SizedBox(
+              height: 8.0,
+            ),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                      text: 'Cijena: ',
+                      style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.grey.shade700,
+                          fontWeight: FontWeight.w500)),
+                  TextSpan(
+                      text: '${formatNumber(item.proizvod.cijena)} KM',
+                      style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.grey.shade700,
+                          fontWeight: FontWeight.w400)),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 5.0,
+            ),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                      text: 'Količina: ',
+                      style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.grey.shade700,
+                          fontWeight: FontWeight.w500)),
+                  TextSpan(
+                      text: item.count.toString(),
+                      style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.grey.shade700,
+                          fontWeight: FontWeight.w400)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10.0),
             Align(
               alignment: Alignment.center,
               child: Container(
