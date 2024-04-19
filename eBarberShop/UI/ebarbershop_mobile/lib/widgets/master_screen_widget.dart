@@ -21,11 +21,10 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         title: Text(
           widget.title ?? "",
           style: const TextStyle(
-            fontStyle: FontStyle.italic,
-            fontWeight: FontWeight.w500,
-            letterSpacing: 1.0,
-            fontSize: 20
-          ),
+              fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 1.0,
+              fontSize: 20),
         ),
       ),
       body: Padding(

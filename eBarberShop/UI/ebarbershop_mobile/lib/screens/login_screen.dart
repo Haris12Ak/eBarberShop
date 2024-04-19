@@ -23,6 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
   late LoginProvider _loginProvider;
   Korisnik? korisnikResponse;
 
+  bool isLoggedIn = false;
+
   @override
   void initState() {
     super.initState();
@@ -37,13 +39,16 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
           colors: [
-            Color.fromARGB(239, 64, 195, 255),
-            Color.fromARGB(220, 255, 255, 255)
+            Colors.blue.shade300,
+            Colors.blue.shade100,
+            Colors.white,
+            Colors.blue.shade50,
+            Colors.blue.shade200,
           ],
         ),
       ),
@@ -78,17 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 50.0),
                   Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.white.withOpacity(0.5),
-                          spreadRadius: 0.0,
-                          blurRadius: 25.0,
-                          offset:
-                              const Offset(0, 0), // changes position of shadow
-                        ),
-                      ],
-                    ),
+                    color: Colors.white38,
                     child: TextField(
                       controller: _usernameController,
                       decoration: const InputDecoration(
@@ -111,17 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 20.0),
                   Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.white.withOpacity(0.5),
-                          spreadRadius: 0.0,
-                          blurRadius: 25.0,
-                          offset:
-                              const Offset(0, 0), // changes position of shadow
-                        ),
-                      ],
-                    ),
+                    color: Colors.white38,
                     child: TextField(
                       controller: _passwordController,
                       obscureText: _isObscured,
@@ -153,7 +138,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 20.0),
-                  _buildLogin(context),
+                  isLoggedIn
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.grey,
+                            backgroundColor: Colors.white54,
+                          ),
+                        )
+                      : _buildLogin(context),
                   const SizedBox(height: 10.0),
                   ElevatedButton(
                     onPressed: () {
@@ -185,12 +177,20 @@ class _LoginScreenState extends State<LoginScreen> {
   ElevatedButton _buildLogin(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
+        setState(() {
+          isLoggedIn = true;
+        });
+
         korisnikResponse = null;
 
         var username = _usernameController.text;
         var password = _passwordController.text;
 
         if (username == "" || password == "") {
+          setState(() {
+            isLoggedIn = false;
+          });
+
           String errorMessage = "Unesite korisničko ime i lozinku!";
 
           // ignore: use_build_context_synchronously
@@ -225,6 +225,10 @@ class _LoginScreenState extends State<LoginScreen> {
               (route) => false,
             );
           } else {
+            setState(() {
+              isLoggedIn = false;
+            });
+
             String errorMessage =
                 "Netačno korisničko ime ili lozinka. Molimo pokušajte ponovo.";
 
@@ -247,14 +251,15 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
       style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(43, 64, 195, 255),
-          elevation: 2.0),
-      child: const SizedBox(
+        backgroundColor: Colors.blue.shade50,
+        elevation: 8.0,
+      ),
+      child: SizedBox(
         width: double.infinity,
         child: Text(
           'Prijava',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20.0, color: Colors.white60),
+          style: TextStyle(fontSize: 18.0, color: Colors.grey.shade700),
         ),
       ),
     );

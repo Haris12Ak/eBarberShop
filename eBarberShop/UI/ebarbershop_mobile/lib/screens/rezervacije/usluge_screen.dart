@@ -63,85 +63,85 @@ class _UslugeScreenState extends State<UslugeScreen> {
   Widget build(BuildContext context) {
     return isLoading
         ? const Center(
-            child: CircularProgressIndicator(),
-          )
+          child: CircularProgressIndicator(),
+        )
         : Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 10.0,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 10.0,
+            ),
+            Text('Zdravo: ${Authorization.username} !', style: _titleStyle),
+            const SizedBox(
+              height: 5.0,
+            ),
+            Text(
+              'Za detalje o cijenama i dostupnim terminima, molimo vas da odaberete željenu uslugu i termin. ',
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey[700],
+                fontFamily: 'Dosis',
+                letterSpacing: 1,
               ),
-              Text('Zdravo: ${Authorization.username} !', style: _titleStyle),
-              const SizedBox(
-                height: 5.0,
-              ),
-              Text(
-                'Za detalje o cijenama i dostupnim terminima, molimo vas da odaberete željenu uslugu i termin. ',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey[700],
-                  fontFamily: 'Dosis',
-                  letterSpacing: 1,
-                ),
-              ),
-              const SizedBox(
-                height: 15.0,
-              ),
-              Text('Usluge', style: _titleStyle),
-              const SizedBox(
-                height: 2.0,
-              ),
-              uslugeResult!.result.isEmpty
-                  ? Center(
-                      child: Text(
-                        'Nema dostupnih usluga !',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 17.0,
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.w600),
-                      ),
-                    )
-                  : SizedBox(
-                      height: 200,
-                      child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 1,
-                          mainAxisExtent: 170,
-                        ),
-                        scrollDirection: Axis.horizontal,
-                        itemCount: uslugeResult!.result.length,
-                        itemBuilder: _buildItemListaUsluga,
-                      ),
+            ),
+            const SizedBox(
+              height: 15.0,
+            ),
+            Text('Usluge', style: _titleStyle),
+            const SizedBox(
+              height: 2.0,
+            ),
+            uslugeResult!.result.isEmpty
+                ? Center(
+                    child: Text(
+                      'Nema dostupnih usluga !',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.grey[600],
+                          fontWeight: FontWeight.w600),
                     ),
-              const SizedBox(
-                height: 15,
-              ),
-              Text('Frizeri', style: _titleStyle),
-              const SizedBox(
-                height: 2.0,
-              ),
-              uposleniciResult!.result.isEmpty
-                  ? Center(
-                      child: Text(
-                        'Nema dostupnih frizera !',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 17.0,
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.w600),
+                  )
+                : SizedBox(
+                    height: 200,
+                    child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 1,
+                        mainAxisExtent: 170,
                       ),
-                    )
-                  : Expanded(
-                      child: ListView.builder(
-                        itemCount: uposleniciResult!.result.length,
-                        itemBuilder: _buildItemListaUposlenika,
-                      ),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: uslugeResult!.result.length,
+                      itemBuilder: _buildItemListaUsluga,
                     ),
-            ],
-          );
+                  ),
+            const SizedBox(
+              height: 15,
+            ),
+            Text('Frizeri', style: _titleStyle),
+            const SizedBox(
+              height: 2.0,
+            ),
+            uposleniciResult!.result.isEmpty
+                ? Center(
+                    child: Text(
+                      'Nema dostupnih frizera !',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.grey[600],
+                          fontWeight: FontWeight.w600),
+                    ),
+                  )
+                : Expanded(
+                    child: ListView.builder(
+                      itemCount: uposleniciResult!.result.length,
+                      itemBuilder: _buildItemListaUposlenika,
+                    ),
+                  ),
+          ],
+        );
   }
 
   Widget? _buildItemListaUsluga(context, index) {
