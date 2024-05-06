@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:ebarbershop_desktop/models/narudzbe/narudzbe.dart';
 import 'package:ebarbershop_desktop/models/narudzbeDetalji/narudzbe_detalji.dart';
+import 'package:ebarbershop_desktop/models/payment_detail/payment_detail.dart';
 import 'package:ebarbershop_desktop/models/search_result.dart';
 import 'package:ebarbershop_desktop/providers/narudzbe_detalji_provider.dart';
+import 'package:ebarbershop_desktop/providers/payment_detail_provider.dart';
 import 'package:ebarbershop_desktop/utils/util.dart';
 import 'package:ebarbershop_desktop/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,9 @@ class NarudzbeDetaljiScreen extends StatefulWidget {
 
 class _NarudzbeDetaljiScreenState extends State<NarudzbeDetaljiScreen> {
   late NarudzbeDetaljiProvider _narudzbeDetaljiProvider;
+  late PaymentDetailProvider _paymentDetailProvider;
   SearchResult<NarudzbeDetalji>? narudzbeDetaljiResult;
+  PaymentDetail? paymentDetailResult;
   bool isLoading = true;
 
   @override
@@ -30,6 +34,7 @@ class _NarudzbeDetaljiScreenState extends State<NarudzbeDetaljiScreen> {
     super.initState();
 
     _narudzbeDetaljiProvider = context.read<NarudzbeDetaljiProvider>();
+    _paymentDetailProvider = context.read<PaymentDetailProvider>();
 
     fetchNarudzbeDetalji();
   }
@@ -37,6 +42,9 @@ class _NarudzbeDetaljiScreenState extends State<NarudzbeDetaljiScreen> {
   Future fetchNarudzbeDetalji() async {
     narudzbeDetaljiResult = await _narudzbeDetaljiProvider.GetNarudzbeDetalji(
         widget.narudzba.narudzbeId);
+
+    paymentDetailResult = await _paymentDetailProvider
+        .getByNarudzbaId(widget.narudzba.narudzbeId);
 
     if (mounted) {
       setState(() {
@@ -131,6 +139,167 @@ class _NarudzbeDetaljiScreenState extends State<NarudzbeDetaljiScreen> {
                   pw.Text('${formatNumber(widget.narudzba.ukupanIznos)} KM')
                 ],
               ),
+              if (paymentDetailResult != null) pw.SizedBox(height: 13.0),
+              if (paymentDetailResult != null)
+                pw.Container(
+                  child: pw.Column(
+                    children: [
+                      pw.Row(
+                        children: [
+                          pw.Text('Transaction ID:'),
+                          pw.SizedBox(width: 10.0),
+                          pw.Text(paymentDetailResult!.transactionId)
+                        ],
+                      ),
+                      pw.SizedBox(height: 5.0),
+                      pw.Row(
+                        children: [
+                          pw.Text('Payment method:'),
+                          pw.SizedBox(width: 10.0),
+                          pw.Text(paymentDetailResult!.paymentMethod)
+                        ],
+                      ),
+                      pw.SizedBox(height: 5.0),
+                      pw.Row(
+                        children: [
+                          pw.Text('Total:'),
+                          pw.SizedBox(width: 10.0),
+                          pw.Text(paymentDetailResult!.total.toString())
+                        ],
+                      ),
+                      pw.SizedBox(height: 5.0),
+                      pw.Row(
+                        children: [
+                          pw.Text('Subtotal:'),
+                          pw.SizedBox(width: 10.0),
+                          pw.Text(paymentDetailResult!.subtotal.toString())
+                        ],
+                      ),
+                      pw.SizedBox(height: 5.0),
+                      pw.Row(
+                        children: [
+                          pw.Text('Shipping Discount:'),
+                          pw.SizedBox(width: 10.0),
+                          pw.Text(
+                              paymentDetailResult!.shippingDiscount.toString())
+                        ],
+                      ),
+                      pw.SizedBox(height: 5.0),
+                      pw.Row(
+                        children: [
+                          pw.Text('Currency:'),
+                          pw.SizedBox(width: 10.0),
+                          pw.Text(paymentDetailResult!.currency)
+                        ],
+                      ),
+                      pw.SizedBox(height: 5.0),
+                      pw.Row(
+                        children: [
+                          pw.Text('Status:'),
+                          pw.SizedBox(width: 10.0),
+                          pw.Text(paymentDetailResult!.message)
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              if (paymentDetailResult != null) pw.SizedBox(height: 13.0),
+              if (paymentDetailResult != null)
+                pw.Row(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  children: [
+                    pw.Expanded(
+                      flex: 1,
+                      child: pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        mainAxisAlignment: pw.MainAxisAlignment.start,
+                        children: [
+                          pw.Text('Payer Info:',
+                              style: const pw.TextStyle(
+                                  decoration: pw.TextDecoration.underline)),
+                          pw.SizedBox(height: 5.0),
+                          pw.Row(
+                            children: [
+                              pw.Text('Payer ID:'),
+                              pw.SizedBox(width: 10.0),
+                              pw.Text(paymentDetailResult!.payerId)
+                            ],
+                          ),
+                          pw.SizedBox(height: 5.0),
+                          pw.Row(
+                            children: [
+                              pw.Text('First Name:'),
+                              pw.SizedBox(width: 10.0),
+                              pw.Text(paymentDetailResult!.payerFirstName)
+                            ],
+                          ),
+                          pw.SizedBox(height: 5.0),
+                          pw.Row(
+                            children: [
+                              pw.Text('Last Name:'),
+                              pw.SizedBox(width: 10.0),
+                              pw.Text(paymentDetailResult!.payerLastName)
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    pw.Expanded(
+                      flex: 1,
+                      child: pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        mainAxisAlignment: pw.MainAxisAlignment.start,
+                        children: [
+                          pw.Text('Recipient Info:',
+                              style: const pw.TextStyle(
+                                  decoration: pw.TextDecoration.underline)),
+                          pw.SizedBox(height: 5.0),
+                          pw.Row(
+                            children: [
+                              pw.Text('Address:'),
+                              pw.SizedBox(width: 10.0),
+                              pw.Text(paymentDetailResult!.recipientAddress)
+                            ],
+                          ),
+                          pw.SizedBox(height: 5.0),
+                          pw.Row(
+                            children: [
+                              pw.Text('City:'),
+                              pw.SizedBox(width: 10.0),
+                              pw.Text(paymentDetailResult!.recipientCity)
+                            ],
+                          ),
+                          pw.SizedBox(height: 5.0),
+                          pw.Row(
+                            children: [
+                              pw.Text('State:'),
+                              pw.SizedBox(width: 10.0),
+                              pw.Text(paymentDetailResult!.recipientState)
+                            ],
+                          ),
+                          pw.SizedBox(height: 5.0),
+                          pw.Row(
+                            children: [
+                              pw.Text('Postal Code:'),
+                              pw.SizedBox(width: 10.0),
+                              pw.Text(paymentDetailResult!.recipientPostalCode
+                                  .toString())
+                            ],
+                          ),
+                          pw.SizedBox(height: 5.0),
+                          pw.Row(
+                            children: [
+                              pw.Text('Country Code:'),
+                              pw.SizedBox(width: 10.0),
+                              pw.Text(paymentDetailResult!.recipientCountryCode)
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               pw.SizedBox(height: 20.0),
               pw.Text('Proizvodi',
                   style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
@@ -435,73 +604,84 @@ class _NarudzbeDetaljiScreenState extends State<NarudzbeDetaljiScreen> {
     return Stack(
       children: [
         Container(
+          width: double.infinity,
           padding: const EdgeInsets.all(25.0),
           margin: const EdgeInsets.all(15.0),
           decoration: BoxDecoration(
             border: Border.all(),
           ),
-          child: Column(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const Text(
-                    'Datum narudžbe:',
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black54),
-                  ),
-                  const SizedBox(
-                    width: 20.0,
-                  ),
-                  Text(
-                    formatDate(widget.narudzba.datumNarudzbe),
-                    style: const TextStyle(fontSize: 18.0),
-                  )
-                ],
+              Expanded(
+                flex: 1,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        const Text(
+                          'Datum narudžbe:',
+                          style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black54),
+                        ),
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        Text(
+                          formatDate(widget.narudzba.datumNarudzbe),
+                          style: const TextStyle(fontSize: 18.0),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    Row(
+                      children: [
+                        const Text(
+                          'Ukupno artikla:',
+                          style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black54),
+                        ),
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        Text(
+                          '${narudzbeDetaljiResult!.count}',
+                          style: const TextStyle(fontSize: 18.0),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    Row(
+                      children: [
+                        const Text(
+                          'Ukupan iznos:',
+                          style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black54),
+                        ),
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        Text(
+                          '${widget.narudzba.ukupanIznos} KM',
+                          style: const TextStyle(fontSize: 18.0),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              Row(
-                children: [
-                  const Text(
-                    'Ukupno artikla:',
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black54),
-                  ),
-                  const SizedBox(
-                    width: 20.0,
-                  ),
-                  Text(
-                    '${narudzbeDetaljiResult!.count}',
-                    style: const TextStyle(fontSize: 18.0),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              Row(
-                children: [
-                  const Text(
-                    'Ukupan iznos:',
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black54),
-                  ),
-                  const SizedBox(
-                    width: 20.0,
-                  ),
-                  Text(
-                    '${widget.narudzba.ukupanIznos} KM',
-                    style: const TextStyle(fontSize: 18.0),
-                  )
-                ],
-              ),
+              if (paymentDetailResult != null) _buildTransactionDetailView(),
             ],
           ),
         ),
@@ -516,6 +696,376 @@ class _NarudzbeDetaljiScreenState extends State<NarudzbeDetaljiScreen> {
                   style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
                 ))),
       ],
+    );
+  }
+
+  Expanded _buildTransactionDetailView() {
+    return Expanded(
+      flex: 2,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              const Text(
+                'Transaction ID:',
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black54),
+              ),
+              const SizedBox(
+                width: 20.0,
+              ),
+              Text(
+                paymentDetailResult!.transactionId,
+                style: const TextStyle(fontSize: 18.0),
+              )
+            ],
+          ),
+          const SizedBox(
+            height: 10.0,
+          ),
+          Row(
+            children: [
+              const Text(
+                'Payment method:',
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black54),
+              ),
+              const SizedBox(
+                width: 20.0,
+              ),
+              Text(
+                paymentDetailResult!.paymentMethod,
+                style: const TextStyle(fontSize: 18.0),
+              )
+            ],
+          ),
+          const SizedBox(
+            height: 10.0,
+          ),
+          Row(
+            children: [
+              const Text(
+                'Total:',
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black54),
+              ),
+              const SizedBox(
+                width: 20.0,
+              ),
+              Text(
+                paymentDetailResult!.total.toString(),
+                style: const TextStyle(fontSize: 18.0),
+              )
+            ],
+          ),
+          const SizedBox(
+            height: 10.0,
+          ),
+          Row(
+            children: [
+              const Text(
+                'Subtotal:',
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black54),
+              ),
+              const SizedBox(
+                width: 20.0,
+              ),
+              Text(
+                paymentDetailResult!.subtotal.toString(),
+                style: const TextStyle(fontSize: 18.0),
+              )
+            ],
+          ),
+          const SizedBox(
+            height: 10.0,
+          ),
+          Row(
+            children: [
+              const Text(
+                'Shipping Discount:',
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black54),
+              ),
+              const SizedBox(
+                width: 20.0,
+              ),
+              Text(
+                paymentDetailResult!.shippingDiscount.toString(),
+                style: const TextStyle(fontSize: 18.0),
+              )
+            ],
+          ),
+          const SizedBox(
+            height: 10.0,
+          ),
+          Row(
+            children: [
+              const Text(
+                'Currency:',
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black54),
+              ),
+              const SizedBox(
+                width: 20.0,
+              ),
+              Text(
+                paymentDetailResult!.currency.toString(),
+                style: const TextStyle(fontSize: 18.0),
+              )
+            ],
+          ),
+          const SizedBox(
+            height: 10.0,
+          ),
+          Row(
+            children: [
+              const Text(
+                'Status:',
+                style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black54),
+              ),
+              const SizedBox(
+                width: 20.0,
+              ),
+              Text(
+                paymentDetailResult!.message,
+                style: const TextStyle(fontSize: 18.0),
+              )
+            ],
+          ),
+          const Divider(
+            height: 40.0,
+            thickness: 2.0,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 1,
+                child: Column(
+                  children: [
+                    const Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Payer Info:',
+                        style: TextStyle(
+                            fontSize: 19.0,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1.0,
+                            decoration: TextDecoration.underline,
+                            color: Colors.black54),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                    Row(
+                      children: [
+                        const Text(
+                          'Payer ID:',
+                          style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black54),
+                        ),
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        Text(
+                          paymentDetailResult!.payerId,
+                          style: const TextStyle(fontSize: 18.0),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                    Row(
+                      children: [
+                        const Text(
+                          'First name:',
+                          style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black54),
+                        ),
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        Text(
+                          paymentDetailResult!.payerFirstName,
+                          style: const TextStyle(fontSize: 18.0),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                    Row(
+                      children: [
+                        const Text(
+                          'Last name:',
+                          style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black54),
+                        ),
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        Text(
+                          paymentDetailResult!.payerLastName,
+                          style: const TextStyle(fontSize: 18.0),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Column(
+                  children: [
+                    const Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Recipient Info:',
+                        style: TextStyle(
+                            fontSize: 19.0,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1.0,
+                            decoration: TextDecoration.underline,
+                            color: Colors.black54),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                    Row(
+                      children: [
+                        const Text(
+                          'Address:',
+                          style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black54),
+                        ),
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        Text(
+                          paymentDetailResult!.recipientAddress,
+                          style: const TextStyle(fontSize: 18.0),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                    Row(
+                      children: [
+                        const Text(
+                          'City:',
+                          style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black54),
+                        ),
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        Text(
+                          paymentDetailResult!.recipientCity,
+                          style: const TextStyle(fontSize: 18.0),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                    Row(
+                      children: [
+                        const Text(
+                          'State:',
+                          style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black54),
+                        ),
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        Text(
+                          paymentDetailResult!.recipientState,
+                          style: const TextStyle(fontSize: 18.0),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                    Row(
+                      children: [
+                        const Text(
+                          'Postal Code:',
+                          style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black54),
+                        ),
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        Text(
+                          paymentDetailResult!.recipientPostalCode.toString(),
+                          style: const TextStyle(fontSize: 18.0),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                    Row(
+                      children: [
+                        const Text(
+                          'Country Code:',
+                          style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black54),
+                        ),
+                        const SizedBox(
+                          width: 20.0,
+                        ),
+                        Text(
+                          paymentDetailResult!.recipientCountryCode,
+                          style: const TextStyle(fontSize: 18.0),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

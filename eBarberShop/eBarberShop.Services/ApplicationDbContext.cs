@@ -159,7 +159,7 @@ namespace eBarberShop.Services
         public virtual DbSet<Uloge> Uloge { get; set; }
         public virtual DbSet<Narudzbe> Narudzbe { get; set; }
         public virtual DbSet<NarudzbeDetalji> NarudzbeDetalji { get; set; }
-        public virtual DbSet<Placanje> Placanje { get; set; }
+        public virtual DbSet<PaymentDetail> PaymentDetail { get; set; }
         public virtual DbSet<Proizvodi> Proizvodi { get; set; }
         public virtual DbSet<VrsteProizvoda> VrsteProizvoda { get; set; }
         public virtual DbSet<Rezervacija> Rezervacija { get; set; }

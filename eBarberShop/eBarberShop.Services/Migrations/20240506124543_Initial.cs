@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace eBarberShop.Services.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -393,21 +393,35 @@ namespace eBarberShop.Services.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Placanje",
+                name: "PaymentDetail",
                 columns: table => new
                 {
-                    PlacanjeId = table.Column<int>(type: "int", nullable: false)
+                    PaymentDetailId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DatumUplate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Iznos = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: true),
+                    TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PayerId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PayerFirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PayerLastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RecipientName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RecipientAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RecipientCity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RecipientState = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RecipientPostalCode = table.Column<int>(type: "int", nullable: false),
+                    RecipientCountryCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Total = table.Column<double>(type: "float", nullable: false),
+                    Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Subtotal = table.Column<double>(type: "float", nullable: false),
+                    ShippingDiscount = table.Column<double>(type: "float", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     NarudzbaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Placanje", x => x.PlacanjeId);
+                    table.PrimaryKey("PK_PaymentDetail", x => x.PaymentDetailId);
                     table.ForeignKey(
-                        name: "FK_Placanje_Narudzbe_NarudzbaId",
+                        name: "FK_PaymentDetail_Narudzbe_NarudzbaId",
                         column: x => x.NarudzbaId,
                         principalTable: "Narudzbe",
                         principalColumn: "NarudzbeId",
@@ -503,10 +517,10 @@ namespace eBarberShop.Services.Migrations
                 columns: new[] { "KorisniciId", "Adresa", "BrojTelefona", "Email", "GradId", "Ime", "KorisnickoIme", "LozinkaHash", "LozinkaSalt", "Prezime", "Slika", "Status" },
                 values: new object[,]
                 {
-                    { 1, "ulica 11", "061/321-333", "admin@gmail.com", 8, "Admin", "admin", "MibXNNuTfcVDdn7azEUpufMXl6k=", "x9iF/LoRyj+HZVEufAHnhQ==", "Admin", null, null },
-                    { 2, "ulica 2", "061/000-333", "uposlenik@gmail.com", 7, "Uposlenik", "uposlenik", "r9ZMv6KLPF5jxaHOQu1i0sC70zI=", "IODJ4cm5upvUKDD65Eu/Mg==", "Uposlenik", null, null },
-                    { 3, "ulica 3", "062/100-333", "test@gmail.com", 4, "Test", "test", "3k1Kl7HncnEtc1ymP3PlQzvEYhA=", "JUFmi1KS3TQuf6PgOef7pA==", "Test", null, null },
-                    { 4, "ulica 9", "062/130-398", "klijent@gmail.com", 4, "Klijent", "klijent", "ieXacih8ZJ1DjKNYLE4b4xzN7EA=", "QMBBpbVKJkqrq7mmF+LbqQ==", "Klijent", null, null }
+                    { 1, "ulica 11", "061/321-333", "admin@gmail.com", 8, "Admin", "admin", "ekQrgQJYLA+xR3bS2JR1FFvEUHA=", "s/UuVYxq1jClLw9fNqk1eQ==", "Admin", null, null },
+                    { 2, "ulica 2", "061/000-333", "uposlenik@gmail.com", 7, "Uposlenik", "uposlenik", "+xo28TJ5TtZxvBLcAn82zquibgE=", "2PmRzK+vXZLs04IxaYFw7w==", "Uposlenik", null, null },
+                    { 3, "ulica 3", "062/100-333", "test@gmail.com", 4, "Test", "test", "S5vH66r4wJV7SvtEdI+aS2xx5lk=", "/mmOVKI9ycqdmKk8C+Teqw==", "Test", null, null },
+                    { 4, "ulica 9", "062/130-398", "klijent@gmail.com", 4, "Klijent", "klijent", "zZsQnEz5YbHc3t2XXAn+RQtBkB0=", "GmzIx/JAJbgUc7t3xTezKQ==", "Klijent", null, null }
                 });
 
             migrationBuilder.InsertData(
@@ -514,10 +528,10 @@ namespace eBarberShop.Services.Migrations
                 columns: new[] { "KorisniciUlogeId", "DatumIzmjene", "KorisnikId", "UlogaId" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5684), 1, 1 },
-                    { 2, new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5733), 2, 2 },
-                    { 3, new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5736), 3, 3 },
-                    { 4, new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5739), 4, 3 }
+                    { 1, new DateTime(2024, 5, 6, 14, 45, 43, 321, DateTimeKind.Local).AddTicks(8612), 1, 1 },
+                    { 2, new DateTime(2024, 5, 6, 14, 45, 43, 321, DateTimeKind.Local).AddTicks(8663), 2, 2 },
+                    { 3, new DateTime(2024, 5, 6, 14, 45, 43, 321, DateTimeKind.Local).AddTicks(8667), 3, 3 },
+                    { 4, new DateTime(2024, 5, 6, 14, 45, 43, 321, DateTimeKind.Local).AddTicks(8672), 4, 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -525,10 +539,10 @@ namespace eBarberShop.Services.Migrations
                 columns: new[] { "NarudzbeId", "BrojNarudzbe", "DatumNarudzbe", "KorisnikId", "Otkazano", "Status", "UkupanIznos" },
                 values: new object[,]
                 {
-                    { 1, "000001", new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(6037), 3, false, true, 8m },
-                    { 2, "000002", new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(6042), 3, false, true, 16m },
-                    { 3, "000003", new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(6046), 4, false, true, 6m },
-                    { 4, "000004", new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(6050), 4, false, true, 7.5m }
+                    { 1, "000001", new DateTime(2024, 5, 6, 14, 45, 43, 321, DateTimeKind.Local).AddTicks(9062), 3, false, true, 8m },
+                    { 2, "000002", new DateTime(2024, 5, 6, 14, 45, 43, 321, DateTimeKind.Local).AddTicks(9069), 3, false, true, 16m },
+                    { 3, "000003", new DateTime(2024, 5, 6, 14, 45, 43, 321, DateTimeKind.Local).AddTicks(9074), 4, false, true, 6m },
+                    { 4, "000004", new DateTime(2024, 5, 6, 14, 45, 43, 321, DateTimeKind.Local).AddTicks(9079), 4, false, true, 7.5m }
                 });
 
             migrationBuilder.InsertData(
@@ -536,9 +550,9 @@ namespace eBarberShop.Services.Migrations
                 columns: new[] { "NovostiId", "DatumObjave", "KorisnikId", "Naslov", "Sadrzaj", "Slika" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5760), 1, "Novi trendovi u frizurama", "Osvježite svoj izgled uz najnovije frizure koje su hit ove sezone! Naši stručnjaci su u toku sa najnovijim trendovima, stoga posjetite naš salon i otkrijte kako možete osvježiti svoj stil", null },
-                    { 2, new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5764), 1, "Posebna ponuda za bojanje kose", "Vrijeme je za promjenu boje! U narednom mjesecu nudimo posebnu ponudu na usluge bojanja kose. Bez obzira želite li se osvježiti ili potpuno transformisati, naši stručnjaci će vam pomoći postići savršen izgled", null },
-                    { 3, new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5766), 1, "Savjetovanje sa stilistom", "Želite li promjeniti frizuru, ali niste sigurni koji stil bi vam najbolje odgovarao? Zakažite savjetovanje sa našim stilistom koji će vam pomoći odabrati frizuru koja će najbolje istaći vaše karakteristike i stil", null }
+                    { 1, new DateTime(2024, 5, 6, 14, 45, 43, 321, DateTimeKind.Local).AddTicks(8705), 1, "Novi trendovi u frizurama", "Osvježite svoj izgled uz najnovije frizure koje su hit ove sezone! Naši stručnjaci su u toku sa najnovijim trendovima, stoga posjetite naš salon i otkrijte kako možete osvježiti svoj stil", null },
+                    { 2, new DateTime(2024, 5, 6, 14, 45, 43, 321, DateTimeKind.Local).AddTicks(8710), 1, "Posebna ponuda za bojanje kose", "Vrijeme je za promjenu boje! U narednom mjesecu nudimo posebnu ponudu na usluge bojanja kose. Bez obzira želite li se osvježiti ili potpuno transformisati, naši stručnjaci će vam pomoći postići savršen izgled", null },
+                    { 3, new DateTime(2024, 5, 6, 14, 45, 43, 321, DateTimeKind.Local).AddTicks(8714), 1, "Savjetovanje sa stilistom", "Želite li promjeniti frizuru, ali niste sigurni koji stil bi vam najbolje odgovarao? Zakažite savjetovanje sa našim stilistom koji će vam pomoći odabrati frizuru koja će najbolje istaći vaše karakteristike i stil", null }
                 });
 
             migrationBuilder.InsertData(
@@ -546,10 +560,10 @@ namespace eBarberShop.Services.Migrations
                 columns: new[] { "Id", "Datum", "KorisnikId", "Ocjena", "Opis", "UposlenikId" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5842), 1, 5.0, null, 1 },
-                    { 2, new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5847), 2, 5.0, null, 2 },
-                    { 3, new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5849), 3, 5.0, null, 3 },
-                    { 4, new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5852), 4, 5.0, null, 4 }
+                    { 1, new DateTime(2024, 5, 6, 14, 45, 43, 321, DateTimeKind.Local).AddTicks(8810), 1, 5.0, null, 1 },
+                    { 2, new DateTime(2024, 5, 6, 14, 45, 43, 321, DateTimeKind.Local).AddTicks(8816), 2, 5.0, null, 2 },
+                    { 3, new DateTime(2024, 5, 6, 14, 45, 43, 321, DateTimeKind.Local).AddTicks(8820), 3, 5.0, null, 3 },
+                    { 4, new DateTime(2024, 5, 6, 14, 45, 43, 321, DateTimeKind.Local).AddTicks(8824), 4, 5.0, null, 4 }
                 });
 
             migrationBuilder.InsertData(
@@ -557,8 +571,8 @@ namespace eBarberShop.Services.Migrations
                 columns: new[] { "RecenzijeId", "DatumObjave", "KorisnikId", "Ocjena", "Sadrzaj" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5793), 3, 5.0, "Posjetio sam ovaj salon prvi put, i moram priznati da sam bio zadovoljan. Atmosfera je opuštajuća, a osoblje je bilo veoma prijateljsko. Frizerka je imala odlične sugestije i savjete za negu kose. Sve preporuke!" },
-                    { 2, new DateTime(2024, 3, 29, 13, 55, 28, 192, DateTimeKind.Local).AddTicks(5797), 4, 4.0, "Odličan salon, vrlo moderno uređen. Osoblje je veoma ljubazno i usluga je bila vrhunska. Moj frizer je bio veoma stručan i posvetio se svakom detalju. Jedini razlog zašto ne dajem pet zvjezdica je cijena koja je bila malo viša nego što sam očekivao, ali kvalitet je definitivno bio tu." }
+                    { 1, new DateTime(2024, 5, 6, 14, 45, 43, 321, DateTimeKind.Local).AddTicks(8745), 3, 5.0, "Posjetio sam ovaj salon prvi put, i moram priznati da sam bio zadovoljan. Atmosfera je opuštajuća, a osoblje je bilo veoma prijateljsko. Frizerka je imala odlične sugestije i savjete za negu kose. Sve preporuke!" },
+                    { 2, new DateTime(2024, 5, 6, 14, 45, 43, 321, DateTimeKind.Local).AddTicks(8750), 4, 4.0, "Odličan salon, vrlo moderno uređen. Osoblje je veoma ljubazno i usluga je bila vrhunska. Moj frizer je bio veoma stručan i posvetio se svakom detalju. Jedini razlog zašto ne dajem pet zvjezdica je cijena koja je bila malo viša nego što sam očekivao, ali kvalitet je definitivno bio tu." }
                 });
 
             migrationBuilder.InsertData(
@@ -634,8 +648,8 @@ namespace eBarberShop.Services.Migrations
                 column: "UposlenikId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Placanje_NarudzbaId",
-                table: "Placanje",
+                name: "IX_PaymentDetail_NarudzbaId",
+                table: "PaymentDetail",
                 column: "NarudzbaId");
 
             migrationBuilder.CreateIndex(
@@ -690,7 +704,7 @@ namespace eBarberShop.Services.Migrations
                 name: "Ocjene");
 
             migrationBuilder.DropTable(
-                name: "Placanje");
+                name: "PaymentDetail");
 
             migrationBuilder.DropTable(
                 name: "Recenzije");

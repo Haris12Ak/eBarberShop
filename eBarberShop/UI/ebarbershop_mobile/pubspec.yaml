@@ -44,6 +44,10 @@ dependencies:
   file_picker: ^4.6.1
   image_picker: ^1.0.7
   table_calendar: ^3.0.8
+  flutter_dotenv: ^5.1.0
+  flutter_paypal_payment: ^1.0.6
+  flutter_inappwebview: ^5.8.0
+  http_auth: ^1.0.4
 
 dev_dependencies:
   flutter_test:
@@ -80,6 +84,8 @@ flutter:
    - assets/images/persons.webp
    - assets/images/barber_icon.jpg
    - assets/images/empty-cart.png
+   - assets/images/paypal_icon.png
+   - .env
 
 
 

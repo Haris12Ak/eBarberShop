@@ -6,6 +6,7 @@ import 'package:ebarbershop_mobile/providers/narudzbe_detalji_provider.dart';
 import 'package:ebarbershop_mobile/providers/narudzbe_provider.dart';
 import 'package:ebarbershop_mobile/providers/novosti_provider.dart';
 import 'package:ebarbershop_mobile/providers/ocjene_provider.dart';
+import 'package:ebarbershop_mobile/providers/payment_detail_provider.dart';
 import 'package:ebarbershop_mobile/providers/proizvodi_provider.dart';
 import 'package:ebarbershop_mobile/providers/recenzije_provider.dart';
 import 'package:ebarbershop_mobile/providers/recommend_provider.dart';
@@ -19,8 +20,13 @@ import 'package:ebarbershop_mobile/providers/vrste_proizvoda_provider.dart';
 import 'package:ebarbershop_mobile/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load(fileName: '.env');
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => LoginProvider()),
@@ -40,7 +46,8 @@ void main() {
       ChangeNotifierProvider(create: (_) => NarudzbeProvider()),
       ChangeNotifierProvider(create: (_) => NarudzbeDetaljiProvider()),
       ChangeNotifierProvider(create: (_) => VrsteProizvodaProvider()),
-      ChangeNotifierProvider(create: (_) => RecommendProvider())
+      ChangeNotifierProvider(create: (_) => RecommendProvider()),
+      ChangeNotifierProvider(create: (_) => PaymentDetailProvider())
     ],
     child: const MyApp(),
   ));

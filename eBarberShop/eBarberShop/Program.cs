@@ -29,6 +29,7 @@ builder.Services.AddTransient<IOcjeneService, OcjeneService>();
 builder.Services.AddScoped<IMessageProducer, MessageProducer>();
 builder.Services.AddTransient<INarudzbeDetaljiService, NarudzbeDetaljiService>();
 builder.Services.AddTransient<IRecommendService, RecommendService>();
+builder.Services.AddTransient<IPaymentDetailService, PaymentDetailService>();
 
 builder.Services.AddControllers(x =>
 {

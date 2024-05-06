@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace eBarberShop.Services.Database
+﻿namespace eBarberShop.Services.Database
 {
     public partial class Narudzbe
     {
@@ -19,7 +13,7 @@ namespace eBarberShop.Services.Database
         public virtual Korisnici Korisnik { get; set; }
 
         public virtual ICollection<NarudzbeDetalji> NarudzbeDetalji { get; set; } = new List<NarudzbeDetalji>();
-        public virtual ICollection<Placanje> Placanje { get; set; } = new List<Placanje>();
+        public virtual ICollection<PaymentDetail> PaymentDetail { get; set; } = new List<PaymentDetail>();
 
     }
 }
