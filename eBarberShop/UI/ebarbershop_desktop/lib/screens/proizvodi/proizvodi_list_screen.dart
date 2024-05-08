@@ -251,56 +251,58 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
                                 IconButton(
                                   tooltip: 'Obriši',
                                   onPressed: () {
-                                    try {
-                                      // ignore: use_build_context_synchronously
-                                      showDialog(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            AlertDialog(
-                                          title: const Text('Potvrda'),
-                                          content: Text(
-                                              'Jeste li sigurni da želite ukloniti proizvod: ${e.naziv} !'),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () async {
+                                    showDialog(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                        title: const Text('Potvrda'),
+                                        content: Text(
+                                            'Jeste li sigurni da želite ukloniti proizvod: ${e.naziv} !'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () async {
+                                              try {
                                                 Navigator.of(context).pop();
 
                                                 await _proizvodiProvider
                                                     .delete(e.proizvodiId);
 
                                                 fetchProizvodi();
-                                              },
-                                              child: const Text('Da'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('Ne'),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    } on Exception catch (e) {
-                                      // ignore: use_build_context_synchronously
-                                      showDialog(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            AlertDialog(
-                                          title: const Text("Error"),
-                                          content: Text(e.toString()),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                              child: const Text("OK"),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }
+                                              } on Exception catch (e) {
+                                                // ignore: use_build_context_synchronously
+                                                showDialog(
+                                                  barrierDismissible: false,
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          AlertDialog(
+                                                    title: const Text("Error"),
+                                                    content: Text(e.toString()),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: const Text("OK"),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                            child: const Text('Da'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text('Ne'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
                                   },
                                   icon: const Icon(Icons.delete_forever),
                                 ),

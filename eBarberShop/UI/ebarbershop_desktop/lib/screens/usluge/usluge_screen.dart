@@ -276,52 +276,54 @@ class _UslugeScreenState extends State<UslugeScreen> {
   IconButton _buildDeleteUsluga(BuildContext context, Usluga usluga) {
     return IconButton(
       onPressed: () async {
-        try {
-          // ignore: use_build_context_synchronously
-          showDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              title: const Text('Potvrda'),
-              content: Text(
-                  'Jeste li sigurni da želite ukloniti uslugu: ${usluga.naziv} !'),
-              actions: [
-                TextButton(
-                  onPressed: () async {
+        // ignore: use_build_context_synchronously
+        showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Potvrda'),
+            content: Text(
+                'Jeste li sigurni da želite ukloniti uslugu: ${usluga.naziv} !'),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  try {
                     Navigator.of(context).pop();
 
                     await _uslugaProvider.delete(usluga.uslugaId);
 
                     fetchUsluge();
-                  },
-                  child: const Text('Da'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Ne'),
-                ),
-              ],
-            ),
-          );
-        } on Exception catch (e) {
-          // ignore: use_build_context_synchronously
-          showDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              title: const Text("Error"),
-              content: Text(e.toString()),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text("OK"),
-                ),
-              ],
-            ),
-          );
-        }
+                  } on Exception catch (e) {
+                    // ignore: use_build_context_synchronously
+                    showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text("Error"),
+                        content: Text(e.toString()),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("OK"),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                },
+                child: const Text('Da'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Ne'),
+              ),
+            ],
+          ),
+        );
       },
       tooltip: 'Ukloni uslugu',
       icon: const Icon(Icons.close, size: 28),

@@ -38,11 +38,33 @@ class _RezervacijeTerminiScreenState extends State<RezervacijeTerminiScreen> {
   }
 
   Future fetchTermine() async {
-    terminiUposlenikaResult = await _rezervacijaProvider.GetTermineUposlenika();
+    try {
+      terminiUposlenikaResult =
+          await _rezervacijaProvider.getTermineUposlenika();
 
-    setState(() {
-      isLoading = false;
-    });
+      setState(() {
+        isLoading = false;
+      });
+    } on Exception catch (e) {
+      // ignore: use_build_context_synchronously
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text("Error"),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   bool isAktivna(String datum) {
@@ -57,7 +79,7 @@ class _RezervacijeTerminiScreenState extends State<RezervacijeTerminiScreen> {
   }
 
   Future<void> filter() async {
-    var data = await _rezervacijaProvider.GetTermineUposlenika(filter: {
+    var data = await _rezervacijaProvider.getTermineUposlenika(filter: {
       'Datum': _selectedDate,
       'ImePrezimeUposlenika': _imePrezimeController.text,
     });

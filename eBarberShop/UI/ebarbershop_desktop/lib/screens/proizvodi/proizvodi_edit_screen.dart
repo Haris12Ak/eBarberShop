@@ -93,7 +93,7 @@ class _ProizvodiEditScreenState extends State<ProizvodiEditScreen> {
         key: _formKey,
         initialValue: _initialValue,
         child: Container(
-           padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 50.0),
+          padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 50.0),
           child: Column(
             children: [
               Row(
@@ -405,26 +405,10 @@ class _ProizvodiEditScreenState extends State<ProizvodiEditScreen> {
                         request['slika'] = _base64Image;
                       }
 
-                      try {
-                        if (widget.proizvod != null) {
-                          _buildEditProizvod(context, request);
-                        } else {
-                          _buildAddProizvod(context, request);
-                        }
-                      } on Exception catch (e) {
-                        // ignore: use_build_context_synchronously
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text("Error"),
-                            content: Text(e.toString()),
-                            actions: [
-                              TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text("OK"))
-                            ],
-                          ),
-                        );
+                      if (widget.proizvod != null) {
+                        _buildEditProizvod(context, request);
+                      } else {
+                        _buildAddProizvod(context, request);
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -469,33 +453,54 @@ class _ProizvodiEditScreenState extends State<ProizvodiEditScreen> {
         actions: [
           TextButton(
               onPressed: () async {
-                if (_formKey.currentState!.saveAndValidate()) {
-                  await _proizvodiProvider.insert(request);
-                }
-                // ignore: use_build_context_synchronously
-                Navigator.of(context).pop();
+                try {
+                  Navigator.of(context).pop();
 
-                // ignore: use_build_context_synchronously
-                showDialog(
+                  if (_formKey.currentState!.saveAndValidate()) {
+                    await _proizvodiProvider.insert(request);
+                  }
+
+                  // ignore: use_build_context_synchronously
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Poruka!'),
+                            content: const Text(
+                                'Uspješno ste dodali novi proizvod.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  _formKey.currentState?.reset();
+
+                                  Navigator.of(context).pop();
+
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ));
+                } on Exception catch (e) {
+                  // ignore: use_build_context_synchronously
+                  showDialog(
                     barrierDismissible: false,
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Poruka!'),
-                          content:
-                              const Text('Uspješno ste dodali novi proizvod.'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                _formKey.currentState?.reset();
-
-                                Navigator.of(context).pop();
-
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        ));
+                      title: const Text("Error"),
+                      content: Text(e.toString()),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("OK"),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
               child: const Text("Potvrdi")),
           TextButton(
@@ -520,35 +525,57 @@ class _ProizvodiEditScreenState extends State<ProizvodiEditScreen> {
         actions: [
           TextButton(
               onPressed: () async {
-                await _proizvodiProvider.update(
-                    widget.proizvod!.proizvodiId, request);
-                setState(() {
-                  _initialValue = Map.from(_formKey.currentState!.value);
-                  _initialValue['slika'] = request['slika'];
-                });
-                // ignore: use_build_context_synchronously
-                Navigator.of(context).pop();
+                try {
+                  Navigator.of(context).pop();
 
-                // ignore: use_build_context_synchronously
-                showDialog(
+                  await _proizvodiProvider.update(
+                      widget.proizvod!.proizvodiId, request);
+
+                  setState(() {
+                    _initialValue = Map.from(_formKey.currentState!.value);
+                    _initialValue['slika'] = request['slika'];
+                  });
+
+                  // ignore: use_build_context_synchronously
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Poruka!'),
+                            content: const Text('Proizvod uspješno editovan'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  _formKey.currentState?.reset();
+
+                                  Navigator.of(context).pop();
+
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ));
+                } on Exception catch (e) {
+                  // ignore: use_build_context_synchronously
+                  showDialog(
                     barrierDismissible: false,
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Poruka!'),
-                          content: const Text('Proizvod uspješno editovan'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                _formKey.currentState?.reset();
-
-                                Navigator.of(context).pop();
-
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        ));
+                      title: const Text("Error"),
+                      content: Text(e.toString()),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("OK"),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
               child: const Text("Potvrdi")),
           TextButton(

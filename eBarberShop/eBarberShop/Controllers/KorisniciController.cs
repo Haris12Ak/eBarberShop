@@ -10,15 +10,18 @@ namespace eBarberShop.Controllers
     [ApiController]
     public class KorisniciController : BaseCRUDController<Korisnici, KorisniciSearch, KorisniciInsertRequest, KorisniciUpdateRequest>
     {
-        public KorisniciController(ILogger<BaseCRUDController<Korisnici, KorisniciSearch, KorisniciInsertRequest, KorisniciUpdateRequest>> logger, IKorisniciService service) : base(logger, service)
+        private readonly IKorisniciService _korisniciService;
+
+        public KorisniciController(ILogger<BaseCRUDController<Korisnici, KorisniciSearch, KorisniciInsertRequest, KorisniciUpdateRequest>> logger, IKorisniciService korisniciService) : base(logger, korisniciService)
         {
+            _korisniciService = korisniciService;
         }
 
         [AllowAnonymous]
         [HttpGet("/Login")]
         public async Task<Model.Korisnici> Login([FromQuery] KorisniciLoginRequest request)
         {
-            return await (_service as IKorisniciService).Login(request.Username, request.Password);
+            return await _korisniciService.Login(request.Username, request.Password);
         }
 
         [AllowAnonymous]

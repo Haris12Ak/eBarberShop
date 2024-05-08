@@ -40,16 +40,37 @@ class _NarudzbeDetaljiScreenState extends State<NarudzbeDetaljiScreen> {
   }
 
   Future fetchNarudzbeDetalji() async {
-    narudzbeDetaljiResult = await _narudzbeDetaljiProvider.GetNarudzbeDetalji(
-        widget.narudzba.narudzbeId);
+    try {
+      narudzbeDetaljiResult = await _narudzbeDetaljiProvider.GetNarudzbeDetalji(
+          widget.narudzba.narudzbeId);
 
-    paymentDetailResult = await _paymentDetailProvider
-        .getByNarudzbaId(widget.narudzba.narudzbeId);
+      paymentDetailResult = await _paymentDetailProvider
+          .getByNarudzbaId(widget.narudzba.narudzbeId);
 
-    if (mounted) {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } on Exception catch (e) {
+      // ignore: use_build_context_synchronously
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text("Error"),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );
     }
   }
 

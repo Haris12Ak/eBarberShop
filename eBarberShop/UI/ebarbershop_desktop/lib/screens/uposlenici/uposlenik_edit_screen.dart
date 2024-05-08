@@ -287,27 +287,10 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
                     if (_formKey.currentState!.saveAndValidate()) {
                       var request = Map.from(_formKey.currentState!.value);
 
-                      try {
-                        if (widget.uposlenik != null) {
-                          _buildEditUposlenika(context, request);
-                        } else {
-                          _buildAddUposlenik(context, request);
-                        }
-                      } on Exception catch (e) {
-                        // ignore: use_build_context_synchronously
-                        showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text("Error"),
-                            content: Text(e.toString()),
-                            actions: [
-                              TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text("OK"))
-                            ],
-                          ),
-                        );
+                      if (widget.uposlenik != null) {
+                        _buildEditUposlenika(context, request);
+                      } else {
+                        _buildAddUposlenik(context, request);
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -352,33 +335,54 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
         actions: [
           TextButton(
               onPressed: () async {
-                if (_formKey.currentState!.saveAndValidate()) {
-                  await _uposlenikProvider.insert(request);
-                }
-                // ignore: use_build_context_synchronously
-                Navigator.of(context).pop();
+                try {
+                  Navigator.of(context).pop();
 
-                // ignore: use_build_context_synchronously
-                showDialog(
+                  if (_formKey.currentState!.saveAndValidate()) {
+                    await _uposlenikProvider.insert(request);
+                  }
+
+                  // ignore: use_build_context_synchronously
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Poruka!'),
+                            content: const Text(
+                                'Uspješno ste dodali novog uposlenika.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  _formKey.currentState?.reset();
+
+                                  Navigator.of(context).pop();
+
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ));
+                } on Exception catch (e) {
+                  // ignore: use_build_context_synchronously
+                  showDialog(
                     barrierDismissible: false,
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Poruka!'),
-                          content: const Text(
-                              'Uspješno ste dodali novog uposlenika.'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                _formKey.currentState?.reset();
-
-                                Navigator.of(context).pop();
-
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        ));
+                      title: const Text("Error"),
+                      content: Text(e.toString()),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("OK"),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
               child: const Text("Potvrdi")),
           TextButton(
@@ -403,32 +407,52 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
         actions: [
           TextButton(
               onPressed: () async {
-                await _uposlenikProvider.update(
-                    widget.uposlenik!.uposlenikId, request);
+                try {
+                  Navigator.of(context).pop();
 
-                // ignore: use_build_context_synchronously
-                Navigator.of(context).pop();
+                  await _uposlenikProvider.update(
+                      widget.uposlenik!.uposlenikId, request);
 
-                // ignore: use_build_context_synchronously
-                showDialog(
+                  // ignore: use_build_context_synchronously
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Poruka!'),
+                            content: const Text('Uposlenik uspješno editovan.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  _formKey.currentState?.reset();
+
+                                  Navigator.of(context).pop();
+
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ));
+                } on Exception catch (e) {
+                  // ignore: use_build_context_synchronously
+                  showDialog(
                     barrierDismissible: false,
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Poruka!'),
-                          content: const Text('Uposlenik uspješno editovan.'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                _formKey.currentState?.reset();
-
-                                Navigator.of(context).pop();
-
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        ));
+                      title: const Text("Error"),
+                      content: Text(e.toString()),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("OK"),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
               child: const Text("Potvrdi")),
           TextButton(

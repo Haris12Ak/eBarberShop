@@ -37,15 +37,36 @@ class _NarudzbeIzvjestajScreenState extends State<NarudzbeIzvjestajScreen> {
   }
 
   Future getIzvjestj() async {
-    izvjestajResult = await _narudzbeProvider.getIzvjestajNarudzbe(filter: {
-      "datumOd": widget.datumOd,
-      "datumDo": widget.datumDo,
-    });
-
-    if (mounted) {
-      setState(() {
-        isLoading = false;
+    try {
+      izvjestajResult = await _narudzbeProvider.getIzvjestajNarudzbe(filter: {
+        "datumOd": widget.datumOd,
+        "datumDo": widget.datumDo,
       });
+
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } on Exception catch (e) {
+      // ignore: use_build_context_synchronously
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text("Error"),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );
     }
   }
 

@@ -35,13 +35,34 @@ class _RezervacijeIzvjestajScreenState
   }
 
   Future getIzvjestaj() async {
-    izvjestaj = await _rezervacijaProvider
-        .getIzvjestajRezervacije(filter: {'Datum': widget.datum});
+    try {
+      izvjestaj = await _rezervacijaProvider
+          .getIzvjestajRezervacije(filter: {'Datum': widget.datum});
 
-    if (mounted) {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } on Exception catch (e) {
+      // ignore: use_build_context_synchronously
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text("Error"),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );
     }
   }
 

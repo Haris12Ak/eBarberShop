@@ -179,6 +179,8 @@ namespace eBarberShop.Services.Servisi
             var query = _dbContext.Set<Database.Rezervacija>()
                 .Include("Usluga")
                 .Include("Uposlenik")
+                .Include("Korisnik")
+                .Where(x => x.Korisnik.KorisniciUloge.Any(u => u.Uloga.Naziv != "Administrator"))
                 .AsQueryable();
 
             DateTime today = DateTime.Today;

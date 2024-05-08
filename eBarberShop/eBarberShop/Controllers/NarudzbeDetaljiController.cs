@@ -2,6 +2,7 @@
 using eBarberShop.Model.Requests;
 using eBarberShop.Model.Search;
 using eBarberShop.Services.Interfejsi;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eBarberShop.Controllers
@@ -9,14 +10,17 @@ namespace eBarberShop.Controllers
     [ApiController]
     public class NarudzbeDetaljiController : BaseCRUDController<NarudzbeDetalji, BaseSearch, NarudzbeDetaljiInsertRequest, NarudzbeDetaljiUpdateRequest>
     {
-        public NarudzbeDetaljiController(ILogger<BaseCRUDController<NarudzbeDetalji, BaseSearch, NarudzbeDetaljiInsertRequest, NarudzbeDetaljiUpdateRequest>> logger, INarudzbeDetaljiService service) : base(logger, service)
+        private readonly INarudzbeDetaljiService _narudzbeDetaljiService;
+        public NarudzbeDetaljiController(ILogger<BaseCRUDController<NarudzbeDetalji, BaseSearch, NarudzbeDetaljiInsertRequest, NarudzbeDetaljiUpdateRequest>> logger, INarudzbeDetaljiService narudzbeDetaljiService) : base(logger, narudzbeDetaljiService)
         {
+            _narudzbeDetaljiService = narudzbeDetaljiService;
         }
 
+        [Authorize(Roles = "Administrator, Uposlenik")]
         [HttpGet("/GetNarudzbeDetaljiByNarudzbaId/{narudzbaId}")]
         public async Task<List<NarudzbeDetalji>> GetNarudzbeDetalji(int narudzbaId)
         {
-            return await (_service as INarudzbeDetaljiService).GetNarudzbeDetaljiByNarudzbaId(narudzbaId);
+            return await _narudzbeDetaljiService.GetNarudzbeDetaljiByNarudzbaId(narudzbaId);
         }
     }
 }

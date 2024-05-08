@@ -46,7 +46,7 @@ class RezervacijaProvider extends BaseProvider<Rezervacija> {
     }
   }
 
-  Future<SearchResult<TerminiUposlenika>> GetTermineUposlenika(
+  Future<SearchResult<TerminiUposlenika>> getTermineUposlenika(
       {dynamic filter}) async {
     var endpoint = "GetTermineUposlenika";
 

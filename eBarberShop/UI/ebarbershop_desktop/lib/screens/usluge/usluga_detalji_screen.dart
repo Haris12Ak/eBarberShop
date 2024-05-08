@@ -323,18 +323,19 @@ class _UslugaDetaljiScreenState extends State<UslugaDetaljiScreen> {
                   alignment: Alignment.bottomRight,
                   child: ElevatedButton.icon(
                     onPressed: () async {
-                      try {
-                        // ignore: use_build_context_synchronously
-                        showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text('Potvrda'),
-                            content: const Text(
-                                'Jeste li sigurni da želite ukloniti sliku!'),
-                            actions: [
-                              TextButton(
-                                onPressed: () async {
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Potvrda'),
+                          content: const Text(
+                              'Jeste li sigurni da želite ukloniti sliku!'),
+                          actions: [
+                            TextButton(
+                              onPressed: () async {
+                                try {
+                                  Navigator.of(context).pop();
+
                                   await _slikeProvider
                                       .delete(slikaUsluge.slikaId);
 
@@ -342,38 +343,39 @@ class _UslugaDetaljiScreenState extends State<UslugaDetaljiScreen> {
 
                                   // ignore: use_build_context_synchronously
                                   Navigator.of(context).pop();
-
+                                } on Exception catch (e) {
                                   // ignore: use_build_context_synchronously
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Da'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Ne'),
-                              ),
-                            ],
-                          ),
-                        );
-                      } on Exception catch (e) {
-                        // ignore: use_build_context_synchronously
-                        showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text("Error"),
-                            content: Text(e.toString()),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text("OK"),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
+                                  showDialog(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      title: const Text("Error"),
+                                      content: Text(e.toString()),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text("OK"),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              },
+                              child: const Text('Da'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Ne'),
+                            ),
+                          ],
+                        ),
+                      );
                     },
                     icon: const Icon(Icons.delete_forever),
                     label: const Text(

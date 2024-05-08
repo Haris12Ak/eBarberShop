@@ -224,7 +224,11 @@ class _UslugaSlikeAddScreenState extends State<UslugaSlikeAddScreen> {
                               content: Text(e.toString()),
                               actions: [
                                 TextButton(
-                                    onPressed: () => Navigator.pop(context),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+
+                                      Navigator.of(context).pop();
+                                    },
                                     child: const Text("OK"))
                               ],
                             ),

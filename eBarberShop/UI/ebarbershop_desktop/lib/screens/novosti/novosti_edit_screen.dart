@@ -71,7 +71,7 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
         key: _formKey,
         initialValue: _initialValue,
         child: Container(
-           padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 50.0),
+          padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 50.0),
           child: Column(
             children: [
               Row(
@@ -264,27 +264,10 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
                       request['korisnikId'] =
                           Authorization.korisnikId.toString();
 
-                      try {
-                        if (widget.novost != null) {
-                          _buildEditNovost(context, request);
-                        } else {
-                          _buldAddNovost(context, request);
-                        }
-                      } on Exception catch (e) {
-                        // ignore: use_build_context_synchronously
-                        showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text("Error"),
-                            content: Text(e.toString()),
-                            actions: [
-                              TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text("OK"))
-                            ],
-                          ),
-                        );
+                      if (widget.novost != null) {
+                        _buildEditNovost(context, request);
+                      } else {
+                        _buldAddNovost(context, request);
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -329,33 +312,54 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
         actions: [
           TextButton(
               onPressed: () async {
-                if (_formKey.currentState!.saveAndValidate()) {
-                  await _novostiProvider.insert(request);
-                }
-                // ignore: use_build_context_synchronously
-                Navigator.of(context).pop();
+                try {
+                  Navigator.of(context).pop();
 
-                // ignore: use_build_context_synchronously
-                showDialog(
+                  if (_formKey.currentState!.saveAndValidate()) {
+                    await _novostiProvider.insert(request);
+                  }
+
+                  // ignore: use_build_context_synchronously
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Poruka!'),
+                            content:
+                                const Text('Uspješno ste dodali novu novost!.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  _formKey.currentState?.reset();
+
+                                  Navigator.of(context).pop();
+
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ));
+                } on Exception catch (e) {
+                  // ignore: use_build_context_synchronously
+                  showDialog(
                     barrierDismissible: false,
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Poruka!'),
-                          content:
-                              const Text('Uspješno ste dodali novu novost!.'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                _formKey.currentState?.reset();
-
-                                Navigator.of(context).pop();
-
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        ));
+                      title: const Text("Error"),
+                      content: Text(e.toString()),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("OK"),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
               child: const Text("Potvrdi")),
           TextButton(
@@ -380,38 +384,59 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
         actions: [
           TextButton(
               onPressed: () async {
-                await _novostiProvider.update(
-                    widget.novost!.novostiId, request);
+                try {
+                  Navigator.of(context).pop();
 
-                setState(() {
-                  _initialValue = Map.from(_formKey.currentState!.value);
-                  _initialValue['datumObjave'] =
-                      DateTime.parse(request['datumObjave']);
-                  _initialValue['slika'] = request['slika'];
-                });
-                // ignore: use_build_context_synchronously
-                Navigator.of(context).pop();
+                  await _novostiProvider.update(
+                      widget.novost!.novostiId, request);
 
-                // ignore: use_build_context_synchronously
-                showDialog(
+                  setState(() {
+                    _initialValue = Map.from(_formKey.currentState!.value);
+                    _initialValue['datumObjave'] =
+                        DateTime.parse(request['datumObjave']);
+                    _initialValue['slika'] = request['slika'];
+                  });
+
+                  // ignore: use_build_context_synchronously
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Poruka!'),
+                            content: const Text('Novost uspješno editovana!.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  _formKey.currentState?.reset();
+
+                                  Navigator.of(context).pop();
+
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ));
+                } on Exception catch (e) {
+                  // ignore: use_build_context_synchronously
+                  showDialog(
                     barrierDismissible: false,
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Poruka!'),
-                          content: const Text('Novost uspješno editovana!.'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                _formKey.currentState?.reset();
-
-                                Navigator.of(context).pop();
-
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        ));
+                      title: const Text("Error"),
+                      content: Text(e.toString()),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("OK"),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
               child: const Text("Potvrdi")),
           TextButton(

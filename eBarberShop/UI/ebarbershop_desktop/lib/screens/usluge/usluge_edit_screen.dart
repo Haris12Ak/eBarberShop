@@ -313,26 +313,10 @@ class _UslugeEditScreenState extends State<UslugeEditScreen> {
                           request['slika'] = _base64Image;
                         }
 
-                        try {
-                          if (widget.usluga != null) {
-                            _buildEditUsluga(context, request);
-                          } else {
-                            _buildAddUsluga(context, request);
-                          }
-                        } on Exception catch (e) {
-                          // ignore: use_build_context_synchronously
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: const Text("Error"),
-                              content: Text(e.toString()),
-                              actions: [
-                                TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text("OK"))
-                              ],
-                            ),
-                          );
+                        if (widget.usluga != null) {
+                          _buildEditUsluga(context, request);
+                        } else {
+                          _buildAddUsluga(context, request);
                         }
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -376,32 +360,53 @@ class _UslugeEditScreenState extends State<UslugeEditScreen> {
         actions: [
           TextButton(
               onPressed: () async {
-                if (_formKey.currentState!.saveAndValidate()) {
-                  await _uslugaProvider.insert(request);
-                }
-                // ignore: use_build_context_synchronously
-                Navigator.of(context).pop();
+                try {
+                  Navigator.of(context).pop();
 
-                // ignore: use_build_context_synchronously
-                showDialog(
+                  if (_formKey.currentState!.saveAndValidate()) {
+                    await _uslugaProvider.insert(request);
+                  }
+
+                  // ignore: use_build_context_synchronously
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Poruka!'),
+                            content: const Text('Usluga uspješno dodana.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  _formKey.currentState?.reset();
+
+                                  Navigator.of(context).pop();
+
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ));
+                } on Exception catch (e) {
+                  // ignore: use_build_context_synchronously
+                  showDialog(
                     barrierDismissible: false,
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Poruka!'),
-                          content: const Text('Usluga uspješno dodana.'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                _formKey.currentState?.reset();
-
-                                Navigator.of(context).pop();
-
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        ));
+                      title: const Text("Error"),
+                      content: Text(e.toString()),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("OK"),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
               child: const Text("Potvrdi")),
           TextButton(
@@ -426,34 +431,54 @@ class _UslugeEditScreenState extends State<UslugeEditScreen> {
         actions: [
           TextButton(
               onPressed: () async {
-                await _uslugaProvider.update(widget.usluga!.uslugaId, request);
-                setState(() {
-                  _initialValue = Map.from(_formKey.currentState!.value);
-                  _initialValue['slika'] = request['slika'];
-                });
-                // ignore: use_build_context_synchronously
-                Navigator.of(context).pop();
+                try {
+                  Navigator.of(context).pop();
 
-                // ignore: use_build_context_synchronously
-                showDialog(
+                  await _uslugaProvider.update(
+                      widget.usluga!.uslugaId, request);
+                  setState(() {
+                    _initialValue = Map.from(_formKey.currentState!.value);
+                    _initialValue['slika'] = request['slika'];
+                  });
+
+                  // ignore: use_build_context_synchronously
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Poruka!'),
+                            content: const Text('Usluga uspješno editovana'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  _formKey.currentState?.reset();
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ));
+                } on Exception catch (e) {
+                  // ignore: use_build_context_synchronously
+                  showDialog(
                     barrierDismissible: false,
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Poruka!'),
-                          content: const Text('Usluga uspješno editovana'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                _formKey.currentState?.reset();
-
-                                Navigator.of(context).pop();
-
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        ));
+                      title: const Text("Error"),
+                      content: Text(e.toString()),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("OK"),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
               child: const Text("Potvrdi")),
           TextButton(

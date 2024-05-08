@@ -9,14 +9,16 @@ namespace eBarberShop.Controllers
     [ApiController]
     public class OcjeneController : BaseCRUDController<Ocjene, OcjeneSearch, OcjeneInsertRequest, OcjeneUpdateRequest>
     {
-        public OcjeneController(ILogger<BaseCRUDController<Ocjene, OcjeneSearch, OcjeneInsertRequest, OcjeneUpdateRequest>> logger, IOcjeneService service) : base(logger, service)
+        private readonly IOcjeneService _ocjeneService;
+        public OcjeneController(ILogger<BaseCRUDController<Ocjene, OcjeneSearch, OcjeneInsertRequest, OcjeneUpdateRequest>> logger, IOcjeneService ocjeneService) : base(logger, ocjeneService)
         {
+            _ocjeneService = ocjeneService;
         }
 
         [HttpGet("/GetOcjeneByUposlenikId/{uposlenikId}")]
         public async Task<List<Ocjene>> GetOcjene(int uposlenikId)
         {
-            return await (_service as IOcjeneService).GetOcjeneByUposlenikId(uposlenikId);
+            return await _ocjeneService.GetOcjeneByUposlenikId(uposlenikId);
         }
     }
 }

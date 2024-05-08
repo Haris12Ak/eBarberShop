@@ -230,27 +230,10 @@ class _SlikeAddEditScreenState extends State<SlikeAddEditScreen> {
                       request['datumPostavljanja'] =
                           DateTime.now().toIso8601String();
 
-                      try {
-                        if (widget.slika != null) {
-                          _buildEditImage(context, request);
-                        } else {
-                          _buildAddNewImage(context, request);
-                        }
-                      } on Exception catch (e) {
-                        // ignore: use_build_context_synchronously
-                        showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text("Error"),
-                            content: Text(e.toString()),
-                            actions: [
-                              TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text("OK"))
-                            ],
-                          ),
-                        );
+                      if (widget.slika != null) {
+                        _buildEditImage(context, request);
+                      } else {
+                        _buildAddNewImage(context, request);
                       }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -295,38 +278,58 @@ class _SlikeAddEditScreenState extends State<SlikeAddEditScreen> {
         actions: [
           TextButton(
               onPressed: () async {
-                await _slikeProvider.update(widget.slika!.slikeId, request);
+                try {
+                  Navigator.of(context).pop();
 
-                setState(() {
-                  _initialValue = Map.from(_formKey.currentState!.value);
-                  _initialValue['datumPostavljanja'] =
-                      DateTime.parse(request['datumPostavljanja']);
-                  _initialValue['slika'] = request['slika'];
-                });
+                  await _slikeProvider.update(widget.slika!.slikeId, request);
 
-                // ignore: use_build_context_synchronously
-                Navigator.of(context).pop();
+                  setState(() {
+                    _initialValue = Map.from(_formKey.currentState!.value);
+                    _initialValue['datumPostavljanja'] =
+                        DateTime.parse(request['datumPostavljanja']);
+                    _initialValue['slika'] = request['slika'];
+                  });
 
-                // ignore: use_build_context_synchronously
-                showDialog(
+                  // ignore: use_build_context_synchronously
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Poruka!'),
+                            content: const Text('Slika uspješno editovana!.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  _formKey.currentState?.reset();
+
+                                  Navigator.of(context).pop();
+
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ));
+                } on Exception catch (e) {
+                  // ignore: use_build_context_synchronously
+                  showDialog(
                     barrierDismissible: false,
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Poruka!'),
-                          content: const Text('Slika uspješno editovana!.'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                _formKey.currentState?.reset();
-
-                                Navigator.of(context).pop();
-
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        ));
+                      title: const Text("Error"),
+                      content: Text(e.toString()),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("OK"),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
               child: const Text("Potvrdi")),
           TextButton(
@@ -350,33 +353,54 @@ class _SlikeAddEditScreenState extends State<SlikeAddEditScreen> {
         actions: [
           TextButton(
               onPressed: () async {
-                if (_formKey.currentState!.saveAndValidate()) {
-                  await _slikeProvider.insert(request);
-                }
-                // ignore: use_build_context_synchronously
-                Navigator.of(context).pop();
+                try {
+                  Navigator.of(context).pop();
 
-                // ignore: use_build_context_synchronously
-                showDialog(
+                  if (_formKey.currentState!.saveAndValidate()) {
+                    await _slikeProvider.insert(request);
+                  }
+
+                  // ignore: use_build_context_synchronously
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Poruka!'),
+                            content:
+                                const Text('Uspješno ste dodali novu sliku!.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  _formKey.currentState?.reset();
+
+                                  Navigator.of(context).pop();
+
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ));
+                } on Exception catch (e) {
+                  // ignore: use_build_context_synchronously
+                  showDialog(
                     barrierDismissible: false,
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Poruka!'),
-                          content:
-                              const Text('Uspješno ste dodali novu sliku!.'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                _formKey.currentState?.reset();
-
-                                Navigator.of(context).pop();
-
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        ));
+                      title: const Text("Error"),
+                      content: Text(e.toString()),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("OK"),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
               child: const Text("Potvrdi")),
           TextButton(
