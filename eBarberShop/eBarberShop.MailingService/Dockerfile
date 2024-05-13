@@ -8,7 +8,10 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+
 COPY ["eBarberShop.MailingService/eBarberShop.MailingService.csproj", "eBarberShop.MailingService/"]
+COPY ["eBarberShop.Model/eBarberShop.Model.csproj", "eBarberShop.Model/"]
+
 RUN dotnet restore "./eBarberShop.MailingService/./eBarberShop.MailingService.csproj"
 COPY . .
 WORKDIR "/src/eBarberShop.MailingService"
