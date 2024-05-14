@@ -193,7 +193,10 @@ class _UslugaSlikeAddScreenState extends State<UslugaSlikeAddScreen> {
 
                           await _slikeUslugeProvider.insert(newSlikaUsluge);
 
-                          // ignore: use_build_context_synchronously
+                          if (!context.mounted) {
+                            return;
+                          }
+
                           showDialog(
                               barrierDismissible: false,
                               context: context,
@@ -215,7 +218,6 @@ class _UslugaSlikeAddScreenState extends State<UslugaSlikeAddScreen> {
                                     ],
                                   ));
                         } on Exception catch (e) {
-                          // ignore: use_build_context_synchronously
                           showDialog(
                             barrierDismissible: false,
                             context: context,
@@ -229,7 +231,7 @@ class _UslugaSlikeAddScreenState extends State<UslugaSlikeAddScreen> {
 
                                       Navigator.of(context).pop();
                                     },
-                                    child: const Text("OK"))
+                                    child: const Text("Close"))
                               ],
                             ),
                           );

@@ -266,14 +266,20 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
                                             TextButton(
                                               onPressed: () async {
                                                 try {
-                                                  Navigator.of(context).pop();
-
                                                   await _uposlenikProvider
-                                                      .delete(e.uposlenikId);
+                                                      .delete(e.uposlenikId)
+                                                      .then((value) =>
+                                                          Navigator.of(context)
+                                                              .pop());
+
+                                                  if (!context.mounted) {
+                                                    return;
+                                                  }
 
                                                   fetchUposlenici();
                                                 } on Exception catch (e) {
-                                                  // ignore: use_build_context_synchronously
+                                                  Navigator.of(context).pop();
+
                                                   showDialog(
                                                     barrierDismissible: false,
                                                     context: context,
@@ -292,7 +298,7 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
                                                                 .pop();
                                                           },
                                                           child:
-                                                              const Text("OK"),
+                                                              const Text("Close"),
                                                         ),
                                                       ],
                                                     ),

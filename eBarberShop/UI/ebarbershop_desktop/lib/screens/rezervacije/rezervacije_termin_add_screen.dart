@@ -319,7 +319,11 @@ class _RezervacijeTerminAddScreenState
                                                                 .insert(
                                                                     request);
 
-                                                            // ignore: use_build_context_synchronously
+                                                            if (!context
+                                                                .mounted) {
+                                                              return;
+                                                            }
+
                                                             showDialog(
                                                                 barrierDismissible:
                                                                     false,
@@ -337,9 +341,12 @@ class _RezervacijeTerminAddScreenState
                                                                           onPressed:
                                                                               () async {
                                                                             await _loadTermine();
-                                                                            // ignore: use_build_context_synchronously
+
+                                                                            if (!context.mounted) {
+                                                                              return;
+                                                                            }
+
                                                                             Navigator.of(context).pop();
-                                                                            // ignore: use_build_context_synchronously
                                                                             Navigator.of(context).pop();
                                                                           },
                                                                           child:
@@ -367,7 +374,7 @@ class _RezervacijeTerminAddScreenState
                                                                           Navigator.pop(
                                                                               context),
                                                                       child: const Text(
-                                                                          "OK"))
+                                                                          "Close"))
                                                                 ],
                                                               ),
                                                             );

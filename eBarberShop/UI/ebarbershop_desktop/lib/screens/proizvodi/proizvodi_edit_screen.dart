@@ -33,6 +33,7 @@ class _ProizvodiEditScreenState extends State<ProizvodiEditScreen> {
   SearchResult<VrsteProizvoda>? vrsteProizvodaResult;
 
   bool isLoading = true;
+  bool isSwitchEnabled = true;
 
   File? _image;
   String? _base64Image;
@@ -70,6 +71,11 @@ class _ProizvodiEditScreenState extends State<ProizvodiEditScreen> {
       'status': widget.proizvod?.status,
       'vrstaProizvodaId': widget.proizvod?.vrstaProizvodaId.toString()
     };
+
+    if (widget.proizvod == null) {
+      _initialValue['status'] = true;
+      isSwitchEnabled = false;
+    }
 
     _proizvodiProvider = context.read<ProizvodiProvider>();
     _vrsteProizvodaProvider = context.read<VrsteProizvodaProvider>();
@@ -377,6 +383,7 @@ class _ProizvodiEditScreenState extends State<ProizvodiEditScreen> {
                         width: 150,
                         child: FormBuilderSwitch(
                           name: 'status',
+                          enabled: isSwitchEnabled,
                           title: const Text(
                             'Status',
                             style: TextStyle(
@@ -454,13 +461,14 @@ class _ProizvodiEditScreenState extends State<ProizvodiEditScreen> {
           TextButton(
               onPressed: () async {
                 try {
-                  Navigator.of(context).pop();
+                  await _proizvodiProvider
+                      .insert(request)
+                      .then((value) => Navigator.of(context).pop());
 
-                  if (_formKey.currentState!.saveAndValidate()) {
-                    await _proizvodiProvider.insert(request);
+                  if (!context.mounted) {
+                    return;
                   }
 
-                  // ignore: use_build_context_synchronously
                   showDialog(
                       barrierDismissible: false,
                       context: context,
@@ -482,7 +490,8 @@ class _ProizvodiEditScreenState extends State<ProizvodiEditScreen> {
                             ],
                           ));
                 } on Exception catch (e) {
-                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
+
                   showDialog(
                     barrierDismissible: false,
                     context: context,
@@ -495,7 +504,7 @@ class _ProizvodiEditScreenState extends State<ProizvodiEditScreen> {
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
                           },
-                          child: const Text("OK"),
+                          child: const Text("Close"),
                         ),
                       ],
                     ),
@@ -526,17 +535,19 @@ class _ProizvodiEditScreenState extends State<ProizvodiEditScreen> {
           TextButton(
               onPressed: () async {
                 try {
-                  Navigator.of(context).pop();
-
-                  await _proizvodiProvider.update(
-                      widget.proizvod!.proizvodiId, request);
+                  await _proizvodiProvider
+                      .update(widget.proizvod!.proizvodiId, request)
+                      .then((value) => Navigator.of(context).pop());
 
                   setState(() {
                     _initialValue = Map.from(_formKey.currentState!.value);
                     _initialValue['slika'] = request['slika'];
                   });
 
-                  // ignore: use_build_context_synchronously
+                  if (!context.mounted) {
+                    return;
+                  }
+
                   showDialog(
                       barrierDismissible: false,
                       context: context,
@@ -557,7 +568,8 @@ class _ProizvodiEditScreenState extends State<ProizvodiEditScreen> {
                             ],
                           ));
                 } on Exception catch (e) {
-                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
+
                   showDialog(
                     barrierDismissible: false,
                     context: context,
@@ -570,7 +582,7 @@ class _ProizvodiEditScreenState extends State<ProizvodiEditScreen> {
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
                           },
-                          child: const Text("OK"),
+                          child: const Text("Close"),
                         ),
                       ],
                     ),

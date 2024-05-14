@@ -334,17 +334,21 @@ class _UslugaDetaljiScreenState extends State<UslugaDetaljiScreen> {
                             TextButton(
                               onPressed: () async {
                                 try {
-                                  Navigator.of(context).pop();
-
                                   await _slikeProvider
-                                      .delete(slikaUsluge.slikaId);
+                                      .delete(slikaUsluge.slikaId)
+                                      .then((value) {
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  });
+
+                                  if (!context.mounted) {
+                                    return;
+                                  }
 
                                   fetchSlike();
-
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.of(context).pop();
                                 } on Exception catch (e) {
-                                  // ignore: use_build_context_synchronously
+                                  Navigator.of(context).pop();
+
                                   showDialog(
                                     barrierDismissible: false,
                                     context: context,
@@ -358,7 +362,7 @@ class _UslugaDetaljiScreenState extends State<UslugaDetaljiScreen> {
                                             Navigator.of(context).pop();
                                             Navigator.of(context).pop();
                                           },
-                                          child: const Text("OK"),
+                                          child: const Text("Close"),
                                         ),
                                       ],
                                     ),

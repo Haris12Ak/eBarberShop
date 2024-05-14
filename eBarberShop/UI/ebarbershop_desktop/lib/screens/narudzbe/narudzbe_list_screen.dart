@@ -201,13 +201,18 @@ class _NarudzbeListScreenState extends State<NarudzbeListScreen> {
                 TextButton(
                   onPressed: () async {
                     try {
-                      Navigator.of(context).pop();
+                      await _narudzbeProvider
+                          .delete(e.narudzbeId)
+                          .then((value) => Navigator.of(context).pop());
 
-                      await _narudzbeProvider.delete(e.narudzbeId);
+                      if (!context.mounted) {
+                        return;
+                      }
 
                       fetchNarudzbe();
                     } on Exception catch (e) {
-                      // ignore: use_build_context_synchronously
+                      Navigator.of(context).pop();
+
                       showDialog(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
@@ -216,7 +221,7 @@ class _NarudzbeListScreenState extends State<NarudzbeListScreen> {
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.pop(context),
-                              child: const Text("OK"),
+                              child: const Text("Close"),
                             ),
                           ],
                         ),

@@ -313,13 +313,14 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
           TextButton(
               onPressed: () async {
                 try {
-                  Navigator.of(context).pop();
+                  await _novostiProvider
+                      .insert(request)
+                      .then((value) => Navigator.of(context).pop());
 
-                  if (_formKey.currentState!.saveAndValidate()) {
-                    await _novostiProvider.insert(request);
+                  if (!context.mounted) {
+                    return;
                   }
 
-                  // ignore: use_build_context_synchronously
                   showDialog(
                       barrierDismissible: false,
                       context: context,
@@ -341,7 +342,8 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
                             ],
                           ));
                 } on Exception catch (e) {
-                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
+
                   showDialog(
                     barrierDismissible: false,
                     context: context,
@@ -354,7 +356,7 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
                           },
-                          child: const Text("OK"),
+                          child: const Text("Close"),
                         ),
                       ],
                     ),
@@ -385,10 +387,9 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
           TextButton(
               onPressed: () async {
                 try {
-                  Navigator.of(context).pop();
-
-                  await _novostiProvider.update(
-                      widget.novost!.novostiId, request);
+                  await _novostiProvider
+                      .update(widget.novost!.novostiId, request)
+                      .then((value) => Navigator.of(context).pop());
 
                   setState(() {
                     _initialValue = Map.from(_formKey.currentState!.value);
@@ -397,7 +398,10 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
                     _initialValue['slika'] = request['slika'];
                   });
 
-                  // ignore: use_build_context_synchronously
+                  if (!context.mounted) {
+                    return;
+                  }
+
                   showDialog(
                       barrierDismissible: false,
                       context: context,
@@ -418,7 +422,8 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
                             ],
                           ));
                 } on Exception catch (e) {
-                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
+
                   showDialog(
                     barrierDismissible: false,
                     context: context,
@@ -431,7 +436,7 @@ class _NovostiEditScreenState extends State<NovostiEditScreen> {
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
                           },
-                          child: const Text("OK"),
+                          child: const Text("Close"),
                         ),
                       ],
                     ),

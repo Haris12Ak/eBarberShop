@@ -337,13 +337,18 @@ class _SlikeListScreenState extends State<SlikeListScreen> {
                 TextButton(
                   onPressed: () async {
                     try {
-                      Navigator.of(context).pop();
+                      await _slikeProvider
+                          .delete(e.slikeId)
+                          .then((value) => Navigator.of(context).pop());
 
-                      await _slikeProvider.delete(e.slikeId);
+                      if (!context.mounted) {
+                        return;
+                      }
 
                       fetchSlike();
                     } on Exception catch (e) {
-                      // ignore: use_build_context_synchronously
+                      Navigator.of(context).pop();
+
                       showDialog(
                         barrierDismissible: false,
                         context: context,
@@ -355,7 +360,7 @@ class _SlikeListScreenState extends State<SlikeListScreen> {
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              child: const Text("OK"),
+                              child: const Text("Close"),
                             ),
                           ],
                         ),

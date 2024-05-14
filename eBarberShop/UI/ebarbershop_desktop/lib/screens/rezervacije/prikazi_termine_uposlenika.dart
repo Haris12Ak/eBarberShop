@@ -168,7 +168,6 @@ class _PrikaziTermineUposlenikaState extends State<PrikaziTermineUposlenika> {
                               tooltip: 'Ukloni termin',
                               onPressed: () {
                                 try {
-                                  // ignore: use_build_context_synchronously
                                   showDialog(
                                     barrierDismissible: false,
                                     context: context,
@@ -180,11 +179,16 @@ class _PrikaziTermineUposlenikaState extends State<PrikaziTermineUposlenika> {
                                       actions: [
                                         TextButton(
                                           onPressed: () async {
-                                            await _rezervacijaProvider.delete(
-                                                rezervacija.rezervacijaId);
+                                            await _rezervacijaProvider
+                                                .delete(
+                                                    rezervacija.rezervacijaId)
+                                                .then((value) =>
+                                                    Navigator.of(context)
+                                                        .pop());
 
-                                            // ignore: use_build_context_synchronously
-                                            Navigator.of(context).pop();
+                                            if (!context.mounted) {
+                                              return;
+                                            }
 
                                             fetchRezervacijeUposlenika();
                                           },
@@ -200,7 +204,8 @@ class _PrikaziTermineUposlenikaState extends State<PrikaziTermineUposlenika> {
                                     ),
                                   );
                                 } on Exception catch (e) {
-                                  // ignore: use_build_context_synchronously
+                                  Navigator.of(context).pop();
+
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) =>
@@ -211,7 +216,7 @@ class _PrikaziTermineUposlenikaState extends State<PrikaziTermineUposlenika> {
                                         TextButton(
                                           onPressed: () =>
                                               Navigator.pop(context),
-                                          child: const Text("OK"),
+                                          child: const Text("Close"),
                                         ),
                                       ],
                                     ),

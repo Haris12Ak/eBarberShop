@@ -276,7 +276,6 @@ class _UslugeScreenState extends State<UslugeScreen> {
   IconButton _buildDeleteUsluga(BuildContext context, Usluga usluga) {
     return IconButton(
       onPressed: () async {
-        // ignore: use_build_context_synchronously
         showDialog(
           barrierDismissible: false,
           context: context,
@@ -288,13 +287,19 @@ class _UslugeScreenState extends State<UslugeScreen> {
               TextButton(
                 onPressed: () async {
                   try {
-                    Navigator.of(context).pop();
+                    await _uslugaProvider
+                        .delete(usluga.uslugaId)
+                        .then((value) => Navigator.of(context).pop());
 
-                    await _uslugaProvider.delete(usluga.uslugaId);
+
+                    if (!context.mounted) {
+                      return;
+                    }
 
                     fetchUsluge();
                   } on Exception catch (e) {
-                    // ignore: use_build_context_synchronously
+                    Navigator.of(context).pop();
+
                     showDialog(
                       barrierDismissible: false,
                       context: context,
@@ -306,7 +311,7 @@ class _UslugeScreenState extends State<UslugeScreen> {
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: const Text("OK"),
+                            child: const Text("Close"),
                           ),
                         ],
                       ),

@@ -31,12 +31,13 @@ class _GalleryListScreenState extends State<GalleryListScreen> {
       context,
       MaterialPageRoute(
         builder: (BuildContext context) => GenericGalleryFullImage<Slike>(
-          data: (context) => fetchSlike(context),
-          index: index,
-          getOpisSlike: (slike) => slike.opis.toString(),
-          getSlika: (slike) => slike.slika.toString(),
-          getDatumObjave: (slikeUsluge ) => slikeUsluge.datumPostavljanja
-        ),
+            data: (context) => fetchSlike(context),
+            index: index,
+            getOpisSlike: (slike) => slike.opis != null && slike.opis != ""
+                ? slike.opis.toString()
+                : "",
+            getSlika: (slike) => slike.slika.toString(),
+            getDatumObjave: (slikeUsluge) => slikeUsluge.datumPostavljanja),
       ),
     );
   }

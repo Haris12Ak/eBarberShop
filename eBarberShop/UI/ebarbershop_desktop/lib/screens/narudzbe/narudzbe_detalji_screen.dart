@@ -66,7 +66,7 @@ class _NarudzbeDetaljiScreenState extends State<NarudzbeDetaljiScreen> {
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
               },
-              child: const Text("OK"),
+              child: const Text("Close"),
             ),
           ],
         ),

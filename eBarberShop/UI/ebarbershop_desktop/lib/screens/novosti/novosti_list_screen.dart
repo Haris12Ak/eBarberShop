@@ -353,7 +353,6 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
     return IconButton(
         tooltip: 'Obriši',
         onPressed: () {
-          // ignore: use_build_context_synchronously
           showDialog(
             barrierDismissible: false,
             context: context,
@@ -365,13 +364,18 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
                 TextButton(
                   onPressed: () async {
                     try {
-                      Navigator.of(context).pop();
+                      await _novostiProvider
+                          .delete(e.novostiId)
+                          .then((value) => Navigator.of(context).pop());
 
-                      await _novostiProvider.delete(e.novostiId);
+                      if (!context.mounted) {
+                        return;
+                      }
 
                       fetctNovosti();
                     } on Exception catch (e) {
-                      // ignore: use_build_context_synchronously
+                      Navigator.of(context).pop();
+
                       showDialog(
                         barrierDismissible: false,
                         context: context,
@@ -383,7 +387,7 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              child: const Text("OK"),
+                              child: const Text("Close"),
                             ),
                           ],
                         ),

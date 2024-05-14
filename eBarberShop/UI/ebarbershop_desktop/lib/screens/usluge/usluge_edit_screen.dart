@@ -361,13 +361,14 @@ class _UslugeEditScreenState extends State<UslugeEditScreen> {
           TextButton(
               onPressed: () async {
                 try {
-                  Navigator.of(context).pop();
+                  await _uslugaProvider
+                      .insert(request)
+                      .then((value) => Navigator.of(context).pop());
 
-                  if (_formKey.currentState!.saveAndValidate()) {
-                    await _uslugaProvider.insert(request);
+                  if (!context.mounted) {
+                    return;
                   }
 
-                  // ignore: use_build_context_synchronously
                   showDialog(
                       barrierDismissible: false,
                       context: context,
@@ -388,7 +389,8 @@ class _UslugeEditScreenState extends State<UslugeEditScreen> {
                             ],
                           ));
                 } on Exception catch (e) {
-                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
+
                   showDialog(
                     barrierDismissible: false,
                     context: context,
@@ -401,7 +403,7 @@ class _UslugeEditScreenState extends State<UslugeEditScreen> {
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
                           },
-                          child: const Text("OK"),
+                          child: const Text("Close"),
                         ),
                       ],
                     ),
@@ -432,16 +434,19 @@ class _UslugeEditScreenState extends State<UslugeEditScreen> {
           TextButton(
               onPressed: () async {
                 try {
-                  Navigator.of(context).pop();
+                  await _uslugaProvider
+                      .update(widget.usluga!.uslugaId, request)
+                      .then((value) => Navigator.of(context).pop());
 
-                  await _uslugaProvider.update(
-                      widget.usluga!.uslugaId, request);
                   setState(() {
                     _initialValue = Map.from(_formKey.currentState!.value);
                     _initialValue['slika'] = request['slika'];
                   });
 
-                  // ignore: use_build_context_synchronously
+                  if (!context.mounted) {
+                    return;
+                  }
+
                   showDialog(
                       barrierDismissible: false,
                       context: context,
@@ -460,7 +465,8 @@ class _UslugeEditScreenState extends State<UslugeEditScreen> {
                             ],
                           ));
                 } on Exception catch (e) {
-                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
+
                   showDialog(
                     barrierDismissible: false,
                     context: context,

@@ -36,12 +36,14 @@ class _UslugaGalleryScreenState extends State<UslugaGalleryScreen> {
       context,
       MaterialPageRoute(
         builder: (BuildContext context) => GenericGalleryFullImage<SlikeUsluge>(
-          data: (context) => fetchSlike(context),
-          index: index,
-          getOpisSlike: (slikeUsluge) => slikeUsluge.opisSlike.toString(),
-          getSlika: (slikeUsluge) => slikeUsluge.slikaUsluga.toString(), 
-          getDatumObjave: (slikeUsluge ) => slikeUsluge.datumObjave!
-        ),
+            data: (context) => fetchSlike(context),
+            index: index,
+            getOpisSlike: (slikeUsluge) =>
+                slikeUsluge.opisSlike != null && slikeUsluge.opisSlike != ""
+                    ? slikeUsluge.opisSlike.toString()
+                    : "",
+            getSlika: (slikeUsluge) => slikeUsluge.slikaUsluga.toString(),
+            getDatumObjave: (slikeUsluge) => slikeUsluge.datumObjave!),
       ),
     );
   }

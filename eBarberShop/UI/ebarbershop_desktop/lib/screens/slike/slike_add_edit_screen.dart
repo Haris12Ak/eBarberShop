@@ -279,9 +279,9 @@ class _SlikeAddEditScreenState extends State<SlikeAddEditScreen> {
           TextButton(
               onPressed: () async {
                 try {
-                  Navigator.of(context).pop();
-
-                  await _slikeProvider.update(widget.slika!.slikeId, request);
+                  await _slikeProvider
+                      .update(widget.slika!.slikeId, request)
+                      .then((value) => Navigator.of(context).pop());
 
                   setState(() {
                     _initialValue = Map.from(_formKey.currentState!.value);
@@ -290,7 +290,10 @@ class _SlikeAddEditScreenState extends State<SlikeAddEditScreen> {
                     _initialValue['slika'] = request['slika'];
                   });
 
-                  // ignore: use_build_context_synchronously
+                  if (!context.mounted) {
+                    return;
+                  }
+
                   showDialog(
                       barrierDismissible: false,
                       context: context,
@@ -311,7 +314,8 @@ class _SlikeAddEditScreenState extends State<SlikeAddEditScreen> {
                             ],
                           ));
                 } on Exception catch (e) {
-                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
+
                   showDialog(
                     barrierDismissible: false,
                     context: context,
@@ -324,7 +328,7 @@ class _SlikeAddEditScreenState extends State<SlikeAddEditScreen> {
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
                           },
-                          child: const Text("OK"),
+                          child: const Text("Close"),
                         ),
                       ],
                     ),
@@ -354,13 +358,14 @@ class _SlikeAddEditScreenState extends State<SlikeAddEditScreen> {
           TextButton(
               onPressed: () async {
                 try {
-                  Navigator.of(context).pop();
+                  await _slikeProvider
+                      .insert(request)
+                      .then((value) => Navigator.of(context).pop());
 
-                  if (_formKey.currentState!.saveAndValidate()) {
-                    await _slikeProvider.insert(request);
+                  if (!context.mounted) {
+                    return;
                   }
 
-                  // ignore: use_build_context_synchronously
                   showDialog(
                       barrierDismissible: false,
                       context: context,
@@ -382,7 +387,8 @@ class _SlikeAddEditScreenState extends State<SlikeAddEditScreen> {
                             ],
                           ));
                 } on Exception catch (e) {
-                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
+
                   showDialog(
                     barrierDismissible: false,
                     context: context,
@@ -395,7 +401,7 @@ class _SlikeAddEditScreenState extends State<SlikeAddEditScreen> {
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
                           },
-                          child: const Text("OK"),
+                          child: const Text("Close"),
                         ),
                       ],
                     ),

@@ -207,7 +207,6 @@ class _RezervacijeScreenState extends State<RezervacijeScreen> {
                                             tooltip: 'Obriši',
                                             onPressed: () {
                                               try {
-                                                // ignore: use_build_context_synchronously
                                                 showDialog(
                                                   barrierDismissible: false,
                                                   context: context,
@@ -221,12 +220,18 @@ class _RezervacijeScreenState extends State<RezervacijeScreen> {
                                                     actions: [
                                                       TextButton(
                                                         onPressed: () async {
-                                                          Navigator.of(context)
-                                                              .pop();
-
                                                           await _rezervacijaProvider
                                                               .delete(e
-                                                                  .rezervacijaId);
+                                                                  .rezervacijaId)
+                                                              .then((value) =>
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop());
+
+                                                          if (!context
+                                                              .mounted) {
+                                                            return;
+                                                          }
 
                                                           fetchRezervacije();
                                                         },
@@ -243,7 +248,8 @@ class _RezervacijeScreenState extends State<RezervacijeScreen> {
                                                   ),
                                                 );
                                               } on Exception catch (e) {
-                                                // ignore: use_build_context_synchronously
+                                                Navigator.of(context).pop();
+
                                                 showDialog(
                                                   context: context,
                                                   builder:
@@ -256,7 +262,7 @@ class _RezervacijeScreenState extends State<RezervacijeScreen> {
                                                         onPressed: () =>
                                                             Navigator.pop(
                                                                 context),
-                                                        child: const Text("OK"),
+                                                        child: const Text("Close"),
                                                       ),
                                                     ],
                                                   ),

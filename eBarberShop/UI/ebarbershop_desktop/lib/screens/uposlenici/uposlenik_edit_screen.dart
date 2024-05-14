@@ -336,13 +336,14 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
           TextButton(
               onPressed: () async {
                 try {
-                  Navigator.of(context).pop();
+                  await _uposlenikProvider
+                      .insert(request)
+                      .then((value) => Navigator.of(context).pop());
 
-                  if (_formKey.currentState!.saveAndValidate()) {
-                    await _uposlenikProvider.insert(request);
+                  if (!context.mounted) {
+                    return;
                   }
 
-                  // ignore: use_build_context_synchronously
                   showDialog(
                       barrierDismissible: false,
                       context: context,
@@ -364,7 +365,8 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
                             ],
                           ));
                 } on Exception catch (e) {
-                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
+
                   showDialog(
                     barrierDismissible: false,
                     context: context,
@@ -377,7 +379,7 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
                           },
-                          child: const Text("OK"),
+                          child: const Text("Close"),
                         ),
                       ],
                     ),
@@ -408,12 +410,14 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
           TextButton(
               onPressed: () async {
                 try {
-                  Navigator.of(context).pop();
+                  await _uposlenikProvider
+                      .update(widget.uposlenik!.uposlenikId, request)
+                      .then((value) => Navigator.of(context).pop());
 
-                  await _uposlenikProvider.update(
-                      widget.uposlenik!.uposlenikId, request);
+                  if (!context.mounted) {
+                    return;
+                  }
 
-                  // ignore: use_build_context_synchronously
                   showDialog(
                       barrierDismissible: false,
                       context: context,
@@ -434,7 +438,7 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
                             ],
                           ));
                 } on Exception catch (e) {
-                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
                   showDialog(
                     barrierDismissible: false,
                     context: context,
@@ -447,7 +451,7 @@ class _UposlenikEditScreenState extends State<UposlenikEditScreen> {
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
                           },
-                          child: const Text("OK"),
+                          child: const Text("Close"),
                         ),
                       ],
                     ),
