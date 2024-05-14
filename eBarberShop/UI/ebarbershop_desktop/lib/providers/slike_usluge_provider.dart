@@ -17,7 +17,7 @@ class SlikeUslugeProvider extends BaseProvider<SlikeUsluge> {
     return SlikeUsluge.fromJson(item);
   }
 
-  Future<SearchResult<SlikeUsluge>> GetSlike(int uslugaId) async {
+  Future<SearchResult<SlikeUsluge>> getSlike(int uslugaId) async {
     String endpointUslugeRezervacije = "GetSlikeByUslugaId";
 
     var url = "$_baseUrl$endpointUslugeRezervacije/$uslugaId";

@@ -47,8 +47,8 @@ class _ProizvodiScreenState extends State<ProizvodiScreen> {
   }
 
   Future fetchProizvode() async {
-    proizvodiReslut = await _proizvodiProvider
-        .get(filter: {'IsVrsteProizvodaIncluded': true});
+    proizvodiReslut = await _proizvodiProvider.get(
+        filter: {'IsVrsteProizvodaIncluded': true, 'IsAktivanProizvod': true});
 
     vrsteProizvodiReslut = await _vrsteProizvodaProvider.get();
 
@@ -67,6 +67,7 @@ class _ProizvodiScreenState extends State<ProizvodiScreen> {
     var data = await _proizvodiProvider.get(filter: {
       "naziv": _nazivProizvodaController.text,
       "vrstaProizvoda": selectedProductName,
+      'IsAktivanProizvod': true,
       'IsVrsteProizvodaIncluded': true
     });
 

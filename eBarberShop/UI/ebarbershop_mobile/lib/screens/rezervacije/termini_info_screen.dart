@@ -27,7 +27,7 @@ class _TerminiInfroScreenState extends State<TerminiInfroScreen> {
   }
 
   Future fetchTerminiByKorisnik() async {
-    terminiKorisnikaResult = await _rezervacijaProvider.GetTermineByKorisnikId(
+    terminiKorisnikaResult = await _rezervacijaProvider.getTermineByKorisnikId(
         Authorization.korisnikId!);
 
     if (mounted) {

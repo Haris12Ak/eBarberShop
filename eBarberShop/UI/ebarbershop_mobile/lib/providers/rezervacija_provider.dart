@@ -18,7 +18,7 @@ class RezervacijaProvider extends BaseProvider<Rezervacija> {
     return Rezervacija.fromJson(item);
   }
 
-  Future<SearchResult<TerminiKorisnikaInfo>> GetTermineByKorisnikId(
+  Future<SearchResult<TerminiKorisnikaInfo>> getTermineByKorisnikId(
       int korisnikId) async {
     String endpointTerminiKorisnikaUrl = "GetTermineByKorisnikId";
 

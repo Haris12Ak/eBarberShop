@@ -13,7 +13,7 @@ class CartProvider with ChangeNotifier {
   }
 
   addToCart(Proizvodi proizvod) {
-    if (IsAlreadyExistProduct(proizvod)) {
+    if (isAlreadyExistProduct(proizvod)) {
       throw Exception("Proizvod dodan u košaricu");
     } else {
       cart.items.add(CartItem(proizvod, 1));
@@ -29,7 +29,7 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  bool IsAlreadyExistProduct(Proizvodi proizvod) {
+  bool isAlreadyExistProduct(Proizvodi proizvod) {
     bool exist = cart.items
         .any((element) => element.proizvod.proizvodiId == proizvod.proizvodiId);
 

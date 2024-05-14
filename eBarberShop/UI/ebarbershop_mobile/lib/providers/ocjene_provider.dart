@@ -16,7 +16,7 @@ class OcjeneProvider extends BaseProvider<Ocjene> {
     return Ocjene.fromJson(item);
   }
 
-  Future<SearchResult<Ocjene>> GetOcjene(int uposlenikId) async {
+  Future<SearchResult<Ocjene>> getOcjene(int uposlenikId) async {
     String endpointOcjene = "GetOcjeneByUposlenikId";
 
     var url = "$_baseUrl$endpointOcjene/$uposlenikId";

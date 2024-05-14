@@ -16,7 +16,7 @@ class RecenzijeProvider extends BaseProvider<Recenzije> {
     return Recenzije.fromJson(item);
   }
 
-  Future<SearchResult<Recenzije>> GetRecenzijeByKorisnikId(
+  Future<SearchResult<Recenzije>> getRecenzijeByKorisnikId(
       int korisnikId) async {
     String endpointRecenzijeKorisnikUrl = "GetRecenzijeByKorisnikId";
 

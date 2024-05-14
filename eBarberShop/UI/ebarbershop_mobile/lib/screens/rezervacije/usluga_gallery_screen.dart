@@ -26,7 +26,7 @@ class _UslugaGalleryScreenState extends State<UslugaGalleryScreen> {
     var slikeUslugeProvider =
         Provider.of<SlikeUslugeProvider>(context, listen: false);
     var slikeUslugeResult =
-        await slikeUslugeProvider.GetSlike(widget.usluga.uslugaId);
+        await slikeUslugeProvider.getSlike(widget.usluga.uslugaId);
 
     return slikeUslugeResult.result;
   }

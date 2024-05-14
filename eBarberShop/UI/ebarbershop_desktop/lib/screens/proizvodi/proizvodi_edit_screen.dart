@@ -385,7 +385,7 @@ class _ProizvodiEditScreenState extends State<ProizvodiEditScreen> {
                           name: 'status',
                           enabled: isSwitchEnabled,
                           title: const Text(
-                            'Status',
+                            'Aktivan',
                             style: TextStyle(
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.w500,

@@ -28,6 +28,15 @@ namespace eBarberShop.Services.Servisi
                 query = query.Where(x => x.VrstaProizvoda.Naziv.ToLower().StartsWith(search.VrstaProizvoda.ToLower()));
             }
 
+            if (search?.IsAktivanProizvod == true)
+            {
+                query = query.Where(x => x.Status == search.IsAktivanProizvod);
+            }
+            else if (search?.IsAktivanProizvod == false)
+            {
+                query = query.Where(x => x.Status == search.IsAktivanProizvod);
+            }
+
             return base.AddFilter(query, search);
         }
 

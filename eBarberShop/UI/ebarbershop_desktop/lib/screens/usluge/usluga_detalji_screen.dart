@@ -37,7 +37,7 @@ class _UslugaDetaljiScreenState extends State<UslugaDetaljiScreen> {
 
   Future fetchSlike() async {
     slikeUslugeResult =
-        await _slikeUslugeProvider.GetSlike(widget.usluga.uslugaId);
+        await _slikeUslugeProvider.getSlike(widget.usluga.uslugaId);
 
     if (mounted) {
       setState(() {

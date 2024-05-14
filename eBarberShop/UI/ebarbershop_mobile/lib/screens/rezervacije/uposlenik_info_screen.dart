@@ -48,7 +48,7 @@ class _UposlenikInfoScreenState extends State<UposlenikInfoScreen> {
 
   Future fetchOcjene() async {
     ocjeneResult =
-        await _ocjeneProvider.GetOcjene(widget.uposlenik.uposlenikId);
+        await _ocjeneProvider.getOcjene(widget.uposlenik.uposlenikId);
 
     if (mounted) {
       setState(() {

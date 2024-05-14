@@ -84,7 +84,7 @@ namespace eBarberShop.Services.Servisi
                 TrainModel();
             }
 
-            var proizvodi = _dbContext.Proizvodi.Include("VrstaProizvoda").Where(x => x.ProizvodiId != id);
+            var proizvodi = _dbContext.Proizvodi.Include("VrstaProizvoda").Where(x => x.ProizvodiId != id && x.Status == true);
             var predictionResult = new List<Tuple<Database.Proizvodi, float>>();
 
             foreach (var proizvod in proizvodi)

@@ -41,7 +41,7 @@ class _NarudzbeDetaljiScreenState extends State<NarudzbeDetaljiScreen> {
 
   Future fetchNarudzbeDetalji() async {
     try {
-      narudzbeDetaljiResult = await _narudzbeDetaljiProvider.GetNarudzbeDetalji(
+      narudzbeDetaljiResult = await _narudzbeDetaljiProvider.getNarudzbeDetalji(
           widget.narudzba.narudzbeId);
 
       paymentDetailResult = await _paymentDetailProvider

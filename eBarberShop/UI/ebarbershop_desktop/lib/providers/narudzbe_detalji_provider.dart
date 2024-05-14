@@ -17,7 +17,7 @@ class NarudzbeDetaljiProvider extends BaseProvider {
     return NarudzbeDetalji.fromJson(item);
   }
 
-  Future<SearchResult<NarudzbeDetalji>> GetNarudzbeDetalji(
+  Future<SearchResult<NarudzbeDetalji>> getNarudzbeDetalji(
       int narudzbaId) async {
     String endpointNarudzbeDetalji = "GetNarudzbeDetaljiByNarudzbaId";
 

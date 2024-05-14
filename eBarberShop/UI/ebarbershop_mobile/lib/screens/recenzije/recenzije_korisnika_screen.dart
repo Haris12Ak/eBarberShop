@@ -29,7 +29,7 @@ class _RecenzijeKorisnikaScreenState extends State<RecenzijeKorisnikaScreen> {
   }
 
   Future fetchRecenzijeByKorisnikId() async {
-    recenzijeResult = await _recenzijeProvider.GetRecenzijeByKorisnikId(
+    recenzijeResult = await _recenzijeProvider.getRecenzijeByKorisnikId(
         Authorization.korisnikId!);
 
     if (mounted) {

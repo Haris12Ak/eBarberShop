@@ -29,6 +29,7 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
 
   String? selectedValue;
   String? selectedProductName;
+  bool? isAktivanProizvod;
 
   @override
   void initState() {
@@ -55,7 +56,8 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
     var data = await _proizvodiProvider.get(filter: {
       'naziv': _nazivSearchController.text,
       'sifra': _sifraSearchController.text,
-      "vrstaProizvoda": selectedProductName,
+      'vrstaProizvoda': selectedProductName,
+      'IsAktivanProizvod': isAktivanProizvod,
       'IsVrsteProizvodaIncluded': true
     });
 
@@ -411,6 +413,48 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
             ),
           ),
         ),
+        const SizedBox(width: 30.0),
+        Expanded(
+          flex: 2,
+          child: Container(
+            decoration:
+                BoxDecoration(border: Border.all(color: Colors.black54)),
+            child: DropdownButton(
+              value: isAktivanProizvod,
+              items: [null, true, false] // Add null for default value
+                  .map<DropdownMenuItem>((value) {
+                return DropdownMenuItem(
+                  value: value,
+                  child: Text(value == null
+                      ? 'Proizvodi (All)'
+                      : value
+                          ? 'Aktivni'
+                          : 'Neaktivni'), // Display appropriate text
+                );
+              }).toList(),
+              onChanged: (newValue) async {
+                setState(() {
+                  isAktivanProizvod = newValue;
+                });
+
+                await filter();
+              },
+              isExpanded: true,
+              padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+              dropdownColor: Colors.grey.shade300,
+              focusColor: Colors.grey.shade300,
+              iconSize: 28,
+              elevation: 0,
+              style: const TextStyle(
+                color: Colors.black54,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              hint: const Text('Vrste proizvoda'),
+              icon: const Icon(Icons.arrow_drop_down),
+            ),
+          ),
+        ),
         const SizedBox(
           width: 50.0,
         ),
@@ -447,6 +491,7 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
                 _sifraSearchController.text = "";
                 selectedProductName = "";
                 selectedValue = null;
+                isAktivanProizvod = null;
               });
 
               await filter();
