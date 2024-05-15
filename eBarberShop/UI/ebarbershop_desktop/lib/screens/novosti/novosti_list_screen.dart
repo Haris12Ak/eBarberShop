@@ -38,6 +38,9 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
     novostiSearchResult =
         await _novostiProvider.get(filter: {'IsKorisnikInclude': true});
 
+    novostiSearchResult!.result
+        .sort((a, b) => b.novostiId.compareTo(a.novostiId));
+
     setState(() {
       isLoading = false;
     });
@@ -49,6 +52,8 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
       'datumObjave': _selectedDate,
       'IsKorisnikInclude': true
     });
+
+    data.result.sort((a, b) => b.novostiId.compareTo(a.novostiId));
 
     setState(() {
       novostiSearchResult = data;
@@ -234,6 +239,8 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
     return Expanded(
       child: SingleChildScrollView(
         child: DataTable(
+            dividerThickness: 2.0,
+            dataRowMaxHeight: 70,
             dataTextStyle: const TextStyle(fontSize: 16.0),
             decoration: const BoxDecoration(color: Colors.white70),
             columns: const <DataColumn>[

@@ -73,13 +73,6 @@ class _UposlenikInfoScreenState extends State<UposlenikInfoScreen> {
         elevation: 0.0,
         title: const Text(
           'Informacije frizera',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.w500,
-            letterSpacing: 1.0,
-            fontSize: 20,
-          ),
         ),
       ),
       body: isLoading

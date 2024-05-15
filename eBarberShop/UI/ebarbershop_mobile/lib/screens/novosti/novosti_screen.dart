@@ -32,6 +32,9 @@ class _NovostiScreenState extends State<NovostiScreen> {
   Future fetchNovosti() async {
     novostiResult = await _novostiProvider.get();
 
+    novostiResult!.result
+        .sort((a, b) => b.datumObjave.compareTo(a.datumObjave));
+
     if (mounted) {
       setState(() {
         isLoading = false;

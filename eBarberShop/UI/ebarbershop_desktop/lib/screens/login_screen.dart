@@ -23,8 +23,6 @@ class _LoginScreenState extends State<LoginScreen> {
   late LoginProvider _loginProvider;
   Korisnik? korisnikResponse;
 
-  bool isLoggedIn = false;
-
   @override
   void initState() {
     super.initState();
@@ -104,14 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 30.0,
                   ),
-                  isLoggedIn
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.grey,
-                            backgroundColor: Colors.white54,
-                          ),
-                        )
-                      : buildLogin(),
+                  buildLogin(),
                   const SizedBox(
                     height: 30.0,
                   ),
@@ -147,20 +138,12 @@ class _LoginScreenState extends State<LoginScreen> {
   ElevatedButton buildLogin() {
     return ElevatedButton(
       onPressed: () async {
-        setState(() {
-          isLoggedIn = true;
-        });
-
         korisnikResponse = null;
 
         var username = _usernameController.text;
         var password = _passwordController.text;
 
         if (username == "" || password == "") {
-          setState(() {
-            isLoggedIn = false;
-          });
-
           String errorMessage = "Unesite korisničko ime i lozinku!";
 
           // ignore: use_build_context_synchronously
@@ -194,10 +177,6 @@ class _LoginScreenState extends State<LoginScreen> {
               (route) => false,
             );
           } else {
-            setState(() {
-              isLoggedIn = false;
-            });
-
             String errorMessage =
                 "Netačno korisničko ime ili lozinka. Molimo pokušajte ponovo.";
 

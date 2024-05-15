@@ -50,6 +50,8 @@ class _RezervacijeScreenState extends State<RezervacijeScreen> {
     rezervacijeResult = await _rezervacijaProvider
         .get(filter: {'IsKorisnikIncluded': true, 'IsUslugaIncluded': true});
 
+    rezervacijeResult!.result.sort((a, b) => b.vrijeme.compareTo(a.vrijeme));
+
     if (mounted) {
       setState(() {
         isLoading = false;
@@ -81,6 +83,8 @@ class _RezervacijeScreenState extends State<RezervacijeScreen> {
       'IsUslugaIncluded': true
     });
 
+    data.result.sort((a, b) => b.vrijeme.compareTo(a.vrijeme));
+
     setState(() {
       rezervacijeResult = data;
     });
@@ -107,6 +111,8 @@ class _RezervacijeScreenState extends State<RezervacijeScreen> {
                   Expanded(
                     child: SingleChildScrollView(
                       child: DataTable(
+                          dividerThickness: 2.0,
+                          dataRowMaxHeight: 55,
                           dataTextStyle: const TextStyle(fontSize: 16.0),
                           decoration:
                               const BoxDecoration(color: Colors.white70),
@@ -262,7 +268,8 @@ class _RezervacijeScreenState extends State<RezervacijeScreen> {
                                                         onPressed: () =>
                                                             Navigator.pop(
                                                                 context),
-                                                        child: const Text("Close"),
+                                                        child:
+                                                            const Text("Close"),
                                                       ),
                                                     ],
                                                   ),

@@ -50,6 +50,9 @@ class _ProizvodiScreenState extends State<ProizvodiScreen> {
     proizvodiReslut = await _proizvodiProvider.get(
         filter: {'IsVrsteProizvodaIncluded': true, 'IsAktivanProizvod': true});
 
+    proizvodiReslut!.result
+        .sort((a, b) => b.proizvodiId.compareTo(a.proizvodiId));
+
     vrsteProizvodiReslut = await _vrsteProizvodaProvider.get();
 
     if (mounted) {

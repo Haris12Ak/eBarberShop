@@ -42,6 +42,9 @@ class _RezervacijeTerminiScreenState extends State<RezervacijeTerminiScreen> {
       terminiUposlenikaResult =
           await _rezervacijaProvider.getTermineUposlenika();
 
+      terminiUposlenikaResult!.result
+          .sort((a, b) => b.datum.compareTo(a.datum));
+
       setState(() {
         isLoading = false;
       });
@@ -83,6 +86,8 @@ class _RezervacijeTerminiScreenState extends State<RezervacijeTerminiScreen> {
       'Datum': _selectedDate,
       'ImePrezimeUposlenika': _imePrezimeController.text,
     });
+
+    data.result.sort((a, b) => b.datum.compareTo(a.datum));
 
     setState(() {
       terminiUposlenikaResult = data;
@@ -246,6 +251,8 @@ class _RezervacijeTerminiScreenState extends State<RezervacijeTerminiScreen> {
                   Expanded(
                     child: SingleChildScrollView(
                       child: DataTable(
+                          dividerThickness: 2.0,
+                          dataRowMaxHeight: 55,
                           dataTextStyle: const TextStyle(fontSize: 16.0),
                           decoration:
                               const BoxDecoration(color: Colors.white70),

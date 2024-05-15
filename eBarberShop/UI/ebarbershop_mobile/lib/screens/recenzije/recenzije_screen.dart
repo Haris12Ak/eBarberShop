@@ -47,6 +47,9 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
     recenzijeResult =
         await _recenzijeProvider.get(filter: {'isKorisnikInclude': true});
 
+    recenzijeResult!.result
+        .sort((a, b) => b.datumObjave.compareTo(a.datumObjave));
+
     if (mounted) {
       setState(() {
         isLoading = false;
@@ -61,202 +64,202 @@ class _RecenzijeScreenState extends State<RecenzijeScreen> {
             child: CircularProgressIndicator(),
           )
         : Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 10.0,
-            ),
-            Align(
-              alignment: Alignment.topCenter,
-              child: Text(
-                'Recenzije',
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey[800],
-                  fontFamily: 'Dosis',
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 10.0,
+              ),
+              Align(
+                alignment: Alignment.topCenter,
+                child: Text(
+                  'Recenzije',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[800],
+                    fontFamily: 'Dosis',
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 5.0,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.star_border_purple500_outlined,
-                  color: Colors.amber,
-                  size: 25.0,
-                ),
-                const SizedBox(
-                  width: 8.0,
-                ),
-                Text(
-                  formatNumber(
-                    calculateAvarageRaiting(recenzijeResult!.result),
+              const SizedBox(
+                height: 5.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.star_border_purple500_outlined,
+                    color: Colors.amber,
+                    size: 25.0,
                   ),
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.grey[700],
-                    fontFamily: 'Dosis',
-                    letterSpacing: 1,
+                  const SizedBox(
+                    width: 8.0,
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                const RecenzijeAddScreen())).then(
-                      (value) => fetchRecenzije(),
-                    );
-                  },
-                  child: Icon(
-                    Icons.rate_review_outlined,
-                    size: 35.0,
-                    color: Colors.amberAccent[700]!.withOpacity(0.8),
+                  Text(
+                    formatNumber(
+                      calculateAvarageRaiting(recenzijeResult!.result),
+                    ),
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[700],
+                      fontFamily: 'Dosis',
+                      letterSpacing: 1,
+                    ),
                   ),
-                ),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    const RecenzijeKorisnikaScreen()))
-                        .then((value) => fetchRecenzije());
-                  },
-                  style: ElevatedButton.styleFrom(
-                      elevation: 0.0, foregroundColor: Colors.black),
-                  icon: const Icon(
-                    Icons.keyboard_arrow_left,
-                    color: Colors.black87,
+                ],
+              ),
+              const SizedBox(height: 10.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  const RecenzijeAddScreen())).then(
+                        (value) => fetchRecenzije(),
+                      );
+                    },
+                    child: Icon(
+                      Icons.rate_review_outlined,
+                      size: 35.0,
+                      color: Colors.amberAccent[700]!.withOpacity(0.8),
+                    ),
                   ),
-                  label: const Text('Pregled recenzije'),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10.0,
-            ),
-            Expanded(
-              child: GridView.builder(
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 10.0,
-                    crossAxisSpacing: 10.0,
-                    mainAxisExtent: 250.0,
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      const RecenzijeKorisnikaScreen()))
+                          .then((value) => fetchRecenzije());
+                    },
+                    style: ElevatedButton.styleFrom(
+                        elevation: 0.0, foregroundColor: Colors.black),
+                    icon: const Icon(
+                      Icons.keyboard_arrow_left,
+                      color: Colors.black87,
+                    ),
+                    label: const Text('Pregled recenzije'),
                   ),
-                  itemCount: recenzijeResult!.result.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    Recenzije recenzija = recenzijeResult!.result[index];
-                    return GestureDetector(
-                      onTap: () {
-                        _buildShowBottomDialog(context, recenzija);
-                      },
-                      child: Container(
-                        color: Colors.white,
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[350],
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                              child: recenzija.korisnik?.slika != "" &&
-                                      recenzija.korisnik?.slika != null
-                                  ? ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.circular(100),
-                                      child: Image(
-                                        image: MemoryImage(
-                                          base64Decode(recenzija
-                                              .korisnik!.slika
-                                              .toString()),
-                                        ),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )
-                                  : ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.circular(100),
-                                      child: const Image(
-                                        image: AssetImage(
-                                            'assets/images/person_icon.png'),
-                                      ),
-                                    ),
-                            ),
-                            const SizedBox(
-                              height: 10.0,
-                            ),
-                            Text(
-                              recenzija.korisnik?.korisnickoIme ?? "",
-                              style: TextStyle(
-                                fontSize: 15.0,
-                                color: Colors.grey[800],
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10.0,
-                            ),
-                            IgnorePointer(
-                              ignoring: true,
-                              child: RatingBar.builder(
-                                itemSize: 25.0,
-                                initialRating: recenzija.ocjena,
-                                minRating: 0,
-                                direction: Axis.horizontal,
-                                allowHalfRating: true,
-                                itemCount: 5,
-                                itemPadding: const EdgeInsets.symmetric(
-                                    horizontal: 2.0),
-                                itemBuilder: (context, _) => const Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
+                ],
+              ),
+              const SizedBox(
+                height: 10.0,
+              ),
+              Expanded(
+                child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing: 10.0,
+                      mainAxisExtent: 250.0,
+                    ),
+                    itemCount: recenzijeResult!.result.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      Recenzije recenzija = recenzijeResult!.result[index];
+                      return GestureDetector(
+                        onTap: () {
+                          _buildShowBottomDialog(context, recenzija);
+                        },
+                        child: Container(
+                          color: Colors.white,
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[350],
+                                  borderRadius: BorderRadius.circular(100),
                                 ),
-                                onRatingUpdate: (rating) {},
+                                child: recenzija.korisnik?.slika != "" &&
+                                        recenzija.korisnik?.slika != null
+                                    ? ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        child: Image(
+                                          image: MemoryImage(
+                                            base64Decode(recenzija
+                                                .korisnik!.slika
+                                                .toString()),
+                                          ),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        child: const Image(
+                                          image: AssetImage(
+                                              'assets/images/person_icon.png'),
+                                        ),
+                                      ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 10.0,
-                            ),
-                            Expanded(
-                              child: Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  recenzija.sadrzaj,
-                                  overflow: TextOverflow.fade,
-                                  maxLines: 5,
-                                  style: const TextStyle(
-                                    color: Colors.black87,
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              Text(
+                                recenzija.korisnik?.korisnickoIme ?? "",
+                                style: TextStyle(
+                                  fontSize: 15.0,
+                                  color: Colors.grey[800],
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              IgnorePointer(
+                                ignoring: true,
+                                child: RatingBar.builder(
+                                  itemSize: 25.0,
+                                  initialRating: recenzija.ocjena,
+                                  minRating: 0,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  itemPadding: const EdgeInsets.symmetric(
+                                      horizontal: 2.0),
+                                  itemBuilder: (context, _) => const Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  onRatingUpdate: (rating) {},
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10.0,
+                              ),
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    recenzija.sadrzaj,
+                                    overflow: TextOverflow.fade,
+                                    maxLines: 5,
+                                    style: const TextStyle(
+                                      color: Colors.black87,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  }),
-            ),
-          ],
-        );
+                      );
+                    }),
+              ),
+            ],
+          );
   }
 
   Future<dynamic> _buildShowBottomDialog(

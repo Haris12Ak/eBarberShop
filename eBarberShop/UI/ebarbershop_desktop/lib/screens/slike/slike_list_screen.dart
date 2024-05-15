@@ -34,6 +34,9 @@ class _SlikeListScreenState extends State<SlikeListScreen> {
 
   Future fetchSlike() async {
     slikeSearchResult = await _slikeProvider.get();
+
+    slikeSearchResult!.result.sort((a, b) => b.slikeId.compareTo(a.slikeId));
+
     setState(() {
       isLoading = false;
     });
@@ -43,6 +46,8 @@ class _SlikeListScreenState extends State<SlikeListScreen> {
     var data = await _slikeProvider.get(filter: {
       'DatumObjave': _selectedDate,
     });
+
+    data.result.sort((a, b) => b.slikeId.compareTo(a.slikeId));
 
     setState(() {
       slikeSearchResult = data;
@@ -286,8 +291,19 @@ class _SlikeListScreenState extends State<SlikeListScreen> {
                                   child: imageFromBase64String(e.slika),
                                 )
                               : const Text('')),
-                          DataCell(Text(formatDate(e.datumPostavljanja))),
-                          DataCell(Text(e.opis ?? "")),
+                          DataCell(
+                            SizedBox(
+                              width: 150,
+                              child: Text(formatDate(e.datumPostavljanja)),
+                            ),
+                          ),
+                          DataCell(Text(
+                            e.opis ?? "",
+                            maxLines: 2,
+                            style: const TextStyle(
+                              overflow: TextOverflow.fade,
+                            ),
+                          )),
                           DataCell(
                             Row(
                               children: [

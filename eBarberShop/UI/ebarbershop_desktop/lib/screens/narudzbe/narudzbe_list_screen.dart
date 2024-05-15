@@ -44,6 +44,9 @@ class _NarudzbeListScreenState extends State<NarudzbeListScreen> {
     narudzbeResult =
         await _narudzbeProvider.get(filter: {'isKorisnikIncluded': true});
 
+    narudzbeResult!.result
+        .sort((a, b) => b.datumNarudzbe.compareTo(a.datumNarudzbe));
+
     if (mounted) {
       setState(() {
         isLoading = false;
@@ -57,6 +60,8 @@ class _NarudzbeListScreenState extends State<NarudzbeListScreen> {
       'brojNarudzbe': _brojNarudzbeController.text,
       'isKorisnikIncluded': true
     });
+
+    data.result.sort((a, b) => b.datumNarudzbe.compareTo(a.datumNarudzbe));
 
     setState(() {
       narudzbeResult = data;
@@ -84,6 +89,8 @@ class _NarudzbeListScreenState extends State<NarudzbeListScreen> {
                   Expanded(
                     child: SingleChildScrollView(
                       child: DataTable(
+                          dividerThickness: 2.0,
+                          dataRowMaxHeight: 55,
                           dataTextStyle: const TextStyle(fontSize: 16.0),
                           decoration:
                               const BoxDecoration(color: Colors.white70),

@@ -35,6 +35,8 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
   Future fetchUposlenici() async {
     var data = await _uposlenikProvider.get();
 
+    data.result.sort((a, b) => b.uposlenikId.compareTo(a.uposlenikId));
+
     setState(() {
       uposlenikSearchResult = data;
       isLoading = false;
@@ -46,6 +48,8 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
       'ime': _imeSearchController.text,
       'prezime': _prezimeSearchController.text
     });
+
+    data.result.sort((a, b) => b.uposlenikId.compareTo(a.uposlenikId));
 
     setState(() {
       uposlenikSearchResult = data;
@@ -120,6 +124,8 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
     return Expanded(
       child: SingleChildScrollView(
         child: DataTable(
+            dividerThickness: 2.0,
+            dataRowMaxHeight: 55,
             dataTextStyle: const TextStyle(fontSize: 16.0),
             decoration: const BoxDecoration(color: Colors.white70),
             columns: const <DataColumn>[
@@ -297,8 +303,8 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
                                                                     context)
                                                                 .pop();
                                                           },
-                                                          child:
-                                                              const Text("Close"),
+                                                          child: const Text(
+                                                              "Close"),
                                                         ),
                                                       ],
                                                     ),

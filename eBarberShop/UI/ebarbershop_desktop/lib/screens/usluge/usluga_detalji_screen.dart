@@ -39,6 +39,9 @@ class _UslugaDetaljiScreenState extends State<UslugaDetaljiScreen> {
     slikeUslugeResult =
         await _slikeUslugeProvider.getSlike(widget.usluga.uslugaId);
 
+    slikeUslugeResult!.result
+        .sort((a, b) => b.datumObjave!.compareTo(a.datumObjave!));
+
     if (mounted) {
       setState(() {
         isLoading = false;

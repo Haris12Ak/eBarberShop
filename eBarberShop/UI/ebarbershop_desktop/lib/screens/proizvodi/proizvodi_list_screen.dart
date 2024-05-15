@@ -45,6 +45,9 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
     proizvodiSearchResult = await _proizvodiProvider
         .get(filter: {'IsVrsteProizvodaIncluded': true});
 
+    proizvodiSearchResult!.result
+        .sort((a, b) => b.proizvodiId.compareTo(a.proizvodiId));
+
     vrsteProizvodiReslut = await _vrsteProizvodaProvider.get();
 
     setState(() {
@@ -60,6 +63,8 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
       'IsAktivanProizvod': isAktivanProizvod,
       'IsVrsteProizvodaIncluded': true
     });
+
+    data.result.sort((a, b) => b.proizvodiId.compareTo(a.proizvodiId));
 
     setState(() {
       proizvodiSearchResult = data;
@@ -134,6 +139,8 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
     return Expanded(
       child: SingleChildScrollView(
         child: DataTable(
+            dataRowMaxHeight: 70,
+            dividerThickness: 2.0,
             dataTextStyle: const TextStyle(fontSize: 16.0),
             decoration: const BoxDecoration(color: Colors.white70),
             columns: const <DataColumn>[

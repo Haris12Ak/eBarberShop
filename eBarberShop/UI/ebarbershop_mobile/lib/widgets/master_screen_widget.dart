@@ -16,15 +16,11 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
-        backgroundColor: Colors.lightBlue[100],
-        elevation: 4.0,
+        backgroundColor: Colors.blue[50],
+        elevation: 0.0,
+        centerTitle: true,
         title: Text(
           widget.title ?? "",
-          style: const TextStyle(
-              fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 1.0,
-              fontSize: 20),
         ),
       ),
       body: Padding(

@@ -205,8 +205,9 @@ class _SlikeAddEditScreenState extends State<SlikeAddEditScreen> {
                         );
                       }),
                       validator: (value) {
-                        if (selectedImageName == null ||
-                            selectedImageName!.isEmpty) {
+                        if (widget.slika == null &&
+                            (selectedImageName == null ||
+                                selectedImageName!.isEmpty)) {
                           return 'Unos slike obavezan !';
                         }
                         return null;

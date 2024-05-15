@@ -35,13 +35,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
         backgroundColor: Colors.blue[50],
         appBar: AppBar(
-          backgroundColor: Colors.lightBlue[100],
-          elevation: 4.0,
+          backgroundColor: Colors.lightBlue[200],
+          elevation: 5.0,
           title: const Text(
             'BarberShop',
             style: TextStyle(
                 fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),
           ),
+          surfaceTintColor: Colors.blueGrey,
+          shadowColor: Colors.blueGrey.shade300,
           actions: [
             Align(
               alignment: Alignment.center,
@@ -78,34 +80,40 @@ class _HomeScreenState extends State<HomeScreen> {
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
         bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.shifting,
+          type: BottomNavigationBarType.fixed,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Početna',
-                backgroundColor: Colors.white60),
+              icon: Icon(Icons.home),
+              label: 'Početna',
+            ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.date_range),
-                label: 'Rezervacije',
-                backgroundColor: Colors.white60),
+              icon: Icon(Icons.date_range),
+              label: 'Rezervacije',
+            ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.star),
-                label: 'Recenzije',
-                backgroundColor: Colors.white60),
+              icon: Icon(Icons.star),
+              label: 'Recenzije',
+            ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart),
-                label: 'Proizvodi',
-                backgroundColor: Colors.white60),
+              icon: Icon(Icons.shopping_cart),
+              label: 'Proizvodi',
+            ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: 'Profil',
-                backgroundColor: Colors.white60),
+              icon: Icon(Icons.person),
+              label: 'Profil',
+            ),
           ],
+          backgroundColor: Colors.white60,
           currentIndex: _selectedIndex,
-          selectedItemColor: Colors.grey.shade800,
-          unselectedItemColor: Colors.black45,
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
-          elevation: 12.0,
+          selectedItemColor: Colors.lightBlue[700],
+          unselectedItemColor: Colors.grey.shade700,
+          selectedLabelStyle:
+              const TextStyle(fontWeight: FontWeight.w700, fontSize: 14.0),
+          unselectedLabelStyle:
+              const TextStyle(fontWeight: FontWeight.w600, fontSize: 12.0),
+          selectedIconTheme: const IconThemeData(size: 30),
+          unselectedIconTheme: const IconThemeData(size: 23),
+          elevation: 15.0,
           onTap: _onItemTapped,
         ));
   }

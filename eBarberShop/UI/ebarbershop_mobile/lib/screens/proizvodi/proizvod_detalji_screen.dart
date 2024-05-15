@@ -5,7 +5,6 @@ import 'package:ebarbershop_mobile/providers/cart_provider.dart';
 import 'package:ebarbershop_mobile/providers/recommend_provider.dart';
 import 'package:ebarbershop_mobile/screens/proizvodi/cart_list_screen.dart';
 import 'package:ebarbershop_mobile/utils/util.dart';
-import 'package:ebarbershop_mobile/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -65,206 +64,230 @@ class _ProizvodDetaljiScreenState extends State<ProizvodDetaljiScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MasterScreenWidget(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              margin: const EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(15.0),
-                    child: widget.proizvod.slika != "" &&
-                            widget.proizvod.slika != null
-                        ? Image(
-                            width: 150,
-                            height: 150,
-                            fit: BoxFit.contain,
-                            image: MemoryImage(
-                              base64Decode(
-                                widget.proizvod.slika.toString(),
-                              ),
-                            ),
-                          )
-                        : Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: Colors.grey.shade200),
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            child: const Image(
+    return Scaffold(
+      backgroundColor: Colors.blue[50],
+      appBar: AppBar(
+        backgroundColor: Colors.blue[50],
+        elevation: 0.0,
+        actions: [
+          IconButton(
+            onPressed: () {
+              while (Navigator.canPop(context)) {
+                Navigator.pop(context);
+              }
+            },
+            icon: const Icon(
+              Icons.close_sharp,
+              size: 28.0,
+              color: Colors.black,
+            ),
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                margin: const EdgeInsets.all(10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: widget.proizvod.slika != "" &&
+                              widget.proizvod.slika != null
+                          ? Image(
                               width: 150,
                               height: 150,
                               fit: BoxFit.contain,
-                              image: AssetImage(
-                                  'assets/images/image_not_available.png'),
-                            ),
-                          ),
-                  ),
-                  const SizedBox(width: 20.0),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          widget.proizvod.naziv,
-                          style: _customHeaderStyle,
-                          overflow: TextOverflow.clip,
-                          softWrap: true,
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          widget.proizvod.vrstaProizvodaNaziv ?? "",
-                          style: _customStyle,
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          '${formatNumber(widget.proizvod.cijena)} KM',
-                          style: _customStyle,
-                        ),
-                        const SizedBox(height: 20),
-                        ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                                elevation: 0.0, backgroundColor: Colors.white),
-                            onPressed: () {
-                              try {
-                                _cartProvider.addToCart(widget.proizvod);
-                                _cartProvider
-                                    .addTotalPrice(widget.proizvod.cijena);
-
-                                setState(() {
-                                  _cartProvider.getCounter();
-                                });
-
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    showCloseIcon: false,
-                                    backgroundColor: Colors.blue[800],
-                                    duration: Durations.extralong4,
-                                    content: const Text(
-                                        "Proizvod dodan u košaricu."),
-                                  ),
-                                );
-                              } catch (e) {
-                                // ignore: use_build_context_synchronously
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    backgroundColor: Colors.red[800],
-                                    showCloseIcon: false,
-                                    duration: Durations.extralong4,
-                                    content: const Text(
-                                        "Proizvod je več dodan u košaricu."),
-                                  ),
-                                );
-                              }
-                            },
-                            icon: Icon(
-                              Icons.add_shopping_cart,
-                              color: Colors.grey[900],
-                            ),
-                            label: Text(
-                              'Dodaj u košaricu',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey[800],
-                                  fontWeight: FontWeight.w600),
-                            ))
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Text(
-              'Opis proizvoda',
-              style: _customHeaderStyle,
-            ),
-            const SizedBox(height: 5),
-            Text(
-              widget.proizvod.opis ?? "Nema opisa . . .",
-              style: _customStyle,
-            ),
-            const SizedBox(height: 15.0),
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                const CartListScreen()))
-                    .then((value) => setState(() {
-                          _cartProvider.getCounter();
-                        }));
-              },
-              style: ElevatedButton.styleFrom(
-                elevation: 5.0,
-                backgroundColor: Colors.lightBlue,
-                foregroundColor: Colors.white,
-                shape: const BeveledRectangleBorder(
-                    borderRadius: BorderRadius.zero),
-              ),
-              icon: const Icon(Icons.shopping_cart_outlined),
-              label: Text(
-                'Prikaži artikle (${_cartProvider.getCounter().toString()})',
-                style: const TextStyle(fontSize: 16),
-              ),
-            ),
-            Divider(color: Colors.grey.shade400, thickness: 2.0, height: 30.0),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white70,
-                  borderRadius: BorderRadius.circular(10.0)),
-              padding: const EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    'Kupci koji su kupili ovaj proizvod su također kupili',
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey.shade700),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  isLoading
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : recommendedProizvodi.isEmpty
-                          ? Text(
-                              widget.proizvod.opis ??
-                                  "Nema rezultata pretrage !",
-                              textAlign: TextAlign.center,
-                              style: _customStyle,
-                            )
-                          : SizedBox(
-                              height: 235,
-                              child: GridView.builder(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 1,
-                                  childAspectRatio: 4 / 3,
+                              image: MemoryImage(
+                                base64Decode(
+                                  widget.proizvod.slika.toString(),
                                 ),
-                                itemCount: recommendedProizvodi.length,
-                                itemBuilder: _buildListRecommendedProizvodi,
+                              ),
+                            )
+                          : Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(color: Colors.grey.shade200),
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              child: const Image(
+                                width: 150,
+                                height: 150,
+                                fit: BoxFit.contain,
+                                image: AssetImage(
+                                    'assets/images/image_not_available.png'),
                               ),
                             ),
-                ],
+                    ),
+                    const SizedBox(width: 20.0),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            widget.proizvod.naziv,
+                            style: _customHeaderStyle,
+                            overflow: TextOverflow.clip,
+                            softWrap: true,
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            widget.proizvod.vrstaProizvodaNaziv ?? "",
+                            style: _customStyle,
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            '${formatNumber(widget.proizvod.cijena)} KM',
+                            style: _customStyle,
+                          ),
+                          const SizedBox(height: 20),
+                          ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 0.0,
+                                  backgroundColor: Colors.white),
+                              onPressed: () {
+                                try {
+                                  _cartProvider.addToCart(widget.proizvod);
+                                  _cartProvider
+                                      .addTotalPrice(widget.proizvod.cijena);
+
+                                  setState(() {
+                                    _cartProvider.getCounter();
+                                  });
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      showCloseIcon: false,
+                                      backgroundColor: Colors.blue[800],
+                                      duration: Durations.extralong4,
+                                      content: const Text(
+                                          "Proizvod dodan u košaricu."),
+                                    ),
+                                  );
+                                } catch (e) {
+                                  // ignore: use_build_context_synchronously
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: Colors.red[800],
+                                      showCloseIcon: false,
+                                      duration: Durations.extralong4,
+                                      content: const Text(
+                                          "Proizvod je več dodan u košaricu."),
+                                    ),
+                                  );
+                                }
+                              },
+                              icon: Icon(
+                                Icons.add_shopping_cart,
+                                color: Colors.grey[900],
+                              ),
+                              label: Text(
+                                'Dodaj u košaricu',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey[800],
+                                    fontWeight: FontWeight.w600),
+                              ))
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              Text(
+                'Opis proizvoda',
+                style: _customHeaderStyle,
+              ),
+              const SizedBox(height: 5),
+              Text(
+                widget.proizvod.opis ?? "Nema opisa . . .",
+                style: _customStyle,
+              ),
+              const SizedBox(height: 15.0),
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  const CartListScreen()))
+                      .then((value) => setState(() {
+                            _cartProvider.getCounter();
+                          }));
+                },
+                style: ElevatedButton.styleFrom(
+                  elevation: 5.0,
+                  backgroundColor: Colors.lightBlue,
+                  foregroundColor: Colors.white,
+                  shape: const BeveledRectangleBorder(
+                      borderRadius: BorderRadius.zero),
+                ),
+                icon: const Icon(Icons.shopping_cart_outlined),
+                label: Text(
+                  'Prikaži artikle (${_cartProvider.getCounter().toString()})',
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
+              Divider(
+                  color: Colors.grey.shade400, thickness: 2.0, height: 30.0),
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.white70,
+                    borderRadius: BorderRadius.circular(10.0)),
+                padding: const EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Kupci koji su kupili ovaj proizvod su također kupili',
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey.shade700),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : recommendedProizvodi.isEmpty
+                            ? Text(
+                                widget.proizvod.opis ??
+                                    "Nema rezultata pretrage !",
+                                textAlign: TextAlign.center,
+                                style: _customStyle,
+                              )
+                            : SizedBox(
+                                height: 235,
+                                child: GridView.builder(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 1,
+                                    childAspectRatio: 4 / 3,
+                                  ),
+                                  itemCount: recommendedProizvodi.length,
+                                  itemBuilder: _buildListRecommendedProizvodi,
+                                ),
+                              ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

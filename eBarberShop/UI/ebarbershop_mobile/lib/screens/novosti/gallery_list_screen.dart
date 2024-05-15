@@ -23,6 +23,9 @@ class _GalleryListScreenState extends State<GalleryListScreen> {
     var slikeProvider = Provider.of<SlikeProvider>(context, listen: false);
     var slikeResult = await slikeProvider.get();
 
+    slikeResult.result
+        .sort((a, b) => b.datumPostavljanja.compareTo(a.datumPostavljanja));
+
     return slikeResult.result;
   }
 

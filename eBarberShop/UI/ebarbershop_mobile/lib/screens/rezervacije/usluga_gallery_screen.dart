@@ -28,6 +28,9 @@ class _UslugaGalleryScreenState extends State<UslugaGalleryScreen> {
     var slikeUslugeResult =
         await slikeUslugeProvider.getSlike(widget.usluga.uslugaId);
 
+    slikeUslugeResult.result
+        .sort((a, b) => b.datumObjave!.compareTo(a.datumObjave!));
+
     return slikeUslugeResult.result;
   }
 

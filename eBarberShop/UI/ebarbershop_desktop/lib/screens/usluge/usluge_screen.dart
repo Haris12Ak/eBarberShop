@@ -164,7 +164,7 @@ class _UslugeScreenState extends State<UslugeScreen> {
               child: usluga.slika != "" && usluga.slika != null
                   ? Image(
                       height: 80,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                       image: MemoryImage(
                         base64Decode(
                           usluga.slika.toString(),

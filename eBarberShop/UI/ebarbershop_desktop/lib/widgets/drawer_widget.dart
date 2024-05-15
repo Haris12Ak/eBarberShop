@@ -66,11 +66,13 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             title: const Text(
               'Početna',
-              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500),
             ),
+            horizontalTitleGap: 20.0,
+            contentPadding: const EdgeInsets.fromLTRB(25.0, 5.0, 30.0, 5.0),
             selectedColor: Colors.blue[800],
             selectedTileColor: Colors.grey[350],
-            leading: const Icon(Icons.home),
+            leading: const Icon(Icons.home, size: 28),
             selected: widget.selectedOption == 'Pocetna',
             onTap: () {
               Navigator.of(context).push(
@@ -78,14 +80,17 @@ class DrawerWidget extends StatelessWidget {
               );
             },
           ),
+          Divider(height: 8.0, thickness: 2.0, color: Colors.grey.shade300),
           ListTile(
             title: const Text(
               'Uposlenici',
-              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500),
             ),
+            horizontalTitleGap: 20.0,
+            contentPadding: const EdgeInsets.fromLTRB(25.0, 5.0, 30.0, 5.0),
             selectedColor: Colors.blue[800],
             selectedTileColor: Colors.grey[350],
-            leading: const Icon(Icons.people_outline_outlined),
+            leading: const Icon(Icons.people_outline_outlined, size: 28),
             selected: widget.selectedOption == 'Uposlenici',
             onTap: () {
               Navigator.of(context).push(
@@ -94,12 +99,15 @@ class DrawerWidget extends StatelessWidget {
               );
             },
           ),
+          Divider(height: 8.0, thickness: 2.0, color: Colors.grey.shade300),
           ListTile(
             title: const Text(
               'Proizvodi',
-              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500),
             ),
-            leading: const Icon(Icons.category),
+            horizontalTitleGap: 20.0,
+            contentPadding: const EdgeInsets.fromLTRB(25.0, 5.0, 30.0, 5.0),
+            leading: const Icon(Icons.category, size: 28),
             selectedColor: Colors.blue[800],
             selectedTileColor: Colors.grey[350],
             selected: widget.selectedOption == 'Proizvodi',
@@ -110,12 +118,15 @@ class DrawerWidget extends StatelessWidget {
               );
             },
           ),
+          Divider(height: 8.0, thickness: 2.0, color: Colors.grey.shade300),
           ListTile(
             title: const Text(
               'Slike',
-              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500),
             ),
-            leading: const Icon(Icons.image),
+            horizontalTitleGap: 20.0,
+            contentPadding: const EdgeInsets.fromLTRB(25.0, 5.0, 30.0, 5.0),
+            leading: const Icon(Icons.image, size: 28),
             selectedColor: Colors.blue[800],
             selectedTileColor: Colors.grey[350],
             selected: widget.selectedOption == 'Slike',
@@ -126,12 +137,15 @@ class DrawerWidget extends StatelessWidget {
               );
             },
           ),
+          Divider(height: 8.0, thickness: 2.0, color: Colors.grey.shade300),
           ListTile(
             title: const Text(
               'Rezervacije',
-              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500),
             ),
-            leading: const Icon(Icons.calendar_month),
+            horizontalTitleGap: 20.0,
+            contentPadding: const EdgeInsets.fromLTRB(25.0, 5.0, 30.0, 5.0),
+            leading: const Icon(Icons.calendar_month, size: 28),
             selectedColor: Colors.blue[800],
             selectedTileColor: Colors.grey[350],
             selected: widget.selectedOption == 'Rezervacije',
@@ -142,12 +156,15 @@ class DrawerWidget extends StatelessWidget {
               );
             },
           ),
+          Divider(height: 8.0, thickness: 2.0, color: Colors.grey.shade300),
           ListTile(
             title: const Text(
               'Novosti',
-              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500),
             ),
-            leading: const Icon(Icons.feed),
+            horizontalTitleGap: 20.0,
+            contentPadding: const EdgeInsets.fromLTRB(25.0, 5.0, 30.0, 5.0),
+            leading: const Icon(Icons.feed, size: 28),
             selectedColor: Colors.blue[800],
             selectedTileColor: Colors.grey[350],
             selected: widget.selectedOption == 'Novosti',
@@ -158,12 +175,15 @@ class DrawerWidget extends StatelessWidget {
               );
             },
           ),
+          Divider(height: 8.0, thickness: 2.0, color: Colors.grey.shade300),
           ListTile(
             title: const Text(
               'Narudžbe',
-              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500),
             ),
-            leading: const Icon(Icons.shopping_cart_checkout),
+            horizontalTitleGap: 20.0,
+            contentPadding: const EdgeInsets.fromLTRB(25.0, 5.0, 30.0, 5.0),
+            leading: const Icon(Icons.shopping_cart_checkout, size: 28),
             selectedColor: Colors.blue[800],
             selectedTileColor: Colors.grey[350],
             selected: widget.selectedOption == 'Narudzbe',
@@ -174,12 +194,15 @@ class DrawerWidget extends StatelessWidget {
               );
             },
           ),
+          Divider(height: 8.0, thickness: 2.0, color: Colors.grey.shade300),
           ListTile(
             title: const Text(
               'Termini',
-              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500),
             ),
-            leading: const Icon(Icons.more_time),
+            horizontalTitleGap: 20.0,
+            contentPadding: const EdgeInsets.fromLTRB(25.0, 5.0, 30.0, 5.0),
+            leading: const Icon(Icons.more_time, size: 28),
             selectedColor: Colors.blue[800],
             selectedTileColor: Colors.grey[350],
             selected: widget.selectedOption == 'Termini',
@@ -190,22 +213,25 @@ class DrawerWidget extends StatelessWidget {
               );
             },
           ),
+          Divider(height: 8.0, thickness: 2.0, color: Colors.grey.shade300),
           ListTile(
             title: const Text(
               'Usluge',
-              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500),
             ),
-            leading: const Icon(Icons.miscellaneous_services),
+            horizontalTitleGap: 20.0,
+            contentPadding: const EdgeInsets.fromLTRB(25.0, 5.0, 30.0, 5.0),
+            leading: const Icon(Icons.miscellaneous_services, size: 28),
             selectedColor: Colors.blue[800],
             selectedTileColor: Colors.grey[350],
             selected: widget.selectedOption == 'Usluge',
             onTap: () {
               Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (context) => const UslugeScreen()),
+                MaterialPageRoute(builder: (context) => const UslugeScreen()),
               );
             },
           ),
+          Divider(height: 8.0, thickness: 2.0, color: Colors.grey.shade300),
         ],
       ),
     );
