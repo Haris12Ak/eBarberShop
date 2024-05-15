@@ -156,15 +156,27 @@ class _ProizvodiScreenState extends State<ProizvodiScreen> {
               ),
               TextField(
                 controller: _nazivProizvodaController,
-                decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.only(left: 10.0, right: 10.0),
-                  border: OutlineInputBorder(
+                decoration: InputDecoration(
+                  contentPadding:
+                      const EdgeInsets.only(left: 10.0, right: 10.0),
+                  border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
                   ),
-                  focusedBorder: OutlineInputBorder(),
+                  focusedBorder: const OutlineInputBorder(),
                   filled: true,
                   fillColor: Colors.white30,
                   hintText: 'Naziv proizvoda',
+                  suffixIcon: IconButton(
+                      onPressed: () async {
+                        setState(() {
+                          _nazivProizvodaController.text = "";
+                        });
+                        await filter();
+                      },
+                      icon: const Icon(
+                        Icons.clear,
+                        size: 26,
+                      )),
                 ),
                 onChanged: (value) {
                   setState(() {

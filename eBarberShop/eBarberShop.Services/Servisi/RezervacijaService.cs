@@ -222,8 +222,8 @@ namespace eBarberShop.Services.Servisi
             var list = await query.ToListAsync();
 
             izvjestaj.UkupnoRezervacija = list.Count;
-            izvjestaj.UkupnoAktivnihRezervacija = await query.Where(x => x.Datum > DateTime.Now && x.Vrijeme > DateTime.Now).CountAsync();
-            izvjestaj.UkupnoNeaktivnihRezervacija = await query.Where(x => x.Datum < DateTime.Now && x.Vrijeme < DateTime.Now).CountAsync();
+            izvjestaj.UkupnoAktivnihRezervacija = await query.Where(x => x.Datum.Date >= DateTime.Now.Date && x.Vrijeme >= DateTime.Now).CountAsync();
+            izvjestaj.UkupnoNeaktivnihRezervacija = await query.Where(x => x.Datum.Date <= DateTime.Now.Date && x.Vrijeme <= DateTime.Now).CountAsync();
             izvjestaj.BrojUsluga = await _dbContext.Usluga.CountAsync();
             izvjestaj.UposlenikSaNajviseRezervacija = uposlenik != null ? uposlenik.Ime + " " + uposlenik.Prezime : "Nije pronaden uposlenik sa najvise rezervacija!";
             izvjestaj.UslugaSaNajviseRezervacija = usluga != null ? usluga.Naziv : "Nije pronadena usluga sa najvise rezervacija!";
