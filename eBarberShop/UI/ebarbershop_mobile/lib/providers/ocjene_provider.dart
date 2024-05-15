@@ -8,7 +8,7 @@ class OcjeneProvider extends BaseProvider<Ocjene> {
   late String _baseUrl;
   OcjeneProvider() : super('Ocjene') {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://10.0.2.2:7076/");
+        defaultValue: "http://10.0.2.2:7076/");
   }
 
   @override

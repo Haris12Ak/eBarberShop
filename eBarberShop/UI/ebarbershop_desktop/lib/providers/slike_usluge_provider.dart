@@ -9,7 +9,7 @@ class SlikeUslugeProvider extends BaseProvider<SlikeUsluge> {
   late String _baseUrl;
   SlikeUslugeProvider() : super('SlikeUsluge') {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://localhost:7076/");
+        defaultValue: "http://localhost:7076/");
   }
 
   @override
