@@ -8,7 +8,7 @@ class RecenzijeProvider extends BaseProvider<Recenzije> {
   late String _baseUrl;
   RecenzijeProvider() : super('Recenzije') {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "http://10.0.2.2:7076/");
+        defaultValue: "https://10.0.2.2:7076/");
   }
 
   @override

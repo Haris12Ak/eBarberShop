@@ -132,17 +132,6 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
               DataColumn(
                 label: Expanded(
                   child: Text(
-                    'ID',
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black54),
-                  ),
-                ),
-              ),
-              DataColumn(
-                label: Expanded(
-                  child: Text(
                     'Ime',
                     style: TextStyle(
                         fontSize: 18.0,
@@ -227,7 +216,6 @@ class _UposleniciListScreenState extends State<UposleniciListScreen> {
             ],
             rows: uposlenikSearchResult?.result
                     .map((Uposlenik e) => DataRow(cells: <DataCell>[
-                          DataCell(Text(e.uposlenikId.toString())),
                           DataCell(Text(e.ime)),
                           DataCell(Text(e.prezime)),
                           DataCell(Text(e.kontaktTelefon)),

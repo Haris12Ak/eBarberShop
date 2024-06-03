@@ -13,7 +13,7 @@ class TerminiProvider with ChangeNotifier {
 
   TerminiProvider() {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "http://localhost:7076/");
+        defaultValue: "https://localhost:7076/");
   }
 
   Future<SearchResult<Termini>> getTermine() async {

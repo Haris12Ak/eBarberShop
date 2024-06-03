@@ -9,7 +9,7 @@ class NarudzbeProvider extends BaseProvider<Narudzbe> {
   late String _baseUrl;
   NarudzbeProvider() : super('Narudzbe') {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "http://localhost:7076/");
+        defaultValue: "https://localhost:7076/");
   }
 
   @override

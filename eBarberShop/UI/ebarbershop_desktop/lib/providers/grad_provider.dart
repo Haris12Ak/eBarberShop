@@ -11,7 +11,7 @@ class GradProvider with ChangeNotifier {
 
   GradProvider() {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "http://localhost:7076/");
+        defaultValue: "https://localhost:7076/");
   }
 
   Future<SearchResult<Grad>> get() async {

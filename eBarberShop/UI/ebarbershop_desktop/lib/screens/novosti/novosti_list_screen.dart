@@ -247,17 +247,6 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
               DataColumn(
                 label: Expanded(
                   child: Text(
-                    'ID',
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black54),
-                  ),
-                ),
-              ),
-              DataColumn(
-                label: Expanded(
-                  child: Text(
                     'Naslov',
                     style: TextStyle(
                         fontSize: 18.0,
@@ -311,7 +300,6 @@ class _NovostiListScreenState extends State<NovostiListScreen> {
             ],
             rows: novostiSearchResult?.result
                     .map((Novosti e) => DataRow(cells: <DataCell>[
-                          DataCell(Text(e.novostiId.toString())),
                           DataCell(Text(e.naslov)),
                           DataCell(Text(formatDate(e.datumObjave))),
                           DataCell(Text(e.korisnikImePrezime ?? "")),

@@ -230,17 +230,6 @@ class _SlikeListScreenState extends State<SlikeListScreen> {
               DataColumn(
                 label: Expanded(
                   child: Text(
-                    'ID',
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black54),
-                  ),
-                ),
-              ),
-              DataColumn(
-                label: Expanded(
-                  child: Text(
                     'Slika',
                     style: TextStyle(
                         fontSize: 18.0,
@@ -283,7 +272,6 @@ class _SlikeListScreenState extends State<SlikeListScreen> {
             ],
             rows: slikeSearchResult?.result
                     .map((Slike e) => DataRow(cells: <DataCell>[
-                          DataCell(Text(e.slikeId.toString())),
                           DataCell(e.slika != ""
                               ? SizedBox(
                                   width: 80,

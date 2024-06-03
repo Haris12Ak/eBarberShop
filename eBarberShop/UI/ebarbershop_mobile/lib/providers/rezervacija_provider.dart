@@ -10,7 +10,7 @@ class RezervacijaProvider extends BaseProvider<Rezervacija> {
 
   RezervacijaProvider() : super('Rezervacija') {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "http://10.0.2.2:7076/");
+        defaultValue: "https://10.0.2.2:7076/");
   }
 
   @override

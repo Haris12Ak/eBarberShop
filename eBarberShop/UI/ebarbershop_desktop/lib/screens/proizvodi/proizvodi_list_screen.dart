@@ -147,17 +147,6 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
               DataColumn(
                 label: Expanded(
                   child: Text(
-                    'ID',
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black54),
-                  ),
-                ),
-              ),
-              DataColumn(
-                label: Expanded(
-                  child: Text(
                     'Naziv',
                     style: TextStyle(
                         fontSize: 18.0,
@@ -222,7 +211,6 @@ class _ProizvodiListScreenState extends State<ProizvodiListScreen> {
             ],
             rows: proizvodiSearchResult?.result
                     .map((Proizvodi e) => DataRow(cells: <DataCell>[
-                          DataCell(Text(e.proizvodiId.toString())),
                           DataCell(Text(e.naziv)),
                           DataCell(Text(e.vrstaProizvodaNaziv ?? "")),
                           DataCell(Text(e.sifra)),
