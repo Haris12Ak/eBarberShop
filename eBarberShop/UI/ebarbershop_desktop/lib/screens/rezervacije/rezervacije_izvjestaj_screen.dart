@@ -5,7 +5,10 @@ import 'package:ebarbershop_desktop/providers/rezervacija_provider.dart';
 import 'package:ebarbershop_desktop/utils/util.dart';
 import 'package:ebarbershop_desktop/widgets/master_screen_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
 import 'package:provider/provider.dart';
 import 'package:pdf/widgets.dart' as pw;
 
@@ -69,14 +72,47 @@ class _RezervacijeIzvjestajScreenState
   Future<void> generatePDF() async {
     final pdf = pw.Document();
 
+    final img = await rootBundle.load('assets/images/logo.png');
+    final imageBytes = img.buffer.asUint8List();
+
+    pw.Image image1 = pw.Image(pw.MemoryImage(imageBytes));
+
     pdf.addPage(
       pw.MultiPage(
+        pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
           return [
             pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.stretch,
               mainAxisAlignment: pw.MainAxisAlignment.start,
               children: [
+                pw.Container(
+                  color: PdfColor.fromHex("#DEDEDE"),
+                  padding: const pw.EdgeInsets.all(8.0),
+                  child: pw.Row(
+                      crossAxisAlignment: pw.CrossAxisAlignment.end,
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                      children: [
+                        pw.Container(
+                          alignment: pw.Alignment.topLeft,
+                          height: 65,
+                          width: 65,
+                          child: image1,
+                        ),
+                        pw.Column(
+                            crossAxisAlignment: pw.CrossAxisAlignment.end,
+                            children: [
+                              pw.Text('Datum i vrijeme',
+                                  style: pw.TextStyle(
+                                      color: PdfColor.fromHex("#2B2B2B"))),
+                              pw.SizedBox(height: 2.0),
+                              pw.Text(formatDate(DateTime.now()),
+                                  style: pw.TextStyle(
+                                      color: PdfColor.fromHex("#424242"))),
+                            ]),
+                      ]),
+                ),
+                pw.SizedBox(height: 10.0),
                 pw.Text('Izvjestaj za prethodni dan',
                     style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                 pw.SizedBox(height: 8.0),
@@ -85,7 +121,7 @@ class _RezervacijeIzvjestajScreenState
                 pw.SizedBox(height: 5.0),
                 pw.Text(
                     'Ukupna zarada: ${formatNumber(izvjestaj.zaradaPrethodnogDana)} KM'),
-                pw.Divider(height: 10.0),
+                pw.Divider(height: 10.0, color: PdfColor.fromHex("#9E9E9E")),
                 pw.SizedBox(height: 15.0),
                 pw.Text('Izvjestaj za prethodnu sedmicu',
                     style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
@@ -95,7 +131,7 @@ class _RezervacijeIzvjestajScreenState
                 pw.SizedBox(height: 5.0),
                 pw.Text(
                     'Ukupna zarada: ${formatNumber(izvjestaj.zaradaPrethodneSemice)} KM'),
-                pw.Divider(height: 10.0),
+                pw.Divider(height: 10.0, color: PdfColor.fromHex("#9E9E9E")),
                 pw.SizedBox(height: 15.0),
                 pw.Text('Izvjestaj za prethodni mjesec',
                     style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
@@ -105,7 +141,7 @@ class _RezervacijeIzvjestajScreenState
                 pw.SizedBox(height: 5.0),
                 pw.Text(
                     'Ukupna zarada: ${formatNumber(izvjestaj.zaradaPrethodnogMjeseca)} KM'),
-                pw.Divider(height: 10.0),
+                pw.Divider(height: 10.0, color: PdfColor.fromHex("#9E9E9E")),
                 pw.SizedBox(height: 15.0),
                 pw.Text(
                     widget.datum != null
@@ -132,7 +168,7 @@ class _RezervacijeIzvjestajScreenState
                 pw.SizedBox(height: 8.0),
                 pw.Text(
                     'Ukupna zarada: ${formatNumber(izvjestaj.ukupnaZarada)} KM'),
-                pw.Divider(height: 10.0),
+                pw.Divider(height: 10.0, color: PdfColor.fromHex("#9E9E9E")),
               ],
             ),
           ];
@@ -141,11 +177,41 @@ class _RezervacijeIzvjestajScreenState
     );
 
     // Save the PDF to a file
-    final output =
-        'Izvještaj_narudzbi_${DateTime.now().millisecondsSinceEpoch}.pdf';
-    final file = File(output);
+    final directory = await getDownloadsDirectory();
+    final path =
+        '${directory?.path}/${"Izvještaj_rezervacije ${DateTime.now().year}_${DateTime.now().month}_${DateTime.now().day}_${DateTime.now().millisecondsSinceEpoch}.pdf"}';
+    final file = File(path);
     await file.writeAsBytes(await pdf.save());
-    OpenFile.open(file.path);
+
+    // ignore: use_build_context_synchronously
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) => AlertDialog(
+              backgroundColor: Colors.blue.shade50,
+              title: const Icon(
+                Icons.save_alt,
+                size: 38,
+              ),
+              content: Text(
+                'PDF has been saved to: $path',
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+
+                      OpenFile.open(file.path);
+                    },
+                    child: const Text(
+                      'OK',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    ))
+              ],
+            ));
   }
 
   @override
@@ -331,39 +397,12 @@ class _RezervacijeIzvjestajScreenState
                   alignment: Alignment.topRight,
                   child: ElevatedButton.icon(
                     onPressed: () async {
-                      bool open = await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Potvrda'),
-                            content:
-                                const Text('Da li želite otvoriti PDF file?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(true);
-                                },
-                                child: const Text('DA'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(false);
-                                },
-                                child: const Text('NE'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-
-                      if (open) {
-                        await generatePDF();
-                      }
+                      await generatePDF();
                     },
                     style: ElevatedButton.styleFrom(
                       elevation: 0.0,
                       foregroundColor: Colors.black,
-                      backgroundColor: Colors.grey.shade200,
+                      backgroundColor: Colors.red.shade200,
                       padding: const EdgeInsets.all(18.0),
                       shape: const BeveledRectangleBorder(
                           borderRadius: BorderRadius.zero),
