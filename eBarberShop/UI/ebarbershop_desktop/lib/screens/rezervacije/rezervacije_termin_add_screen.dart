@@ -191,7 +191,31 @@ class _RezervacijeTerminAddScreenState
                               _termini.any((termin) => termin.vrijeme == time);
                           return GestureDetector(
                             onTap: () {
-                              if (!isZauzetTermin) {
+                              if (isZauzetTermin) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    showCloseIcon: true,
+                                    duration: Durations.extralong4,
+                                    content: Text(
+                                      "Odabrani termin ${formatDate(time)} je zauzet !.",
+                                      style: const TextStyle(fontSize: 15.0),
+                                    ),
+                                  ),
+                                );
+                              } else if (!isZauzetTermin &&
+                                  time.isBefore(DateTime.now())) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    showCloseIcon: true,
+                                    backgroundColor: Colors.red.shade900,
+                                    content: Text(
+                                      "Vrijeme termina ${getTimeFormat(time)} h za datum ${getDateFormat(time)} je isteklo. Moilmo Vas da odaberete drugo vrijeme termina !",
+                                      style: const TextStyle(
+                                          fontSize: 15.0, color: Colors.white),
+                                    ),
+                                  ),
+                                );
+                              } else {
                                 showModalBottomSheet(
                                   showDragHandle: true,
                                   context: context,

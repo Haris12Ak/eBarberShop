@@ -26,14 +26,10 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
   List<Termini> _termini = [];
   List<Uposlenik> _uposlenici = [];
   bool isLoading = true;
-  final String _emailKorisnika = Authorization.email!;
 
   DateTime today = DateTime.now();
 
   int? selectedUsposlenik = -1;
-
-  final TextEditingController _emailController = TextEditingController();
-  bool _isEmailValid = true;
 
   static final TextStyle _customLabelStyle = TextStyle(
       fontSize: 16.0, fontWeight: FontWeight.w500, color: Colors.grey.shade800);
@@ -182,7 +178,33 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
                             _termini.any((termin) => termin.vrijeme == time);
                         return GestureDetector(
                           onTap: () {
-                            if (!isZauzetTermin) {
+                            if (isZauzetTermin) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  showCloseIcon: true,
+                                  duration: Durations.extralong4,
+                                  backgroundColor: Colors.grey.shade800,
+                                  content: Text(
+                                    "Odabrani termin ${formatDate(time)} je zauzet !.",
+                                    style: const TextStyle(
+                                        fontSize: 15.0, color: Colors.white),
+                                  ),
+                                ),
+                              );
+                            } else if (!isZauzetTermin &&
+                                time.isBefore(DateTime.now())) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  showCloseIcon: true,
+                                  backgroundColor: Colors.red.shade900,
+                                  content: Text(
+                                    "Vrijeme termina ${getTimeFormat(time)} h za datum ${getDateFormat(time)} je isteklo. Moilmo Vas da odaberete drugo vrijeme termina !",
+                                    style: const TextStyle(
+                                        fontSize: 15.0, color: Colors.white),
+                                  ),
+                                ),
+                              );
+                            } else {
                               _buildRezervacijaTermina(context, time);
                             }
                           },
@@ -249,40 +271,6 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                          'Unesite email za potvrdu rezervacije:',
-                          style: _customLabelStyle,
-                        ),
-                        const SizedBox(height: 5.0),
-                        TextField(
-                          controller: _emailController,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white24,
-                            contentPadding: const EdgeInsets.all(0),
-                            focusColor: Colors.black,
-                            hintText: 'Email',
-                            border: const OutlineInputBorder(),
-                            prefixIcon: const Icon(Icons.email),
-                            errorText: _isEmailValid
-                                ? null
-                                : 'Unesite ispravnu e-mail adresu',
-                          ),
-                          onChanged: (value) {
-                            bool isValid = RegExp(
-                                    r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$')
-                                .hasMatch(value);
-                            setState(() {
-                              _isEmailValid = isValid;
-                              if (value == _emailKorisnika) {
-                                _isEmailValid = true;
-                              } else {
-                                _isEmailValid = false;
-                              }
-                            });
-                          },
-                        ),
-                        const SizedBox(height: 15.0),
                         Text(
                           'Odaberite frizera',
                           style: _customLabelStyle,
@@ -357,9 +345,7 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
       padding: const EdgeInsets.all(10.0),
       child: ElevatedButton.icon(
         onPressed: () async {
-          if (selectedUsposlenik == -1 ||
-              _emailController.text == "" ||
-              _isEmailValid == false) {
+          if (selectedUsposlenik == -1) {
             showDialog(
                 barrierDismissible: false,
                 context: context,
@@ -372,7 +358,7 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
                       ),
                       iconColor: Colors.black,
                       content: const Text(
-                        'Da bi rezervacija bila uspješna morate odabrati željenog frizera i unijeti svoj email ! \nMolimo da unesete ispravano vaš email!',
+                        'Molimo odaberite željenog frizera!',
                         style: TextStyle(
                             fontSize: 18.0,
                             color: Colors.black,
@@ -414,8 +400,16 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
                   barrierDismissible: false,
                   context: context,
                   builder: (BuildContext context) => AlertDialog(
-                        title: const Text('Poruka'),
-                        content: const Text('Termin uspješno rezervisan.'),
+                        title: const Icon(
+                          Icons.check_circle_outline_outlined,
+                          size: 35,
+                          color: Colors.green,
+                        ),
+                        content: const Text(
+                          'Termin uspješno rezervisan !',
+                          style: TextStyle(
+                              fontSize: 16.0, fontWeight: FontWeight.w500),
+                        ),
                         actions: [
                           TextButton(
                             onPressed: () async {
@@ -424,7 +418,13 @@ class _RezervacijaScreenState extends State<RezervacijaScreen> {
 
                               await _loadTermine();
                             },
-                            child: const Text('OK'),
+                            child: const Text(
+                              'OK',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w500),
+                            ),
                           ),
                         ],
                       ));
