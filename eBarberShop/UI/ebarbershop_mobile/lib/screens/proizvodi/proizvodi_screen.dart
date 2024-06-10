@@ -7,6 +7,7 @@ import 'package:ebarbershop_mobile/providers/cart_provider.dart';
 import 'package:ebarbershop_mobile/providers/proizvodi_provider.dart';
 import 'package:ebarbershop_mobile/providers/vrste_proizvoda_provider.dart';
 import 'package:ebarbershop_mobile/screens/proizvodi/cart_list_screen.dart';
+import 'package:ebarbershop_mobile/screens/proizvodi/pregled_narudzbi_screen.dart';
 import 'package:ebarbershop_mobile/screens/proizvodi/proizvod_detalji_screen.dart';
 import 'package:ebarbershop_mobile/utils/util.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,8 @@ class _ProizvodiScreenState extends State<ProizvodiScreen> {
 
   final TextEditingController _nazivProizvodaController =
       TextEditingController();
+
+  String selectedOption = 'Kosarica';
 
   @override
   void initState() {
@@ -80,6 +83,29 @@ class _ProizvodiScreenState extends State<ProizvodiScreen> {
     });
   }
 
+  void navigateToSelectedOption(String option) {
+    switch (option) {
+      case 'Kosarica':
+        Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => const CartListScreen()))
+            .then((value) => setState(() {
+                  _cartProvider.getCounter();
+                }));
+        break;
+      case 'Narudzbe':
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    const PregledNarudzbiScreen()));
+        break;
+      default:
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return isLoading
@@ -105,49 +131,91 @@ class _ProizvodiScreenState extends State<ProizvodiScreen> {
                         fontFamily: 'Dosis',
                         color: Colors.grey[900]),
                   ),
-                  Stack(
-                    alignment: Alignment.topRight,
-                    children: [
-                      Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white60,
-                              borderRadius: BorderRadius.circular(50.0)),
-                          width: 50,
-                          height: 50,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              const CartListScreen()))
-                                  .then((value) => setState(() {
-                                        _cartProvider.getCounter();
-                                      }));
-                            },
-                            child: const Icon(
-                              Icons.shopping_cart_outlined,
-                              size: 28,
-                              color: Colors.black,
-                            ),
-                          )),
-                      Positioned(
-                        right: 0.0,
-                        top: 0.0,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50.0),
-                          ),
+                  Container(
+                    padding: const EdgeInsets.all(4.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black38,
+                          spreadRadius: 0,
+                          blurRadius: 3,
+                          offset: Offset(1, 2),
+                        ),
+                      ],
+                    ),
+                    child: Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                          child: DropdownButton<String>(
+                              value: selectedOption,
+                              hint: const Text('Opcije'),
+                              dropdownColor: Colors.lightBlue[50],
+                              iconSize: 30.0,
+                              style: TextStyle(
+                                color: Colors.grey.shade800,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              icon: const Icon(Icons.arrow_drop_down_outlined),
+                              underline: Container(
+                                height: 2,
+                                color: Colors.grey.shade700,
+                              ),
+                              items: [
+                                DropdownMenuItem<String>(
+                                  value: 'Kosarica',
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Icon(Icons.shopping_cart,
+                                          size: 22.0,
+                                          color: Colors.grey.shade800),
+                                      const SizedBox(width: 8.0),
+                                      Text(
+                                          'Košarica (${_cartProvider.getCounter()})'),
+                                    ],
+                                  ),
+                                ),
+                                DropdownMenuItem<String>(
+                                  value: 'Narudzbe',
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Icon(Icons.receipt,
+                                          size: 22.0,
+                                          color: Colors.grey.shade800),
+                                      const SizedBox(width: 8.0),
+                                      const Text('Pregled narudžbi'),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                              onChanged: (String? value) {
+                                setState(() {
+                                  selectedOption = value!;
+                                });
+
+                                navigateToSelectedOption(selectedOption);
+                              }),
+                        ),
+                        Positioned(
+                          left: 0.0,
+                          top: 0.0,
                           child: Text(
-                            _cartProvider.getCounter().toString(),
-                            style: const TextStyle(
-                                fontSize: 17.0,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.red),
+                            'Opcije',
+                            style: TextStyle(
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.w400,
+                                letterSpacing: 1.0,
+                                color: Colors.grey.shade800),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),

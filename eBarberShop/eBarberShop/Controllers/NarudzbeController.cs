@@ -29,5 +29,17 @@ namespace eBarberShop.Controllers
         {
             return base.Delete(id);
         }
+
+        [HttpGet("/GetNarudzbeByKorisnikId/{korisnikId}")]
+        public async Task<List<Model.Narudzbe>> GetNarudzbeByKorisnikId(int korisnikId, [FromQuery] DateTime? datumNarudzbe)
+        {
+            return await _narudzbeService.GetNarudzbeByKorisnikId(korisnikId, datumNarudzbe);
+        }
+
+        [HttpPut("/OtkaziNarudzbu/{narudzbaId}")]
+        public async Task<Model.Narudzbe> OtkaziNarudzbu(int narudzbaId)
+        {
+            return await _narudzbeService.OtkaziNarudzbu(narudzbaId);
+        }
     }
 }

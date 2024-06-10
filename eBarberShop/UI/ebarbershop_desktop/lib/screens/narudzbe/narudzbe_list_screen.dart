@@ -140,6 +140,17 @@ class _NarudzbeListScreenState extends State<NarudzbeListScreen> {
                               ),
                             ),
                             DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Status',
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black54),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
                               label: Text(
                                 'Akcije',
                                 style: TextStyle(
@@ -159,6 +170,60 @@ class _NarudzbeListScreenState extends State<NarudzbeListScreen> {
                                             '${getDateFormat(e.datumNarudzbe)}  |  ${getTimeFormat(e.datumNarudzbe)}')),
                                         DataCell(Text(
                                             '${formatNumber(e.ukupanIznos)} KM')),
+                                        if (e.otkazano != null &&
+                                            e.otkazano == false &&
+                                            e.datumNarudzbe
+                                                .add(const Duration(days: 1))
+                                                .isAfter(DateTime.now()))
+                                          DataCell(
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              color: Colors.grey.shade400,
+                                              child: const Text(
+                                                'In Progress',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15.0,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                            ),
+                                          )
+                                        else if (e.otkazano != null &&
+                                            e.otkazano == true)
+                                          DataCell(
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              color: Colors.red.shade400,
+                                              child: const Text(
+                                                'Cancelled',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15.0,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                            ),
+                                          )
+                                        else if (e.otkazano != null &&
+                                            e.otkazano == false)
+                                          DataCell(
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              color: Colors.green.shade400,
+                                              child: const Text(
+                                                'Completed',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15.0,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                            ),
+                                          ),
                                         DataCell(
                                           Row(
                                             children: [

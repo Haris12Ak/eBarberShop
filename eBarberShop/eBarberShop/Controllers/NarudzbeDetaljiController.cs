@@ -2,7 +2,6 @@
 using eBarberShop.Model.Requests;
 using eBarberShop.Model.Search;
 using eBarberShop.Services.Interfejsi;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eBarberShop.Controllers
@@ -16,7 +15,6 @@ namespace eBarberShop.Controllers
             _narudzbeDetaljiService = narudzbeDetaljiService;
         }
 
-        [Authorize(Roles = "Administrator, Uposlenik")]
         [HttpGet("/GetNarudzbeDetaljiByNarudzbaId/{narudzbaId}")]
         public async Task<List<NarudzbeDetalji>> GetNarudzbeDetalji(int narudzbaId)
         {

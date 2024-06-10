@@ -32,9 +32,14 @@ class _NarudzbeDetaljiScreenState extends State<NarudzbeDetaljiScreen> {
   PaymentDetail? paymentDetailResult;
   bool isLoading = true;
 
+  late DateTime datumOtkazivanjaNarudzbe;
+
   @override
   void initState() {
     super.initState();
+
+    datumOtkazivanjaNarudzbe =
+        widget.narudzba.datumNarudzbe.add(const Duration(days: 1));
 
     _narudzbeDetaljiProvider = context.read<NarudzbeDetaljiProvider>();
     _paymentDetailProvider = context.read<PaymentDetailProvider>();
@@ -197,6 +202,35 @@ class _NarudzbeDetaljiScreenState extends State<NarudzbeDetaljiScreen> {
                       pw.Text('${formatNumber(widget.narudzba.ukupanIznos)} KM')
                     ],
                   ),
+                  pw.SizedBox(height: 5.0),
+                  if (widget.narudzba.otkazano != null &&
+                      widget.narudzba.otkazano == false &&
+                      datumOtkazivanjaNarudzbe.isAfter(DateTime.now()))
+                    pw.Row(
+                      children: [
+                        pw.Text('Status:'),
+                        pw.SizedBox(width: 10.0),
+                        pw.Text('In Progress'),
+                      ],
+                    )
+                  else if (widget.narudzba.otkazano != null &&
+                      widget.narudzba.otkazano == true)
+                    pw.Row(
+                      children: [
+                        pw.Text('Status:'),
+                        pw.SizedBox(width: 10.0),
+                        pw.Text('Cancelled'),
+                      ],
+                    )
+                  else if (widget.narudzba.otkazano != null &&
+                      widget.narudzba.otkazano == false)
+                    pw.Row(
+                      children: [
+                        pw.Text('Status:'),
+                        pw.SizedBox(width: 10.0),
+                        pw.Text('Completed'),
+                      ],
+                    ),
                   if (paymentDetailResult != null) pw.SizedBox(height: 13.0),
                   if (paymentDetailResult != null)
                     pw.Container(
@@ -248,14 +282,6 @@ class _NarudzbeDetaljiScreenState extends State<NarudzbeDetaljiScreen> {
                               pw.Text('Currency:'),
                               pw.SizedBox(width: 10.0),
                               pw.Text(paymentDetailResult!.currency)
-                            ],
-                          ),
-                          pw.SizedBox(height: 5.0),
-                          pw.Row(
-                            children: [
-                              pw.Text('Status:'),
-                              pw.SizedBox(width: 10.0),
-                              pw.Text(paymentDetailResult!.message)
                             ],
                           ),
                         ],
@@ -749,6 +775,91 @@ class _NarudzbeDetaljiScreenState extends State<NarudzbeDetaljiScreen> {
                         )
                       ],
                     ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    if (widget.narudzba.otkazano != null &&
+                        widget.narudzba.otkazano == false &&
+                        datumOtkazivanjaNarudzbe.isAfter(DateTime.now()))
+                      Row(
+                        children: [
+                          const Text(
+                            'Status:',
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black54),
+                          ),
+                          const SizedBox(
+                            width: 20.0,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(5.0),
+                            color: Colors.grey.shade400,
+                            child: const Text(
+                              'In Progress',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ],
+                      )
+                    else if (widget.narudzba.otkazano != null &&
+                        widget.narudzba.otkazano == true)
+                      Row(
+                        children: [
+                          const Text(
+                            'Status:',
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black54),
+                          ),
+                          const SizedBox(
+                            width: 20.0,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(5.0),
+                            color: Colors.red.shade400,
+                            child: const Text(
+                              'Cancelled',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ],
+                      )
+                    else if (widget.narudzba.otkazano != null &&
+                        widget.narudzba.otkazano == false)
+                      Row(
+                        children: [
+                          const Text(
+                            'Status:',
+                            style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black54),
+                          ),
+                          const SizedBox(
+                            width: 20.0,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.all(5.0),
+                            color: Colors.green.shade400,
+                            child: const Text(
+                              'Completed',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),
@@ -894,27 +1005,6 @@ class _NarudzbeDetaljiScreenState extends State<NarudzbeDetaljiScreen> {
               ),
               Text(
                 paymentDetailResult!.currency.toString(),
-                style: const TextStyle(fontSize: 18.0),
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 10.0,
-          ),
-          Row(
-            children: [
-              const Text(
-                'Status:',
-                style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black54),
-              ),
-              const SizedBox(
-                width: 20.0,
-              ),
-              Text(
-                paymentDetailResult!.message,
                 style: const TextStyle(fontSize: 18.0),
               )
             ],

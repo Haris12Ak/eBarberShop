@@ -144,5 +144,36 @@ namespace eBarberShop.Services.Servisi
 
             return createReport;
         }
+
+        public async Task<List<Narudzbe>> GetNarudzbeByKorisnikId(int korisnikId, DateTime? datumNarudzbe)
+        {
+            var query = _dbContext.Set<Database.Narudzbe>().Where(x => x.KorisnikId == korisnikId).AsQueryable();
+
+            if (datumNarudzbe.HasValue == true)
+            {
+                query = query.Where(y => y.DatumNarudzbe.Date == datumNarudzbe.Value.Date);
+            }
+
+            var result = await query.ToListAsync();
+
+            return _mapper.Map<List<Model.Narudzbe>>(result);
+        }
+
+        public async Task<Narudzbe> OtkaziNarudzbu(int narudzbaId)
+        {
+            var set = _dbContext.Set<Database.Narudzbe>();
+
+            var entity = await set.FindAsync(narudzbaId);
+
+            if (entity == null)
+            {
+                return null;
+            }
+
+            entity.Otkazano = true;
+
+            await _dbContext.SaveChangesAsync();
+            return _mapper.Map<Model.Narudzbe>(entity);
+        }
     }
 }
