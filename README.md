@@ -23,8 +23,8 @@ Za praćenje i pregled transakcija potrebno se prijaviti na paypal račun korist
 - Password: businessTestRS2
 
 ### Rezervacija termina
-Za uspješnu rezervaciju termina potrebno je unijeti email i odabrati željenu uslugu.
-- Email za potvrudu rezervacije termina: mobile_test@gmail.com
+Kako bi rezervacija termina bila uspješna potrebno je odabrati uslugu i frizera, nakon čega korisnik dobiva email ukoliko je rezervacija 
+uspješna.
 
 ###NOTE: Za "MailingService" potrebno je napraviti rezervaciju u mobilnoj aplikaciji, nakon čega servis šalje mail potvrde rezervacije.
 
