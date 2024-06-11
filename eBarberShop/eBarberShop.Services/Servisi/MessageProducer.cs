@@ -1,5 +1,8 @@
 ﻿using EasyNetQ;
+using eBarberShop.Model.Settings;
 using eBarberShop.Services.Interfejsi;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using System.Text;
 
@@ -7,10 +10,12 @@ namespace eBarberShop.Services.Servisi
 {
     public class MessageProducer : IMessageProducer
     {
-        private readonly string _host = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "localhost";
-        private readonly string _username = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? "guest";
-        private readonly string _password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? "guest";
-        private readonly string _virtualhost = Environment.GetEnvironmentVariable("RABBITMQ_VIRTUALHOST") ?? "/";
+        private readonly RabbitMQSettings _rabbitMQSettings;
+
+        public MessageProducer(IConfiguration configuration, IOptions<RabbitMQSettings> rabbitMQSettings)
+        {
+            _rabbitMQSettings = rabbitMQSettings.Value;
+        }
 
         public void SendingMessage(string message)
         {
@@ -18,10 +23,10 @@ namespace eBarberShop.Services.Servisi
             {
                 var factory = new ConnectionFactory
                 {
-                    HostName = _host,
-                    UserName = _username,
-                    Password = _password,
-                    VirtualHost = _virtualhost,
+                    HostName = _rabbitMQSettings.RABBITMQ_HOST,
+                    UserName = _rabbitMQSettings.RABBITMQ_USERNAME,
+                    Password = _rabbitMQSettings.RABBITMQ_PASSWORD,
+                    VirtualHost = _rabbitMQSettings.RABBITMQ_VIRTUALHOST,
                 };
 
                 using var connection = factory.CreateConnection();
@@ -49,10 +54,10 @@ namespace eBarberShop.Services.Servisi
 
         public void SendingObject<T>(T obj)
         {
-            var host = _host;
-            var username = _username;
-            var password = _password;
-            var virtualhost = _virtualhost;
+            var host = _rabbitMQSettings.RABBITMQ_HOST;
+            var username = _rabbitMQSettings.RABBITMQ_USERNAME;
+            var password = _rabbitMQSettings.RABBITMQ_PASSWORD;
+            var virtualhost = _rabbitMQSettings.RABBITMQ_VIRTUALHOST;
 
             using var bus = RabbitHutch.CreateBus($"host={host};virtualHost={virtualhost};username={username};password={password}");
 

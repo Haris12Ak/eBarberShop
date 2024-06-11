@@ -1,5 +1,6 @@
 using eBarberShop;
 using eBarberShop.Filter;
+using eBarberShop.Model.Settings;
 using eBarberShop.Services;
 using eBarberShop.Services.Interfejsi;
 using eBarberShop.Services.Servisi;
@@ -10,6 +11,7 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
 
 builder.Services.AddTransient<IDrzavaService, DrzavaService>();
 builder.Services.AddTransient<IGradService, GradService>();

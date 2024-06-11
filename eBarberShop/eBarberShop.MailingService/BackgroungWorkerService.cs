@@ -1,6 +1,8 @@
 ﻿
 using EasyNetQ;
 using eBarberShop.Model;
+using eBarberShop.Model.Settings;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -8,20 +10,19 @@ namespace eBarberShop.MailingService
 {
     public class ConsumeRabbitMQHostedService : BackgroundService
     {
-        private readonly string _host = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "localhost";
-        private readonly string _username = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? "guest";
-        private readonly string _password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? "guest";
-        private readonly string _virtualhost = Environment.GetEnvironmentVariable("RABBITMQ_VIRTUALHOST") ?? "/";
+        private readonly RabbitMQSettings _rabbitMQSettings;
 
         private readonly ILogger _logger;
         private IConnection _connection;
         private IModel _channel;
         private readonly IEmailSender _emailSender;
 
-        public ConsumeRabbitMQHostedService(ILoggerFactory loggerFactory, IEmailSender emailSender)
+        public ConsumeRabbitMQHostedService(ILoggerFactory loggerFactory, IEmailSender emailSender, IOptions<RabbitMQSettings> rabbitMQSettings)
         {
             _logger = loggerFactory.CreateLogger<ConsumeRabbitMQHostedService>();
             _emailSender = emailSender;
+            _rabbitMQSettings = rabbitMQSettings.Value;
+
             InitRabbitMQ();
         }
 
@@ -29,10 +30,10 @@ namespace eBarberShop.MailingService
         {
             var factory = new ConnectionFactory
             {
-                HostName = _host,
-                UserName = _username,
-                Password = _password,
-                VirtualHost = _virtualhost
+                HostName = _rabbitMQSettings.RABBITMQ_HOST,
+                UserName = _rabbitMQSettings.RABBITMQ_USERNAME,
+                Password = _rabbitMQSettings.RABBITMQ_PASSWORD,
+                VirtualHost = _rabbitMQSettings.RABBITMQ_VIRTUALHOST,
             };
 
             _connection = factory.CreateConnection();
@@ -53,13 +54,12 @@ namespace eBarberShop.MailingService
             {
                 try
                 {
-                    using (var bus = RabbitHutch.CreateBus($"host={_host};virtualHost={_virtualhost};username={_username};password={_password}"))
+                    using (var bus = RabbitHutch.CreateBus($"host={_rabbitMQSettings.RABBITMQ_HOST};virtualHost={_rabbitMQSettings.RABBITMQ_VIRTUALHOST};username={_rabbitMQSettings.RABBITMQ_USERNAME};password={_rabbitMQSettings.RABBITMQ_PASSWORD}"))
                     {
                         bus.PubSub.Subscribe<ReservationNotifier>("New_Reservations", HandleMessage);
                         Console.WriteLine("Listening for reservations.");
                         await Task.Delay(TimeSpan.FromSeconds(7), stoppingToken);
                     }
-
 
                 }
                 catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)

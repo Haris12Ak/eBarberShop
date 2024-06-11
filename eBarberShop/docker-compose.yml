@@ -36,12 +36,12 @@ services:
       context: .
       dockerfile: eBarberShop.MailingService/Dockerfile
     environment:
-      - RABBITMQ_HOST=rabbitmq
-      - RABBITMQ_USERNAME=${RABBITMQ_USER}
-      - RABBITMQ_PASSWORD=${RABBITMQ_PASS}
-      - RABBITMQ_VIRTUALHOST=${RABBITMQ_VIRTUALHOST}
-      - OUTLOOK_MAIL=${OUTLOOK_MAIL}
-      - OUTLOOK_PASS=${OUTLOOK_PASS}
+      - RabbitMQ:RABBITMQ_HOST=rabbitmq
+      - RabbitMQ:RABBITMQ_USERNAME=${RABBITMQ_USER}
+      - RabbitMQ:RABBITMQ_PASSWORD=${RABBITMQ_PASS}
+      - RabbitMQ:RABBITMQ_VIRTUALHOST=${RABBITMQ_VIRTUALHOST}
+      - Email:OUTLOOK_MAIL=${OUTLOOK_MAIL}
+      - Email:OUTLOOK_PASS=${OUTLOOK_PASS}
     depends_on:
       - rabbitmq
       - ebarbershop-sql
@@ -59,11 +59,11 @@ services:
     environment:
       - ConnectionStrings:DefaultConnection=Server=ebarbershop-sql,1433;Database=${SQL_DATABASE};User=${SQL_USER};Password=${SQL_PASSWORD};ConnectRetryCount=0;TrustServerCertificate=True
       - ASPNETCORE_ENVIRONMENT=Development
-      - RABBITMQ_HOST=rabbitmq
-      - RABBITMQ_PORT=${RABBITMQ_PORT}
-      - RABBITMQ_USERNAME=${RABBITMQ_USER}
-      - RABBITMQ_PASSWORD=${RABBITMQ_PASS}
-      - RABBITMQ_VIRTUALHOST=${RABBITMQ_VIRTUALHOST}
+      - RabbitMQ:RABBITMQ_HOST=rabbitmq
+      - RabbitMQ:RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RabbitMQ:RABBITMQ_USERNAME=${RABBITMQ_USER}
+      - RabbitMQ:RABBITMQ_PASSWORD=${RABBITMQ_PASS}
+      - RabbitMQ:RABBITMQ_VIRTUALHOST=${RABBITMQ_VIRTUALHOST}
     ports:
       - ${API_PORT}:${API_PORT}
     networks:

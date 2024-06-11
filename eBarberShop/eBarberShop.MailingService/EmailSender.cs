@@ -1,15 +1,17 @@
-﻿using System.Net;
+﻿using eBarberShop.Model.Settings;
+using Microsoft.Extensions.Options;
+using System.Net;
 using System.Net.Mail;
 
 namespace eBarberShop.MailingService
 {
     public class EmailSender : IEmailSender
     {
-        private readonly string _outlookMail = Environment.GetEnvironmentVariable("OUTLOOK_MAIL") ?? "ebarber_shop@outlook.com";
-        private readonly string _outlookPass = Environment.GetEnvironmentVariable("OUTLOOK_PASS") ?? "ebarbershop_rs2";
+        private readonly EmailSettings _emailSettings;
 
-        public EmailSender()
+        public EmailSender(IOptions<EmailSettings> emailSettings)
         {
+            _emailSettings = emailSettings.Value;
         }
 
         public Task SendEmailAsync(string email, string subject, string message)
@@ -18,11 +20,11 @@ namespace eBarberShop.MailingService
             {
                 EnableSsl = true,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(_outlookMail, _outlookPass)
+                Credentials = new NetworkCredential(_emailSettings.OUTLOOK_MAIL, _emailSettings.OUTLOOK_PASS)
             };
 
             return client.SendMailAsync(
-                new MailMessage(from: _outlookMail,
+                new MailMessage(from: _emailSettings.OUTLOOK_MAIL,
                                 to: email,
                                 subject,
                                 message
