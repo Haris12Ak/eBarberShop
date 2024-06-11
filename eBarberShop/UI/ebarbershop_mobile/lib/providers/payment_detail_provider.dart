@@ -7,7 +7,7 @@ class PaymentDetailProvider extends BaseProvider {
   late String _baseUrl;
   PaymentDetailProvider() : super('PaymentDetail') {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://10.0.2.2:7076/");
+        defaultValue: "http://10.0.2.2:7076/");
   }
 
   @override

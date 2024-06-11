@@ -15,7 +15,7 @@ class LoginProvider with ChangeNotifier {
 
   LoginProvider() {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://10.0.2.2:7076/");
+        defaultValue: "http://10.0.2.2:7076/");
 
     client.badCertificateCallback = (cert, host, port) => true;
     http = IOClient(client);

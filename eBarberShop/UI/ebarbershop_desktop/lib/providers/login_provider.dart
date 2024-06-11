@@ -12,7 +12,7 @@ class LoginProvider with ChangeNotifier {
 
   LoginProvider() {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://localhost:7076/");
+        defaultValue: "http://localhost:7076/");
   }
 
   Future<dynamic> login() async {

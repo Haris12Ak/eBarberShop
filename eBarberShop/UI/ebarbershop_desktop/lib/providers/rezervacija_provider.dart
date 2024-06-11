@@ -11,7 +11,7 @@ class RezervacijaProvider extends BaseProvider<Rezervacija> {
   late String _baseUrl;
   RezervacijaProvider() : super('Rezervacija') {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://localhost:7076/");
+        defaultValue: "http://localhost:7076/");
   }
 
   @override
